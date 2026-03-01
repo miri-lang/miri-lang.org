@@ -1,0 +1,12 @@
+enum Direction
+    North
+    South
+    East
+    West
+
+fn direction_name(d Direction) string
+    match d
+        Direction.North: "north"
+        Direction.South: "south"
+        Direction.East: "east"
+        Direction.West: "west"

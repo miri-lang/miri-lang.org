@@ -1,0 +1,18 @@
+title: Miri Programming Language
+description: >-
+  Miri is a modern, GPU-first, statically-typed, compiled programming language
+  designed for balancing high performance and safety in the age of Generative AI.
+url: "https://miri-lang.org"
+baseurl: ""
+
+github_url: "https://github.com/miri-lang/miri"
+author: "Viacheslav Shynkarenko"
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md

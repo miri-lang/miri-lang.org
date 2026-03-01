@@ -1,0 +1,8 @@
+fn describe_number(n int) string
+    match n
+        0
+            return "zero"
+        1
+            return "one"
+        _
+            return "something else"

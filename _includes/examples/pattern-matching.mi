@@ -1,0 +1,13 @@
+use system.io
+
+fn status_code(code int) String
+    match code
+        200 | 201 | 202: "OK"
+        404: "Not Found"
+        500 | 501 | 502: "Internal Server Error"
+        503: "Service Unavailable"
+        c if code >= 300 and code < 400: f"Redirect {c}"
+        _: "Unknown"
+
+for code in 200..504
+    println(f"{code}: {status_code(code)}")

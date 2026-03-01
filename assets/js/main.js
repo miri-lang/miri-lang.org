@@ -25,19 +25,17 @@ function escapeHtml(text) {
 }
 
 function highlightMiri(code) {
-  // Tokenize with a single regex, processing in order
   const tokenPattern = /\/\/[^\n]*|f"(?:[^"\\]|\\.)*"|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\b\d+\.?\d*\b|[a-zA-Z_]\w*/g;
   let result = '';
   let lastIndex = 0;
 
   for (const match of code.matchAll(tokenPattern)) {
-    // Add text between matches (escaped)
     result += escapeHtml(code.slice(lastIndex, match.index));
     const token = match[0];
 
     if (token.startsWith('//')) {
       result += `<span class="hl-comment">${escapeHtml(token)}</span>`;
-    } else if (token.startsWith('"') || token.startsWith("'") || token.startsWith('f"')) {
+    } else if (token.startsWith('f"') || token.startsWith('"') || token.startsWith("'")) {
       result += `<span class="hl-string">${escapeHtml(token)}</span>`;
     } else if (/^\d/.test(token)) {
       result += `<span class="hl-number">${token}</span>`;
@@ -66,24 +64,56 @@ function highlightAll() {
   });
 }
 
-// ===== Tab Switching =====
+// ===== Accessible Tab Switching =====
 
 function initTabs() {
-  document.querySelectorAll('.code-tabs').forEach(tabBar => {
+  document.querySelectorAll('[role="tablist"]').forEach(tabBar => {
     const section = tabBar.closest('.code-section');
-    const tabs = tabBar.querySelectorAll('.code-tab');
-    const panels = section.querySelectorAll('.code-panel');
+    const tabs = Array.from(tabBar.querySelectorAll('[role="tab"]'));
+    const panels = section.querySelectorAll('[role="tabpanel"]');
+
+    function activateTab(tab) {
+      tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+      panels.forEach(p => p.classList.remove('active'));
+
+      tab.setAttribute('aria-selected', 'true');
+      const target = section.querySelector(`#${tab.dataset.target}`);
+      if (target) target.classList.add('active');
+      tab.focus();
+    }
 
     tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
+      tab.addEventListener('click', () => activateTab(tab));
 
-        tab.classList.add('active');
-        const target = section.querySelector(`#${tab.dataset.target}`);
-        if (target) target.classList.add('active');
+      tab.addEventListener('keydown', e => {
+        const idx = tabs.indexOf(tab);
+        let next;
+        if (e.key === 'ArrowRight') next = tabs[(idx + 1) % tabs.length];
+        else if (e.key === 'ArrowLeft') next = tabs[(idx - 1 + tabs.length) % tabs.length];
+        else if (e.key === 'Home') next = tabs[0];
+        else if (e.key === 'End') next = tabs[tabs.length - 1];
+        if (next) { e.preventDefault(); activateTab(next); }
       });
     });
+
+    // Set tabindex for keyboard navigation
+    tabs.forEach((tab, i) => {
+      tab.setAttribute('tabindex', i === 0 ? '0' : '-1');
+    });
+  });
+}
+
+// ===== Mobile Navigation =====
+
+function initMobileNav() {
+  const toggle = document.querySelector('.nav-toggle');
+  const links = document.querySelector('.nav-links');
+  if (!toggle || !links) return;
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    links.classList.toggle('open');
   });
 }
 
@@ -122,5 +152,6 @@ function initDocsSidebar() {
 document.addEventListener('DOMContentLoaded', () => {
   highlightAll();
   initTabs();
+  initMobileNav();
   initDocsSidebar();
 });

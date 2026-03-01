@@ -1,0 +1,13 @@
+let name = "Miri"
+let version = 1
+
+// Regular string
+let greeting = "Hello!"
+
+// Formatted string (f-string) — embed expressions with {}
+let msg = f"Welcome to {name} v{version}"
+print(f"{name} is {version} year(s) old")
+
+// Expressions inside f-strings
+print(f"2 + 2 = {2 + 2}")
+print(f"Name length: {name.length()}")

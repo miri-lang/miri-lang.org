@@ -1,0 +1,5 @@
+use system.io
+
+// Hello, Miri!
+let name = "Miri"
+println(f"Hello, {name}!")

@@ -1,0 +1,19 @@
+// For loop with range
+for i in 0..10
+    print(f"{i}")
+
+// For loop over collection
+for item in items
+    print(f"{item}")
+
+// While loop
+var n = 10
+while n > 0
+    print(f"{n}")
+    n -= 1
+
+// Infinite loop
+forever
+    let input = read_line()
+    if input == "quit"
+        break

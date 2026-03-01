@@ -1,0 +1,19 @@
+use system.io.{print}
+
+// With explicit return
+fn add(a int, b int) int
+    return a + b
+
+// With implicit return
+fn sub(a int, b int) int
+    a - b
+
+// Inline body
+fn greet(name string): print(f"Hello, {name}!")
+
+fn main()
+    let sum = add(10, 20)
+    let diff = sub(10, 20)
+    greet("World")
+    print(f"Sum: {sum}")
+    print(f"Diff: {diff}")

@@ -1,0 +1,39 @@
+- title: "Static Typing &amp; Type Inference"
+  icon: "&#x1f3af;"
+  description: "Catch errors at compile time with a powerful type system that stays out of your way. Types are inferred where possible."
+
+- title: "GPU-First Programming"
+  icon: "&#x1f680;"
+  description: "Write GPU kernels alongside CPU code in the same language. No separate shader files, no foreign function interfaces."
+  coming_soon: true
+
+- title: "Pattern Matching"
+  icon: "&#x1f500;"
+  description: "Exhaustive pattern matching with destructuring across enums, structs, tuples, and literals. Guard clauses included."
+
+- title: "Memory Safety"
+  icon: "&#x1f6e1;"
+  description: "Ownership semantics with reference counting ensure memory safety without garbage collection pauses."
+  coming_soon: true
+
+- title: "Async &amp; Parallelism"
+  icon: "&#x26a1;"
+  description: "First-class async/await and parallel primitives make concurrent programming intuitive and safe."
+  coming_soon: true
+
+- title: "Clean Syntax"
+  icon: "&#x2728;"
+  description: "Indentation-based blocks, no braces or semicolons. Balanced readability, expressiveness, and safety."
+
+- title: "Native Compilation"
+  icon: "&#x2699;"
+  description: "Compiles to native machine code. Fast compilation, fast execution, small binaries."
+
+- title: "Rich Standard Library"
+  icon: "&#x1f4da;"
+  description: "Batteries-included standard library covering I/O, collections, networking, and more."
+  coming_soon: true
+
+- title: "AI-Assisted Development"
+  icon: "&#x1f916;"
+  description: "Designed with clear, consistent semantics that make AI code generation and assistance highly effective."

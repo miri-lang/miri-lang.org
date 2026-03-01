@@ -1,0 +1,11 @@
+use system.io.{println}
+
+fn add(a int, b int) int: a + b
+
+fn factorial(n int) int
+    1 if n <= 1 else n * factorial(n - 1)
+
+fn main()
+    let result = add(3, 4)
+    println(f"3 + 4 = {result}")
+    println(f"10! = {factorial(10)}")

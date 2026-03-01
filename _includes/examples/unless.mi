@@ -1,0 +1,2 @@
+unless list.is_empty()
+    print(f"List has {list.len()} items")

@@ -1,0 +1,4 @@
+let name = "Miri"
+let age = 1
+let pi = 3.14159
+// name = "Other"  // Error: cannot reassign immutable variable

@@ -1,0 +1,17 @@
+---
+layout: default
+---
+
+<div class="docs-layout">
+  <aside class="docs-sidebar">
+    <nav>
+      {% for item in page.sidebar %}
+      <a href="#{{ item.id }}">{{ item.title }}</a>
+      {% endfor %}
+    </nav>
+  </aside>
+
+  <div class="docs-content">
+    {{ content }}
+  </div>
+</div>

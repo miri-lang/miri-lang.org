@@ -1,0 +1,3 @@
+use system.io
+
+println("Hello, World!")

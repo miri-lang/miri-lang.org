@@ -1,277 +1,133 @@
-<!DOCTYPE html>
-<html lang="en">
+---
+layout: docs
+title: "Getting Started — Miri Programming Language"
+description: "Learn how to install the Miri programming language, write your first program, and explore the language's features."
+sidebar:
+  - id: installation
+    title: Installation
+  - id: hello-world
+    title: Hello World
+  - id: variables
+    title: Variables
+  - id: functions
+    title: Functions
+  - id: control-flow
+    title: Control Flow
+  - id: pattern-matching
+    title: Pattern Matching
+  - id: strings
+    title: Strings
+  - id: whats-next
+    title: What's Next
+---
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Getting Started — Miri Programming Language</title>
-  <meta name="description"
-    content="Learn how to install the Miri programming language, write your first program, and explore the language's features.">
-  <link rel="icon" type="image/png" href="../../logo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/style.css">
-  <style>
-    body {
-      font-family: 'Inter', var(--font-body);
-    }
-  </style>
-</head>
+<h1>Getting Started</h1>
+<p>This guide walks you through installing Miri, writing your first program, and exploring the core language
+  features.</p>
 
-<body>
+<!-- Installation -->
+<h2 id="installation">Installation</h2>
+<p>Miri is built with Rust, so you'll need the Rust toolchain installed. If you don't have it yet:</p>
+<pre><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></pre>
 
-  <!-- Navigation -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="/" class="nav-brand">
-        <img src="../../logo.png" alt="Miri logo">
-        Miri
-      </a>
-      <ul class="nav-links">
-        <li><a href="/#features">Features</a></li>
-        <li><a href="/#examples">Examples</a></li>
-        <li><a href="/docs/getting-started/">Docs</a></li>
-        <li>
-          <a href="https://github.com/miri-lang/miri" class="nav-github" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16">
-              <path
-                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-            </svg>
-            GitHub
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Docs Layout -->
-  <div class="docs-layout">
-    <aside class="docs-sidebar">
-      <nav>
-        <a href="#installation" class="active">Installation</a>
-        <a href="#hello-world">Hello World</a>
-        <a href="#variables">Variables</a>
-        <a href="#functions">Functions</a>
-        <a href="#control-flow">Control Flow</a>
-        <a href="#pattern-matching">Pattern Matching</a>
-        <a href="#strings">Strings</a>
-        <a href="#whats-next">What's Next</a>
-      </nav>
-    </aside>
-
-    <main class="docs-content">
-      <h1>Getting Started</h1>
-      <p>This guide walks you through installing Miri, writing your first program, and exploring the core language
-        features.</p>
-
-      <!-- Installation -->
-      <h2 id="installation">Installation</h2>
-      <p>Miri is built with Rust, so you'll need the Rust toolchain installed. If you don't have it yet:</p>
-      <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></pre>
-
-      <p>Then clone and build Miri:</p>
-      <pre><code>git clone git@github.com:miri-lang/miri.git
+<p>Then clone and build Miri:</p>
+<pre><code>git clone https://github.com/miri-lang/miri.git
 cd miri
 cargo build --release</code></pre>
 
-      <p>The compiler binary will be at <code>target/release/miri</code>. You can add it to your PATH or run it
-        directly.</p>
+<p>The compiler binary will be at <code>target/release/miri</code>. You can add it to your PATH or run it
+  directly.</p>
 
-      <div class="note">
-        <p><strong>Note:</strong> Miri is under active development. Build from the <code>main</code> branch for the
-          latest features.</p>
-      </div>
+<div class="note">
+  <p><strong>Note:</strong> Miri is under active development. Build from the <code>main</code> branch for the
+    latest features.</p>
+</div>
 
-      <!-- Hello World -->
-      <h2 id="hello-world">Hello World</h2>
-      <p>Create a file called <code>hello.mi</code>:</p>
-      <pre><code class="language-miri">use system.io
+<!-- Hello World -->
+<h2 id="hello-world">Hello World</h2>
+<p>Create a file called <code>hello.mi</code>:</p>
+<pre><code class="language-miri">{% include examples/docs-hello.mi %}</code></pre>
 
-println("Hello, World!")</code></pre>
+<p>Compile and run:</p>
+<pre><code>./target/release/miri run hello.mi</code></pre>
 
-      <p>Compile and run:</p>
-      <pre><code>./target/release/miri run hello.mi</code></pre>
+<p>Miri uses indentation for blocks — no braces, no semicolons. The <code>main</code> function is the entry point
+  of every program. If the file doesn't contain a <code>main</code> function, the code will be wrapped in a
+  <code>main</code> function automatically.
+</p>
 
-      <p>Miri uses indentation for blocks — no braces, no semicolons. The <code>main</code> function is the entry point
-        of every program. If the file doesn't contain a <code>main</code> function, the code will be wrapped in a
-        <code>main</code> function automatically.
-      </p>
+<!-- Variables -->
+<h2 id="variables">Variables</h2>
+<p>Miri has two ways to declare variables:</p>
 
-      <!-- Variables -->
-      <h2 id="variables">Variables</h2>
-      <p>Miri has two ways to declare variables:</p>
+<h3><code>let</code> — Immutable bindings</h3>
+<pre><code class="language-miri">{% include examples/let-bindings.mi %}</code></pre>
 
-      <h3><code>let</code> — Immutable bindings</h3>
-      <pre><code class="language-miri">let name = "Miri"
-let age = 1
-let pi = 3.14159
-// name = "Other"  // Error: cannot reassign immutable variable</code></pre>
+<h3><code>var</code> — Mutable bindings</h3>
+<pre><code class="language-miri">{% include examples/var-bindings.mi %}</code></pre>
 
-      <h3><code>var</code> — Mutable bindings</h3>
-      <pre><code class="language-miri">var counter = 0
-counter = counter + 1
-counter += 1  // Shorthand works too</code></pre>
+<p>Types are inferred but can be explicitly annotated:</p>
+<pre><code class="language-miri">{% include examples/type-annotations.mi %}</code></pre>
 
-      <p>Types are inferred but can be explicitly annotated:</p>
-      <pre><code class="language-miri">let x int = 42
-let name string = "Miri"
-let flag bool = true</code></pre>
+<p>Miri supports a full range of numeric types: <code>i8</code>, <code>i16</code>, <code>i32</code>,
+  <code>i64</code>, <code>i128</code>, <code>u8</code>, <code>u16</code>, <code>u32</code>, <code>u64</code>,
+  <code>u128</code>, <code>f32</code>, <code>f64</code>. The default <code>int</code> is <code>i64</code> and
+  <code>float</code> is <code>f64</code>.
+</p>
 
-      <p>Miri supports a full range of numeric types: <code>i8</code>, <code>i16</code>, <code>i32</code>,
-        <code>i64</code>, <code>i128</code>, <code>u8</code>, <code>u16</code>, <code>u32</code>, <code>u64</code>,
-        <code>u128</code>, <code>f32</code>, <code>f64</code>. The default <code>int</code> is <code>i64</code> and
-        <code>float</code> is <code>f64</code>.
-      </p>
+<!-- Functions -->
+<h2 id="functions">Functions</h2>
+<p>Functions are declared with <code>fn</code>. Parameter types are required.</p>
+<pre><code class="language-miri">{% include examples/docs-functions.mi %}</code></pre>
 
-      <!-- Functions -->
-      <h2 id="functions">Functions</h2>
-      <p>Functions are declared with <code>fn</code>. Parameter types are required.</p>
-      <pre><code class="language-miri">fn add(a int, b int) int
-    return a + b
+<p>Functions without a return type implicitly return <code>void</code>.</p>
 
-fn greet(name string)
-    print(f"Hello, {name}!")
+<!-- Control Flow -->
+<h2 id="control-flow">Control Flow</h2>
 
-fn main()
-    let sum = add(10, 20)
-    greet("World")
-    print(f"Sum: {sum}")</code></pre>
+<h3>if / else</h3>
+<pre><code class="language-miri">{% include examples/if-else.mi %}</code></pre>
 
-      <p>Functions without a return type implicitly return <code>void</code>.</p>
+<h3>unless</h3>
+<p>The inverse of <code>if</code> — runs the block when the condition is false:</p>
+<pre><code class="language-miri">{% include examples/unless.mi %}</code></pre>
 
-      <!-- Control Flow -->
-      <h2 id="control-flow">Control Flow</h2>
+<h3>Loops</h3>
+<pre><code class="language-miri">{% include examples/loops.mi %}</code></pre>
 
-      <h3>if / else</h3>
-      <pre><code class="language-miri">fn classify(n int) string
-    if n > 0
-        return "positive"
-    else if n < 0
-        return "negative"
-    else
-        return "zero"</code></pre>
+<!-- Pattern Matching -->
+<h2 id="pattern-matching">Pattern Matching</h2>
+<p>Pattern matching is a core feature of Miri. It's exhaustive — the compiler checks that all cases are covered.
+</p>
 
-      <h3>unless</h3>
-      <p>The inverse of <code>if</code> — runs the block when the condition is false:</p>
-      <pre><code class="language-miri">unless list.is_empty()
-    print(f"List has {list.len()} items")</code></pre>
+<pre><code class="language-miri">{% include examples/enum-direction.mi %}</code></pre>
 
-      <h3>Loops</h3>
-      <pre><code class="language-miri">// For loop with range
-for i in 0..10
-    print(f"{i}")
+<h3>Destructuring</h3>
+<pre><code class="language-miri">{% include examples/destructuring.mi %}</code></pre>
 
-// For loop over collection
-for item in items
-    print(f"{item}")
+<h3>Matching on values</h3>
+<pre><code class="language-miri">{% include examples/match-values.mi %}</code></pre>
 
-// While loop
-var n = 10
-while n > 0
-    print(f"{n}")
-    n -= 1
+<!-- Strings -->
+<h2 id="strings">Strings &amp; Formatted Strings</h2>
+<p>Miri has built-in string support with f-string interpolation:</p>
 
-// Infinite loop
-forever
-    let input = read_line()
-    if input == "quit"
-        break</code></pre>
+<pre><code class="language-miri">{% include examples/strings.mi %}</code></pre>
 
-      <!-- Pattern Matching -->
-      <h2 id="pattern-matching">Pattern Matching</h2>
-      <p>Pattern matching is a core feature of Miri. It's exhaustive — the compiler checks that all cases are covered.
-      </p>
+<!-- What's Next -->
+<h2 id="whats-next">What's Next</h2>
+<p>You've covered the basics of Miri. Here are some next steps:</p>
+<ul>
+  <li>Explore <a href="{{ site.github_url }}/tree/main/tests" target="_blank" rel="noopener">the
+      test suite</a> for more code examples</li>
+  <li>Read about <a href="{{ '/#features' | relative_url }}">planned features</a> like GPU programming and async/await</li>
+  <li>Star the project on <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a>
+    and follow development</li>
+  <li>Check the <a href="{{ site.github_url }}/issues" target="_blank" rel="noopener">issue
+      tracker</a> for the roadmap</li>
+</ul>
 
-      <pre><code class="language-miri">enum Direction
-    North
-    South
-    East
-    West
-
-fn describe(dir Direction) string
-    match dir
-        Direction::North
-            return "going up"
-        Direction::South
-            return "going down"
-        Direction::East
-            return "going right"
-        Direction::West
-            return "going left"</code></pre>
-
-      <h3>Destructuring</h3>
-      <pre><code class="language-miri">enum Result
-    Ok(int)
-    Err(string)
-
-fn handle(r Result)
-    match r
-        Result::Ok(value)
-            print(f"Success: {value}")
-        Result::Err(msg)
-            print(f"Error: {msg}")</code></pre>
-
-      <h3>Matching on values</h3>
-      <pre><code class="language-miri">fn describe_number(n int) string
-    match n
-        0
-            return "zero"
-        1
-            return "one"
-        _
-            return "something else"</code></pre>
-
-      <!-- Strings -->
-      <h2 id="strings">Strings &amp; Formatted Strings</h2>
-      <p>Miri has built-in string support with f-string interpolation:</p>
-
-      <pre><code class="language-miri">let name = "Miri"
-let version = 1
-
-// Regular string
-let greeting = "Hello!"
-
-// Formatted string (f-string) — embed expressions with {}
-let msg = f"Welcome to {name} v{version}"
-print(f"{name} is {version} year(s) old")
-
-// Expressions inside f-strings
-print(f"2 + 2 = {2 + 2}")
-print(f"Name length: {name.length()}")</code></pre>
-
-      <!-- What's Next -->
-      <h2 id="whats-next">What's Next</h2>
-      <p>You've covered the basics of Miri. Here are some next steps:</p>
-      <ul>
-        <li>Explore <a href="https://github.com/miri-lang/miri/tree/main/tests" target="_blank" rel="noopener">the
-            test suite</a> for more code examples</li>
-        <li>Read about <a href="/#features">planned features</a> like GPU programming and async/await</li>
-        <li>Star the project on <a href="https://github.com/miri-lang/miri" target="_blank" rel="noopener">GitHub</a>
-          and follow development</li>
-        <li>Check the <a href="https://github.com/miri-lang/miri/issues" target="_blank" rel="noopener">issue
-            tracker</a> for the roadmap</li>
-      </ul>
-
-      <div class="note">
-        <p><strong>Miri is evolving fast.</strong> Features like GPU kernels, ownership, and async are actively being
-          designed. Join us on GitHub to shape the language!</p>
-      </div>
-    </main>
-  </div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <ul class="footer-links">
-      <li><a href="https://github.com/miri-lang/miri" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="/docs/getting-started/">Documentation</a></li>
-      <li><a href="https://github.com/miri-lang/miri/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0
-          License</a></li>
-    </ul>
-    <p>&copy; 2026 Viacheslav Shynkarenko</p>
-  </footer>
-
-  <script src="../../js/main.js"></script>
-</body>
-
-</html>
+<div class="note">
+  <p><strong>Miri is evolving fast.</strong> Features like GPU kernels, ownership, and async are actively being
+    designed. Join us on GitHub to shape the language!</p>
+</div>

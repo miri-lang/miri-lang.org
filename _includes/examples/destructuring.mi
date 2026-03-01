@@ -1,0 +1,8 @@
+enum Shape
+    Circle(int)
+    Rectangle(int)
+
+fn area(s Shape) int
+    match s
+        Shape.Circle(r): r * r
+        Shape.Rectangle(side): side * side
