@@ -9,4 +9,4 @@ println(f"Length: {items.length()}")
 
 // Key-value map
 let scores = {"Alice": 95, "Bob": 87}
-println(f"Alice: {scores["Alice"]}")
+println(f"Alice: {scores['Alice']}")
