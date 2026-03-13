@@ -1,0 +1,3 @@
+type ID is String
+type Pair is (int, int)
+type ScoreMap is {String: int}

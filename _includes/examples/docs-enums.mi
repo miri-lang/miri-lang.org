@@ -1,0 +1,14 @@
+use system.io
+
+enum Result
+    Ok(int)
+    Error(String)
+
+fn handle(r Result)
+    match r
+        Result.Ok(n): println(f"Success: {n}")
+        Result.Error(msg): println(f"Error: {msg}")
+
+fn main()
+    let r = Result.Ok(42)
+    handle(r)

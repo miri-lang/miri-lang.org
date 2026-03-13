@@ -1,0 +1,15 @@
+use system.io
+
+fn find(name String?)
+    if let Some(s) = name
+        println(f"Found: {s}")
+
+fn main()
+    let val int? = 10
+
+    match val
+        Some(n): println(f"got {n}")
+        None: println("nothing")
+
+    let fallback = val ?? 0
+    println(f"value: {fallback}")

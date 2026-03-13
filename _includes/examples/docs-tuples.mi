@@ -1,0 +1,10 @@
+use system.io
+
+let t = (10, "hello", true)
+println(f"{t[0]}")   // 10
+println(f"{t[1]}")   // hello
+
+let pair = (3, 7)
+let sum = match pair
+    (a, b): a + b
+println(f"sum: {sum}")

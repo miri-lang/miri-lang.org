@@ -1,0 +1,25 @@
+use system.io
+use system.collections.array
+use system.collections.list
+use system.collections.map
+use system.collections.set
+
+// Array — fixed size
+let nums = [1, 2, 3]
+println(f"first: {nums.first()}")
+
+// List — dynamic, growable
+var items = List([1, 2, 3])
+items.push(4)
+items.push(5)
+println(f"list length: {items.length()}")
+
+// Map — key-value pairs
+var scores = {"Alice": 95, "Bob": 87}
+scores["Carol"] = 91
+println(f"Alice: {scores["Alice"]}")
+
+// Set — unique values
+let tags = {1, 2, 3}
+if 2 in tags
+    println("found 2 in set")

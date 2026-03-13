@@ -1,0 +1,13 @@
+use system.io
+
+struct Point
+    x int
+    y int
+
+fn offset(p Point, dx int, dy int) Point
+    Point(x: p.x + dx, y: p.y + dy)
+
+fn main()
+    let p = Point(x: 1, y: 2)
+    let q = offset(p, 10, 20)
+    println(f"{q.x}, {q.y}")

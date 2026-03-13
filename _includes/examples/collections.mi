@@ -1,0 +1,12 @@
+use system.io
+use system.collections.list
+use system.collections.map
+
+// Dynamic list
+var items = List([1, 2, 3])
+items.push(4)
+println(f"Length: {items.length()}")
+
+// Key-value map
+let scores = {"Alice": 95, "Bob": 87}
+println(f"Alice: {scores["Alice"]}")

@@ -12,8 +12,8 @@ performance and safety in the age of Generative AI."
       height="120">
     <h1 class="hero-tagline">GPU-First. Safe. Fast.</h1>
     <p class="hero-description">
-      Miri is a statically-typed language compiled to native code with clean syntax,
-      powerful features, and first-class GPU programming.
+      A statically-typed language compiled to native code with clean syntax,
+      null safety, automatic memory management, and first-class GPU programming.
     </p>
     <div class="hero-buttons">
       <a href="{{ '/docs/getting-started/' | relative_url }}" class="btn btn-primary">Get Started</a>
@@ -37,22 +37,46 @@ performance and safety in the age of Generative AI."
     <div class="code-tabs" role="tablist" aria-label="Code examples">
       <button class="code-tab" role="tab" aria-selected="true" aria-controls="ex-hello" data-target="ex-hello">Hello
         World</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-functions"
-        data-target="ex-functions">Functions</button>
+      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-structs"
+        data-target="ex-structs">Structs</button>
+      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-enums"
+        data-target="ex-enums">Enums</button>
+      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-collections"
+        data-target="ex-collections">Collections</button>
+      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-options"
+        data-target="ex-options">Options</button>
       <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-matching"
         data-target="ex-matching">Pattern Matching</button>
+      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-functions"
+        data-target="ex-functions">Functions</button>
     </div>
 
     <div id="ex-hello" class="code-panel active" role="tabpanel">
       <pre><code class="language-miri">{% include examples/hello.mi %}</code></pre>
     </div>
 
-    <div id="ex-functions" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/functions.mi %}</code></pre>
+    <div id="ex-structs" class="code-panel" role="tabpanel">
+      <pre><code class="language-miri">{% include examples/structs.mi %}</code></pre>
+    </div>
+
+    <div id="ex-enums" class="code-panel" role="tabpanel">
+      <pre><code class="language-miri">{% include examples/enums-data.mi %}</code></pre>
+    </div>
+
+    <div id="ex-collections" class="code-panel" role="tabpanel">
+      <pre><code class="language-miri">{% include examples/collections.mi %}</code></pre>
+    </div>
+
+    <div id="ex-options" class="code-panel" role="tabpanel">
+      <pre><code class="language-miri">{% include examples/options.mi %}</code></pre>
     </div>
 
     <div id="ex-matching" class="code-panel" role="tabpanel">
       <pre><code class="language-miri">{% include examples/pattern-matching.mi %}</code></pre>
+    </div>
+
+    <div id="ex-functions" class="code-panel" role="tabpanel">
+      <pre><code class="language-miri">{% include examples/functions.mi %}</code></pre>
     </div>
   </div>
 </section>

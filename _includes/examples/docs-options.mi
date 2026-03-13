@@ -1,0 +1,18 @@
+use system.io
+
+// Option type: might be absent
+let x int? = None
+let y int? = 42
+
+// Unwrap with if let
+if let Some(val) = y
+    println(f"y is {val}")
+
+// Pattern matching
+match x
+    Some(n): println(f"got {n}")
+    None: println("x is empty")
+
+// Coalesce with ??
+let safe = x ?? 0
+println(f"safe: {safe}")

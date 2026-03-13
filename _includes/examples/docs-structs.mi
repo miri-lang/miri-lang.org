@@ -1,0 +1,12 @@
+use system.io
+
+struct User
+    name String
+    age int
+
+fn greet(u User)
+    println(f"{u.name} is {u.age} years old")
+
+fn main()
+    let u = User(name: "Alice", age: 30)
+    greet(u)

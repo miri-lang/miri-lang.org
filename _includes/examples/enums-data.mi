@@ -1,0 +1,14 @@
+use system.io
+
+enum Shape
+    Circle(float)
+    Rect(float, float)
+
+fn area(s Shape) float
+    match s
+        Shape.Circle(r): 3.14 * r * r
+        Shape.Rect(w, h): w * h
+
+fn main()
+    let s = Shape.Circle(5.0)
+    println(f"Area: {area(s)}")

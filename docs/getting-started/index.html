@@ -17,6 +17,20 @@ sidebar:
     title: Pattern Matching
   - id: strings
     title: Strings
+  - id: structs
+    title: Structs
+  - id: enums
+    title: Enums
+  - id: tuples
+    title: Tuples
+  - id: collections
+    title: Collections
+  - id: option-types
+    title: Option Types
+  - id: type-aliases
+    title: Type Aliases
+  - id: memory-model
+    title: Memory Model
   - id: whats-next
     title: What's Next
 ---
@@ -33,10 +47,9 @@ sidebar:
 <p>Then clone and build Miri:</p>
 <pre><code>git clone https://github.com/miri-lang/miri.git
 cd miri
-cargo build --release</code></pre>
+make build</code></pre>
 
-<p>The compiler binary will be at <code>target/release/miri</code>. You can add it to your PATH or run it
-  directly.</p>
+<p>The compiler binary will be at <code>target/debug/miri</code>. For optimized builds, use <code>make release</code> (binary at <code>target/release/miri</code>). You can add it to your PATH or run it directly.</p>
 
 <div class="note">
   <p><strong>Note:</strong> Miri is under active development. Build from the <code>main</code> branch for the
@@ -77,10 +90,10 @@ cargo build --release</code></pre>
 
 <!-- Functions -->
 <h2 id="functions">Functions</h2>
-<p>Functions are declared with <code>fn</code>. Parameter types are required.</p>
+<p>Functions are declared with <code>fn</code>. Parameter types are required. Parameters use <code>name type</code> syntax (no colon).</p>
 <pre><code class="language-miri">{% include examples/docs-functions.mi %}</code></pre>
 
-<p>Functions without a return type implicitly return <code>void</code>.</p>
+<p>Functions without a return type implicitly return <code>void</code>. Functions support named arguments at the call site.</p>
 
 <!-- Control Flow -->
 <h2 id="control-flow">Control Flow</h2>
@@ -95,6 +108,8 @@ cargo build --release</code></pre>
 <h3>Loops</h3>
 <pre><code class="language-miri">{% include examples/loops.mi %}</code></pre>
 
+<p>Miri supports <code>while</code>, <code>until</code>, <code>do-while</code>, <code>forever</code>, and <code>for..in</code> loops. All loop types support inline syntax with a colon: <code>for x in 1..10: print(x)</code>.</p>
+
 <!-- Pattern Matching -->
 <h2 id="pattern-matching">Pattern Matching</h2>
 <p>Pattern matching is a core feature of Miri. It's exhaustive — the compiler checks that all cases are covered.
@@ -108,15 +123,100 @@ cargo build --release</code></pre>
 <h3>Matching on values</h3>
 <pre><code class="language-miri">{% include examples/match-values.mi %}</code></pre>
 
+<p>Match supports or-patterns (<code>2 | 3</code>), guard clauses (<code>x if x > 10</code>), and wildcard (<code>_</code>).</p>
+
 <!-- Strings -->
 <h2 id="strings">Strings &amp; Formatted Strings</h2>
 <p>Miri has built-in string support with f-string interpolation:</p>
 
 <pre><code class="language-miri">{% include examples/strings.mi %}</code></pre>
 
+<!-- Structs -->
+<h2 id="structs">Structs</h2>
+<p>Structs are value types with named fields. Construct them using named arguments.</p>
+
+<pre><code class="language-miri">{% include examples/docs-structs.mi %}</code></pre>
+
+<p>Structs can be passed to and returned from functions. Small structs (all primitive fields, &lt;= 128 bytes) are auto-copied on assignment — no reference counting overhead.</p>
+
+<!-- Enums -->
+<h2 id="enums">Enums</h2>
+<p>Enums support variants with and without associated data. Pattern matching extracts the data from each variant.</p>
+
+<pre><code class="language-miri">{% include examples/docs-enums.mi %}</code></pre>
+
+<p>Enums can have simple tag variants (<code>Red</code>, <code>Green</code>) or carry data (<code>Ok(int)</code>, <code>Error(String)</code>). Each variant can hold different types and numbers of fields.</p>
+
+<!-- Tuples -->
+<h2 id="tuples">Tuples</h2>
+<p>Tuples are fixed-size, heterogeneous collections accessed by index. They support destructuring in match expressions.</p>
+
+<pre><code class="language-miri">{% include examples/docs-tuples.mi %}</code></pre>
+
+<!-- Collections -->
+<h2 id="collections">Collections</h2>
+<p>Miri has four built-in collection types, each with a full method API and <code>for..in</code> iteration support.</p>
+
+<pre><code class="language-miri">{% include examples/docs-collections.mi %}</code></pre>
+
+<h3>Collection types at a glance</h3>
+<table>
+  <thead>
+    <tr><th>Type</th><th>Syntax</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Array</strong></td><td><code>[T; N]</code></td><td>Fixed-size, stack-friendly</td></tr>
+    <tr><td><strong>List</strong></td><td><code>[T]</code></td><td>Dynamic, growable</td></tr>
+    <tr><td><strong>Map</strong></td><td><code>{K: V}</code></td><td>Key-value pairs</td></tr>
+    <tr><td><strong>Set</strong></td><td><code>{T}</code></td><td>Unique values, supports <code>in</code> operator</td></tr>
+  </tbody>
+</table>
+
+<p>Each collection requires its corresponding import: <code>use system.collections.array</code>, <code>use system.collections.list</code>, <code>use system.collections.map</code>, <code>use system.collections.set</code>.</p>
+
+<!-- Option Types -->
+<h2 id="option-types">Option Types</h2>
+<p>Option types represent values that may or may not be present. Add <code>?</code> to any type to make it optional. The compiler prevents using option values without checking first — eliminating null pointer errors at compile time.</p>
+
+<pre><code class="language-miri">{% include examples/docs-options.mi %}</code></pre>
+
+<p>Three ways to handle option types:</p>
+<ul>
+  <li><strong><code>if let Some(x) = val</code></strong> — unwrap and use in a block</li>
+  <li><strong><code>match</code></strong> — handle <code>Some</code> and <code>None</code> branches</li>
+  <li><strong><code>val ?? default</code></strong> — coalesce to a default value</li>
+</ul>
+
+<!-- Type Aliases -->
+<h2 id="type-aliases">Type Aliases</h2>
+<p>Type aliases create semantic names for existing types. They are transparent to the type checker — fully interchangeable with the underlying type.</p>
+
+<pre><code class="language-miri">{% include examples/docs-type-aliases.mi %}</code></pre>
+
+<!-- Memory Model -->
+<h2 id="memory-model">Memory Model</h2>
+<p>Miri uses a hybrid memory model with no annotations required from the programmer.</p>
+
+<ul>
+  <li><strong>Auto-copy types</strong> — Small, all-primitive structs and all primitive types are copied on assignment. No overhead.</li>
+  <li><strong>Managed types</strong> — Collections, strings, and structs containing managed fields use automatic reference counting.</li>
+  <li><strong>Drop specialization</strong> — When a managed type's reference count reaches zero, a type-specific drop function recursively releases all managed fields.</li>
+</ul>
+
+<pre><code class="language-miri">var a = [1, 2, 3]
+var b = a            // RC incremented, both point to same data
+a = [4, 5, 6]       // old array's RC decremented, freed if zero</code></pre>
+
+<p>You never write memory annotations — the compiler handles ownership automatically.</p>
+
 <!-- What's Next -->
 <h2 id="whats-next">What's Next</h2>
-<p>You've covered the basics of Miri. Here are some next steps:</p>
+<p>You've covered the features available in Miri v0.1.0-alpha.2. Here's what's coming next:</p>
+<ul>
+  <li><strong>Alpha 3</strong> — Classes with inheritance, traits, closures, and generic monomorphization</li>
+  <li><strong>Future milestones</strong> — Multi-file projects, full memory safety model, GPU codegen, async/await</li>
+</ul>
+<p>More resources:</p>
 <ul>
   <li>Explore <a href="{{ site.github_url }}/tree/main/tests" target="_blank" rel="noopener">the
       test suite</a> for more code examples</li>
@@ -128,6 +228,6 @@ cargo build --release</code></pre>
 </ul>
 
 <div class="note">
-  <p><strong>Miri is evolving fast.</strong> Features like GPU kernels, ownership, and async are actively being
+  <p><strong>Miri is evolving fast.</strong> Features like GPU kernels, classes, traits, and async are actively being
     designed. Join us on GitHub to shape the language!</p>
 </div>
