@@ -1,0 +1,13 @@
+use system.io
+
+fn identity<T>(x T) T
+    x
+
+struct Wrapper<T>
+    value T
+
+fn main()
+    println(f"{identity(42)}")
+    println(f"{identity("hello")}")
+    let w = Wrapper<int>(value: 99)
+    println(f"{w.value}")

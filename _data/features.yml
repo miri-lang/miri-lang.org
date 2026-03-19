@@ -26,6 +26,18 @@
   icon: "&#x1f512;"
   description: "Automatic reference counting with no annotations. Small types are auto-copied. Managed types get recursive cleanup at zero references."
 
+- title: "Classes &amp; Inheritance"
+  icon: "&#x1f3db;"
+  description: "Full OOP with constructors, visibility modifiers, single inheritance, abstract classes, super calls, and runtime virtual dispatch via vtables."
+
+- title: "Traits &amp; Generics"
+  icon: "&#x1f9ec;"
+  description: "Trait interfaces with default methods and inheritance chains. Generic functions, structs, and classes monomorphized at compile time."
+
+- title: "First-Class Closures"
+  icon: "&#x1f517;"
+  description: "Lambdas that capture variables by value. Pass them as arguments, store in variables, return from functions. Compiled to native fat pointers."
+
 - title: "GPU-First Programming"
   icon: "&#x1f680;"
   description: "Write GPU kernels alongside CPU code in the same language. No separate shader files, no foreign function interfaces."

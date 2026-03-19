@@ -1,0 +1,17 @@
+use system.io
+
+trait Speakable
+    fn speak()
+
+trait Describable extends Speakable
+    fn describe()
+        println("I am an animal")
+
+class Dog implements Describable
+    fn speak()
+        println("Woof!")
+
+fn main()
+    let d = Dog()
+    d.speak()       // Woof!
+    d.describe()    // I am an animal

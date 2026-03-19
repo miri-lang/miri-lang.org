@@ -31,6 +31,14 @@ sidebar:
     title: Type Aliases
   - id: memory-model
     title: Memory Model
+  - id: classes
+    title: Classes
+  - id: traits
+    title: Traits
+  - id: closures
+    title: Closures
+  - id: generics
+    title: Generics
   - id: whats-next
     title: What's Next
 ---
@@ -209,12 +217,70 @@ a = [4, 5, 6]       // old array's RC decremented, freed if zero</code></pre>
 
 <p>You never write memory annotations — the compiler handles ownership automatically.</p>
 
+<!-- Classes -->
+<h2 id="classes">Classes</h2>
+<p>Classes are reference types with constructors, methods, visibility modifiers, and single inheritance. Method calls on base-typed variables are dispatched at runtime via vtables.</p>
+
+<pre><code class="language-miri">{% include examples/docs-classes.mi %}</code></pre>
+
+<h3>Key concepts</h3>
+<ul>
+  <li><strong><code>init</code></strong> — Constructor method. Fields are initialized via <code>self.field = value</code>. Instantiation uses named arguments matching <code>init</code> parameters.</li>
+  <li><strong><code>extends</code></strong> — Single inheritance. Subclasses inherit all fields and methods.</li>
+  <li><strong><code>super.method()</code></strong> — Calls the parent class implementation. <code>super.init()</code> chains to the parent constructor.</li>
+  <li><strong><code>abstract</code></strong> — Abstract classes cannot be instantiated. Abstract methods must be overridden in concrete subclasses.</li>
+  <li><strong>Virtual dispatch</strong> — When a variable is typed as a base class, method calls are resolved at runtime to the correct subclass implementation.</li>
+</ul>
+
+<h3>Visibility modifiers</h3>
+<table>
+  <thead>
+    <tr><th>Modifier</th><th>Accessible from</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>public</code></td><td>Everywhere (default for methods)</td></tr>
+    <tr><td><code>protected</code></td><td>Declaring class and all subclasses</td></tr>
+    <tr><td><code>private</code></td><td>Declaring class only</td></tr>
+  </tbody>
+</table>
+
+<!-- Traits -->
+<h2 id="traits">Traits</h2>
+<p>Traits define shared interfaces — a set of abstract and optionally concrete method signatures that classes can implement. Traits support inheritance and default methods.</p>
+
+<pre><code class="language-miri">{% include examples/docs-traits.mi %}</code></pre>
+
+<h3>Key concepts</h3>
+<ul>
+  <li><strong><code>implements</code></strong> — Attach one or more traits to a class. The class must provide implementations for all abstract methods.</li>
+  <li><strong>Default methods</strong> — Traits can provide method bodies. Classes inherit the default unless they override it.</li>
+  <li><strong>Trait inheritance</strong> — Traits can extend other traits with <code>extends</code>. Implementing a derived trait requires implementing the entire chain.</li>
+  <li><strong>Multiple traits</strong> — A class can implement multiple traits: <code>class X implements A, B</code>.</li>
+  <li><strong>Combined</strong> — A class can extend a base class and implement traits: <code>class Fish extends Animal implements Swimmer</code>.</li>
+  <li><strong><code>Self</code> type</strong> — Use <code>Self</code> in trait signatures to refer to the implementing class's own type.</li>
+</ul>
+
+<!-- Closures -->
+<h2 id="closures">Closures</h2>
+<p>Lambdas are first-class values. They can be stored in variables, passed as arguments, and returned from functions. Closures capture variables from the enclosing scope by value.</p>
+
+<pre><code class="language-miri">{% include examples/docs-closures.mi %}</code></pre>
+
+<p>At the ABI level, closures are represented as fat pointers <code>(fn_ptr, env_ptr)</code>. Captured variables are copied into an environment struct at the point of closure creation.</p>
+
+<!-- Generics -->
+<h2 id="generics">Generics</h2>
+<p>Generic functions and types are monomorphized at compile time — a specialized copy is emitted for each unique set of type arguments. No runtime cost.</p>
+
+<pre><code class="language-miri">{% include examples/docs-generics.mi %}</code></pre>
+
+<p>Calling <code>identity(42)</code> and <code>identity("hello")</code> produces two separate compiled functions (<code>identity_int</code>, <code>identity_string</code>). Generic structs and classes work the same way — each unique instantiation gets its own compiled type.</p>
+
 <!-- What's Next -->
 <h2 id="whats-next">What's Next</h2>
-<p>You've covered the features available in Miri v0.1.0-alpha.2. Here's what's coming next:</p>
+<p>You've covered the features available in Miri v0.1.0-alpha.3. Here's what's coming next:</p>
 <ul>
-  <li><strong>Alpha 3</strong> — Classes with inheritance, traits, closures, and generic monomorphization</li>
-  <li><strong>Future milestones</strong> — Multi-file projects, full memory safety model, GPU codegen, async/await</li>
+  <li><strong>Future milestones</strong> — Multi-file projects, trait objects, capture-by-reference closures, GPU codegen, async/await</li>
 </ul>
 <p>More resources:</p>
 <ul>
@@ -228,6 +294,6 @@ a = [4, 5, 6]       // old array's RC decremented, freed if zero</code></pre>
 </ul>
 
 <div class="note">
-  <p><strong>Miri is evolving fast.</strong> Features like GPU kernels, classes, traits, and async are actively being
+  <p><strong>Miri is evolving fast.</strong> GPU kernels, trait objects, and async are actively being
     designed. Join us on GitHub to shape the language!</p>
 </div>

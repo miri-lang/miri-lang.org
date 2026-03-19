@@ -1,0 +1,32 @@
+use system.io
+
+abstract class Shape
+    abstract fn area() float
+
+class Circle extends Shape
+    private radius float
+
+    fn init(r float)
+        self.radius = r
+
+    fn area() float
+        3.14159 * self.radius * self.radius
+
+class Rectangle extends Shape
+    private width float
+    private height float
+
+    fn init(w float, h float)
+        self.width = w
+        self.height = h
+
+    fn area() float
+        self.width * self.height
+
+fn main()
+    let c = Circle(r: 5.0)
+    println(f"{c.area()}")       // 78.53975
+
+    // Virtual dispatch — method resolved at runtime
+    let s Shape = Circle(r: 3.0)
+    println(f"{s.area()}")       // 28.27431

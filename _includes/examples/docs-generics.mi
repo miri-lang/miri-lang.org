@@ -1,0 +1,30 @@
+use system.io
+
+// Generic function — monomorphized per type
+fn identity<T>(x T) T
+    x
+
+// Generic struct
+struct Pair<T, U>
+    first T
+    second U
+
+// Generic class
+class Box<T>
+    private value T
+
+    fn init(v T)
+        self.value = v
+
+    fn get() T
+        self.value
+
+fn main()
+    let n = identity(42)
+    let s = identity("hello")
+
+    let p = Pair<int, String>(first: 1, second: "one")
+    println(f"{p.first}: {p.second}")    // 1: one
+
+    let b = Box<int>(v: 99)
+    println(f"{b.get()}")                // 99

@@ -1,0 +1,16 @@
+use system.io
+
+trait Logger
+    fn prefix() String
+        "INFO"                     // default implementation
+
+    fn log(msg String)
+        println(f"[{self.prefix()}] {msg}")
+
+class AppLogger implements Logger
+    fn prefix() String
+        "APP"                      // override default
+
+fn main()
+    let logger = AppLogger()
+    logger.log("started")          // [APP] started

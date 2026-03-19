@@ -5,7 +5,9 @@ const MIRI_KEYWORDS = new Set([
   'use', 'struct', 'enum', 'return', 'break', 'continue', 'forever',
   'until', 'unless', 'do', 'const', 'gpu', 'async', 'await', 'spawn',
   'parallel', 'not', 'and', 'or', 'type', 'impl', 'trait', 'pub',
-  'import', 'from', 'as', 'with', 'yield', 'where'
+  'import', 'from', 'as', 'with', 'yield', 'where',
+  'class', 'extends', 'implements', 'abstract', 'super', 'self',
+  'private', 'protected', 'public', 'init'
 ]);
 
 const MIRI_TYPES = new Set([

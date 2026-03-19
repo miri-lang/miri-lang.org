@@ -1,0 +1,22 @@
+use system.io
+
+class Animal
+    protected name String
+
+    fn init(n String)
+        self.name = n
+
+    fn speak()
+        println(f"I am {self.name}")
+
+class Dog extends Animal
+    fn speak()
+        super.speak()
+        println("Woof!")
+
+fn main()
+    let d = Dog(n: "Rex")
+    d.speak()
+    // Output:
+    // I am Rex
+    // Woof!

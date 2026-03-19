@@ -1,0 +1,12 @@
+use system.io
+
+fn apply(f fn(int) int, x int) int
+    f(x)
+
+fn main()
+    var base = 100
+    let add = fn(n int) int: base + n
+    println(f"{add(42)}")      // 142
+
+    let double = fn(x int) int: x * 2
+    println(f"{apply(double, 7)}")  // 14
