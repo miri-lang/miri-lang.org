@@ -1,0 +1,7 @@
+use system.io
+use system.collections.list as L
+
+fn main()
+    var items = L.List([1, 2, 3])
+    items.push(4)
+    println(f"{items.length()}")  // 4

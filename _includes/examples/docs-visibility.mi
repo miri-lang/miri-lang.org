@@ -1,0 +1,13 @@
+// utils/helper.mi
+public fn add(a int, b int) int
+    a + b
+
+private fn internal_detail() int
+    42
+
+// main.mi
+use local.utils.helper
+
+fn main()
+    let x = add(1, 2)         // OK — add is public
+    // internal_detail()       // Error — private to its module

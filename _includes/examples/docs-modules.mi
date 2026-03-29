@@ -1,0 +1,15 @@
+// Import all public entities from a module
+use system.io
+
+// Selective import
+use system.io.{print, println}
+
+// Module aliasing
+use system.collections.list as L
+
+// Multiple aliases in one statement
+use system.{io, collections.map as M}
+
+// Import from local project files
+use local.models.user
+use local.utils.math

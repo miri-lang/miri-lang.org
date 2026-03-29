@@ -1,0 +1,18 @@
+// models/user.mi
+use system.io
+
+class User
+    public name String
+
+    fn init(n String)
+        self.name = n
+
+    public fn greet()
+        println(f"Hello, {self.name}")
+
+// main.mi
+use local.models.user
+
+fn main()
+    let u = User(n: "Alice")
+    u.greet()  // Hello, Alice
