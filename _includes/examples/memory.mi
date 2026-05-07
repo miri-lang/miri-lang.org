@@ -1,0 +1,17 @@
+use system.io
+use system.collections.list
+
+fn inc(n out int)
+    n = n + 1
+
+fn main()
+    // Copy-on-Write — assignment shares, mutation forks.
+    let a = List([1, 2, 3])
+    var b = a
+    b.push(4)
+    println(f"{a.length()} {b.length()}")   // 3 4
+
+    // `out` — explicit, in-place mutation through a function.
+    var x = 41
+    inc(x)
+    println(f"{x}")                          // 42

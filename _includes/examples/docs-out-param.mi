@@ -1,0 +1,22 @@
+use system.io
+use system.collections.list
+
+// `out` lets a function modify a caller's variable in place.
+// The only memory-related keyword in the language.
+fn inc(n out int)
+    n = n + 1
+
+fn append_99(list out [int])
+    list.push(99)
+
+fn main()
+    var x = 41
+    inc(x)
+    println(f"{x}")          // 42
+
+    var items = List([1, 2])
+    append_99(items)
+    println(f"{items.length()}")   // 3
+
+    // Passing a `let` binding to an `out` parameter is a compile error —
+    // out parameters always require a mutable variable.

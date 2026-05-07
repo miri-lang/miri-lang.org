@@ -1,0 +1,17 @@
+use system.io
+use system.collections.list
+
+fn main()
+    let a = List([1, 2, 3])
+
+    // .clone() forces an independent deep copy up front,
+    // skipping the share-then-CoW dance.
+    var b = a.clone()
+    b.push(4)
+
+    println(f"{a.length()} {b.length()}")   // 3 4
+
+    // Strings, Maps, Arrays, and Sets are all Cloneable.
+    let greeting = "hello"
+    let copy = greeting.clone()
+    println(copy)

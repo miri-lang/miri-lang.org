@@ -13,7 +13,8 @@ performance and safety in the age of Generative AI."
     <h1 class="hero-tagline">GPU-First. Safe. Fast.</h1>
     <p class="hero-description">
       A statically-typed language compiled to native code with clean syntax,
-      null safety, automatic memory management, and first-class GPU programming.
+      null safety, invisible ownership with copy-on-write collections,
+      and first-class GPU programming.
     </p>
     <div class="hero-buttons">
       <a href="{{ '/docs/getting-started/' | relative_url }}" class="btn btn-primary">Get Started</a>
@@ -55,6 +56,8 @@ performance and safety in the age of Generative AI."
         data-target="ex-traits">Traits</button>
       <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-closures"
         data-target="ex-closures">Closures</button>
+      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-memory"
+        data-target="ex-memory">Memory</button>
       <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-generics"
         data-target="ex-generics">Generics</button>
       <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-modules"
@@ -101,6 +104,10 @@ performance and safety in the age of Generative AI."
 
     <div id="ex-closures" class="code-panel" role="tabpanel">
       <pre><code class="language-miri">{% include examples/closures.mi %}</code></pre>
+    </div>
+
+    <div id="ex-memory" class="code-panel" role="tabpanel">
+      <pre><code class="language-miri">{% include examples/memory.mi %}</code></pre>
     </div>
 
     <div id="ex-generics" class="code-panel" role="tabpanel">

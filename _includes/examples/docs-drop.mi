@@ -1,0 +1,19 @@
+use system.io
+
+// A type with `fn drop(self)` is a *resource type*.
+// Miri runs `drop` exactly once when the value's lifetime ends.
+class FileHandle
+    private path String
+
+    fn init(p String)
+        self.path = p
+        println(f"opened {self.path}")
+
+    fn drop(self)
+        println(f"closed {self.path}")
+
+fn main()
+    let f = FileHandle(p: "config.toml")
+    println("doing work...")
+    // f goes out of scope here — `drop` fires automatically.
+    // No manual .close() needed.

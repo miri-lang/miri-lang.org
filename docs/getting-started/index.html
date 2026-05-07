@@ -31,6 +31,14 @@ sidebar:
     title: Type Aliases
   - id: memory-model
     title: Memory Model
+  - id: cloneable
+    title: Cloneable & .clone()
+  - id: resource-types
+    title: Resource Types & drop
+  - id: use-after-move
+    title: Use-After-Move
+  - id: out-keyword
+    title: The out Keyword
   - id: classes
     title: Classes
   - id: traits
@@ -207,19 +215,82 @@ make build</code></pre>
 
 <!-- Memory Model -->
 <h2 id="memory-model">Memory Model</h2>
-<p>Miri uses a hybrid memory model with no annotations required from the programmer.</p>
+<p>Miri's memory model is built on a single promise: <strong>you never write memory annotations</strong>. The compiler infers ownership, manages reference counts, and proves linear flows so it can elide the bookkeeping. The only memory-related concept that ever appears in your source code is the <code>out</code> keyword (covered below).</p>
 
+<p>Under the hood, every value falls into one of three buckets:</p>
 <ul>
-  <li><strong>Auto-copy types</strong> — Small, all-primitive structs and all primitive types are copied on assignment. No overhead.</li>
-  <li><strong>Managed types</strong> — Collections, strings, and structs containing managed fields use automatic reference counting.</li>
-  <li><strong>Drop specialization</strong> — When a managed type's reference count reaches zero, a type-specific drop function recursively releases all managed fields.</li>
+  <li><strong>Auto-copy types</strong> — Primitives (<code>int</code>, <code>float</code>, <code>bool</code>) and small all-primitive structs (≤ 128 bytes) are copied bitwise on assignment. Zero overhead, no reference counting at all.</li>
+  <li><strong>Managed types</strong> — Strings, collections (<code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>), and any struct or class with managed fields are tracked with reference counts. The compiler emits IncRef/DecRef instructions automatically — even for elements deep inside nested collections.</li>
+  <li><strong>Resource types</strong> — Any type that defines a <code>fn drop(self)</code> method. These are single-owner: aliasing is forbidden, and the compiler tracks them strictly so you cannot use one after passing it away.</li>
 </ul>
 
-<pre><code class="language-miri">var a = [1, 2, 3]
-var b = a            // RC incremented, both point to same data
-a = [4, 5, 6]       // old array's RC decremented, freed if zero</code></pre>
+<h3>Copy-on-Write: assignment shares, mutation forks</h3>
+<p>When you assign a managed value to a new variable, both bindings point at the <em>same</em> underlying buffer — there is no eager deep copy. The buffer's reference count goes up by one. The instant either side mutates the value, Miri silently forks: it copies the buffer, decrements the old RC, sets the new RC to <code>1</code>, and applies the mutation to the fresh copy.</p>
 
-<p>You never write memory annotations — the compiler handles ownership automatically.</p>
+<pre><code class="language-miri">{% include examples/docs-memory-cow.mi %}</code></pre>
+
+<p>The result is the best of both worlds: <strong>value semantics</strong> (mutating <code>b</code> never changes <code>a</code>), but with the <strong>performance of reference passing</strong> when no one mutates. CoW applies to <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>, and <code>String</code>.</p>
+
+<h3>Zero-cost RC elision</h3>
+<p>The Perceus optimization pass analyses every function for linear flows. When the compiler proves that a value is created, used once, and discarded — never aliased, never escaping — it removes all of the IncRef/DecRef calls for that value entirely. You write idiomatic code; the compiler emits straight-line allocation and drop with no atomic counter traffic on the hot path.</p>
+
+<h3>Automatic recursive cleanup</h3>
+<p>When a managed value's RC reaches zero, Miri runs a compiler-generated destructor that, in order: (1) calls the user's <code>fn drop(self)</code> if one is defined, (2) recursively decrements every managed field, (3) frees the allocation. You never write <code>.close()</code>, <code>.dispose()</code>, or <code>try/finally</code>.</p>
+
+<!-- Cloneable -->
+<h2 id="cloneable">Cloneable &amp; <code>.clone()</code></h2>
+<p>Sometimes you want an independent deep copy up front rather than waiting for Copy-on-Write to fire. The <code>Cloneable</code> trait provides a <code>.clone()</code> method that does exactly that.</p>
+
+<pre><code class="language-miri">{% include examples/docs-cloneable.mi %}</code></pre>
+
+<p>All managed types (<code>String</code>, <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>) implicitly implement <code>Cloneable</code>. User-defined classes get an auto-generated <code>__clone_TypeName</code> helper — primitives are copied bitwise, managed fields are recursively cloned. Resource types (those with <code>fn drop(self)</code>) intentionally do <em>not</em> implement <code>Cloneable</code>: copying a file handle or a network socket is almost always a bug.</p>
+
+<p><strong>When to reach for <code>.clone()</code>:</strong> when you need to keep using a managed value after passing it to a function that consumes it (see Use-After-Move below), or when you want to break aliasing eagerly to avoid a CoW copy later in a tight loop.</p>
+
+<!-- Resource Types -->
+<h2 id="resource-types">Resource Types &amp; <code>fn drop(self)</code></h2>
+<p>Some values represent things in the outside world — open files, sockets, GPU buffers, lock guards — and need explicit cleanup. Miri's answer is the <code>fn drop(self)</code> method. Defining one on a class or struct turns it into a <em>resource type</em>:</p>
+
+<pre><code class="language-miri">{% include examples/docs-drop.mi %}</code></pre>
+
+<ul>
+  <li>Miri guarantees <code>drop</code> runs <strong>exactly once</strong> when the value's lifetime ends.</li>
+  <li>Resource types are <strong>single-owner</strong> — they cannot be shared via reference counting and they do not participate in Copy-on-Write.</li>
+  <li>Resource types are intentionally not <code>Cloneable</code> — most external resources cannot be meaningfully duplicated.</li>
+  <li>Aliasing a resource (<code>var alias = original</code>) consumes the original, just like passing it to a function.</li>
+</ul>
+
+<p>This is how Miri delivers RAII without manual <code>.close()</code> calls and without exception-handling ceremony.</p>
+
+<!-- Use-After-Move -->
+<h2 id="use-after-move">Use-After-Move &amp; Escape Analysis</h2>
+<p>Once you pass a resource to a function, the compiler refuses to let you use that variable again. This is enforced statically — there is no runtime check, just a compile error.</p>
+
+<pre><code class="language-miri">{% include examples/docs-use-after-move.mi %}</code></pre>
+
+<p>The rule has two layers:</p>
+<ul>
+  <li><strong>Resource types</strong> are tracked strictly at every scope. Pass one to a function, store it in a field, or alias it via assignment, and the original binding is marked consumed. Any subsequent use is a compile error with diagnostic <code>E0110</code>.</li>
+  <li><strong>Managed types</strong> are tracked at the top level (script-style code) and inside function bodies via <em>escape analysis</em>. The compiler examines each callee's body to see whether your argument is just being read (a borrow) or genuinely escapes — returned, stored on the heap, or captured into a returned closure. Reads do not consume; escapes do. The diagnostic explains the multi-hop chain that led to the move.</li>
+</ul>
+
+<p>The fix is always the same: <code>.clone()</code> the value before the consuming call. Because escape analysis is precise, you only need to clone at the spots that actually matter — the borrow-checker tax of "clone everywhere just in case" is gone.</p>
+
+<!-- The out Keyword -->
+<h2 id="out-keyword">The <code>out</code> Keyword</h2>
+<p>So far, every memory rule has been inferred. The one — and only — explicit memory concept in the language is <code>out</code>. Mark a parameter <code>out</code> to let a function modify a caller's variable in place.</p>
+
+<pre><code class="language-miri">{% include examples/docs-out-param.mi %}</code></pre>
+
+<h3>Rules at a glance</h3>
+<ul>
+  <li>The argument passed to an <code>out</code> parameter <strong>must be a <code>var</code></strong>. Passing a <code>let</code> is a compile error.</li>
+  <li>The same variable cannot appear twice as <code>out</code> in a single call (no aliasing through the back door).</li>
+  <li>Types must match exactly — no implicit coercion.</li>
+  <li>For small auto-copy types, <code>out</code> compiles to a mutable reference (no allocation). For managed/large types, the value is moved in and moved back out — ownership transfers to the callee and returns to the caller.</li>
+</ul>
+
+<p>That's the whole memory-keyword surface. No lifetimes, no <code>&amp;mut</code>, no borrow-vs-move distinctions to memorize.</p>
 
 <!-- Classes -->
 <h2 id="classes">Classes</h2>
@@ -324,9 +395,10 @@ a = [4, 5, 6]       // old array's RC decremented, freed if zero</code></pre>
 
 <!-- What's Next -->
 <h2 id="whats-next">What's Next</h2>
-<p>You've covered the features available in Miri v0.2.0-alpha.4. Here's what's coming next:</p>
+<p>You've covered the features available in Miri v0.3.0-beta.1 — the first Beta release, which closes out the Memory Safety milestone (Perceus+, Copy-on-Write, escape-based use-after-move, <code>out</code> parameters, and user-defined <code>drop</code>).</p>
+<p>Here's what's coming next:</p>
 <ul>
-  <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, GPU codegen, async/await</li>
+  <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, GPU codegen, async/await, channel-based concurrency</li>
 </ul>
 <p>More resources:</p>
 <ul>

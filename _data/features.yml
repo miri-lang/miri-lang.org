@@ -24,7 +24,7 @@
 
 - title: "Memory Safety"
   icon: "&#x1f512;"
-  description: "Automatic reference counting with no annotations. Small types are auto-copied. Managed types get recursive cleanup at zero references."
+  description: "Invisible ownership with optimized reference counting. Copy-on-Write collections give value semantics with reference-pass speed. Use-after-move is caught at compile time via escape analysis. The compiler elides RC entirely on linear flows. The only memory keyword you ever write is `out`."
 
 - title: "Classes &amp; Inheritance"
   icon: "&#x1f3db;"
@@ -47,4 +47,3 @@
   icon: "&#x26a1;"
   description: "First-class async/await and parallel primitives make concurrent programming intuitive and safe."
   coming_soon: true
-

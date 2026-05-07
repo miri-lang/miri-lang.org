@@ -1,0 +1,26 @@
+use system.io
+
+// Resource types (those defining `fn drop(self)`) are tracked strictly.
+// Once you pass one to a function, you can't use it again.
+class Connection
+    public id int
+
+    fn init(i int)
+        self.id = i
+
+    fn drop(self)
+        println(f"closing {self.id}")
+
+fn archive(c Connection)
+    println(f"archiving {c.id}")
+
+fn main()
+    let c = Connection(i: 1)
+    archive(c)
+    // archive(c)   // compile error: 'c' was consumed by 'archive'
+                    // and cannot be used again
+
+    // Need to call archive twice? Use `.clone()` to opt in to a copy
+    // (only available for Cloneable types — resource types are
+    // intentionally not Cloneable, because cloning a file handle is
+    // almost always a bug).
