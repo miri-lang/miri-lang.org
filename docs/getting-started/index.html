@@ -27,6 +27,14 @@ sidebar:
     title: Collections
   - id: option-types
     title: Option Types
+  - id: result-type
+    title: Result&lt;T, E&gt;
+  - id: math-module
+    title: system.math
+  - id: collection-traits
+    title: Collection Traits
+  - id: testing
+    title: Testing
   - id: type-aliases
     title: Type Aliases
   - id: memory-model
@@ -207,6 +215,64 @@ make build</code></pre>
   <li><strong><code>val ?? default</code></strong> — coalesce to a default value</li>
 </ul>
 
+<!-- Result -->
+<h2 id="result-type"><code>Result&lt;T, E&gt;</code></h2>
+<p>Fallible operations return <code>Result&lt;T, E&gt;</code> — an enum with two variants, <code>Ok(T)</code> and <code>Err(E)</code>. The compiler enforces <code>must_use</code> semantics: ignoring a <code>Result</code> value without inspecting it is a compile error, so fallible APIs cannot be silently dropped.</p>
+
+<pre><code class="language-miri">{% include examples/docs-result.mi %}</code></pre>
+
+<p>Inspect a result with <code>match</code> for full extraction, or with the helpers <code>is_ok()</code>, <code>is_err()</code>, and <code>unwrap_or(default)</code> for quick paths. There is no <code>unwrap()</code> that panics on <code>Err</code> — Miri's standard library does not panic, so the failure path is always explicit at the call site.</p>
+
+<!-- system.math -->
+<h2 id="math-module"><code>system.math</code></h2>
+<p>The math module ships a single set of numeric primitives that works on both CPU and (in upcoming releases) GPU kernels. Functions are imported as free names — no receiver object, no method-call syntax.</p>
+
+<pre><code class="language-miri">{% include examples/docs-math.mi %}</code></pre>
+
+<p>The current surface covers <code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, plus the constants <code>PI</code>, <code>E</code>, and <code>INF</code>. CPU calls lower to <code>libm</code> / Cranelift intrinsics; GPU calls (in the upcoming GPU preview) lower to the target backend's built-in equivalents — same source, same answer.</p>
+
+<!-- Collection Traits -->
+<h2 id="collection-traits">Collection Traits</h2>
+<p>Collections share a four-trait taxonomy that breaks the classic "kitchen sink" iterator interface into focused, composable pieces. <code>List&lt;T&gt;</code> and <code>Array&lt;T, N&gt;</code> inherit the default method bodies on each trait, so the same fluent pipeline works across collection types.</p>
+
+<pre><code class="language-miri">{% include examples/docs-collection-traits.mi %}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Trait</th><th>Methods</th><th>Returns</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Queryable&lt;T&gt;</code></td><td><code>is_empty</code>, <code>first</code>, <code>last</code>, <code>contains</code>, <code>index_of</code></td><td>bool / <code>T?</code> / <code>int?</code></td></tr>
+    <tr><td><code>Transformable&lt;T&gt;</code></td><td><code>map</code>, <code>filter</code>, <code>flat_map</code></td><td><code>Self</code></td></tr>
+    <tr><td><code>Foldable&lt;T&gt;</code></td><td><code>reduce</code>, <code>any</code>, <code>all</code>, <code>count_where</code>, <code>sum</code>, <code>min</code>, <code>max</code></td><td>scalar / <code>T?</code></td></tr>
+    <tr><td><code>Sequenced&lt;T&gt;</code></td><td><code>take</code>, <code>skip</code>, <code>sorted_by</code>, <code>unique</code>, <code>reversed</code>, <code>zip</code>, <code>enumerate</code></td><td><code>Self</code></td></tr>
+  </tbody>
+</table>
+
+<p><code>sum</code>, <code>min</code>, and <code>max</code> return <code>T?</code> — <code>None</code> on an empty collection, <code>Some(value)</code> otherwise. The standard library never traps on an empty input. Combine with <code>?? default</code> for a one-shot fallback.</p>
+
+<p><code>Map&lt;K, V&gt;</code> and <code>Set&lt;T&gt;</code> keep ad-hoc <code>map</code> / <code>filter</code> / <code>reduce</code> methods — they don't fit the generic <code>Self</code>-returning shape of the traits until associated types and generic methods land in a future release.</p>
+
+<!-- Testing -->
+<h2 id="testing">Testing</h2>
+<p><code>system.testing</code> provides four assertion intrinsics. Each is lowered directly by the compiler — the abort path is synthesized at the call site, embedding the source <code>path:line</code> in the failure message.</p>
+
+<pre><code class="language-miri">{% include examples/docs-testing.mi %}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Function</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>assert(cond, msg?)</code></td><td>Aborts when <code>cond</code> is <code>false</code>.</td></tr>
+    <tr><td><code>assert_eq&lt;T&gt;(actual, expected, msg?)</code></td><td>Aborts when values differ. Supports <code>int</code>/<code>float</code>/<code>bool</code>/<code>String</code> + all int widths.</td></tr>
+    <tr><td><code>assert_ne&lt;T&gt;(a, b, msg?)</code></td><td>Aborts when values are equal.</td></tr>
+    <tr><td><code>assert_panics(f, expected?)</code></td><td>Runs <code>f()</code> and aborts unless it calls <code>panic(...)</code>.</td></tr>
+  </tbody>
+</table>
+
+<p>A failed assertion aborts with <code>Runtime error: assertion failed at &lt;path&gt;:&lt;line&gt;: &lt;detail&gt;</code>. <code>assert_panics</code> uses a setjmp/longjmp catch frame so a Miri-level <code>panic(...)</code> inside the closure is caught and reported as a pass.</p>
+
 <!-- Type Aliases -->
 <h2 id="type-aliases">Type Aliases</h2>
 <p>Type aliases create semantic names for existing types. They are transparent to the type checker — fully interchangeable with the underlying type.</p>
@@ -366,10 +432,13 @@ make build</code></pre>
   <tbody>
     <tr><td><code>system.io</code></td><td><code>print</code>, <code>println</code>, <code>eprint</code>, <code>eprintln</code></td></tr>
     <tr><td><code>system.string</code></td><td>String class with intrinsics</td></tr>
-    <tr><td><code>system.collections.array</code></td><td>Array methods</td></tr>
-    <tr><td><code>system.collections.list</code></td><td>List methods</td></tr>
-    <tr><td><code>system.collections.map</code></td><td>Map methods</td></tr>
-    <tr><td><code>system.collections.set</code></td><td>Set methods</td></tr>
+    <tr><td><code>system.math</code></td><td><code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, <code>PI</code>, <code>E</code>, <code>INF</code></td></tr>
+    <tr><td><code>system.result</code></td><td><code>Result&lt;T, E&gt;</code> with <code>is_ok</code>, <code>is_err</code>, <code>unwrap_or</code></td></tr>
+    <tr><td><code>system.testing</code></td><td><code>assert</code>, <code>assert_eq</code>, <code>assert_ne</code>, <code>assert_panics</code></td></tr>
+    <tr><td><code>system.collections.array</code></td><td>Array methods + <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> traits</td></tr>
+    <tr><td><code>system.collections.list</code></td><td>List methods + <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> traits</td></tr>
+    <tr><td><code>system.collections.map</code></td><td>Map methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
+    <tr><td><code>system.collections.set</code></td><td>Set methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
   </tbody>
 </table>
 
@@ -395,7 +464,7 @@ make build</code></pre>
 
 <!-- What's Next -->
 <h2 id="whats-next">What's Next</h2>
-<p>You've covered the features available in Miri v0.3.0-beta.1 — the first Beta release, which closes out the Memory Safety milestone (Perceus+, Copy-on-Write, escape-based use-after-move, <code>out</code> parameters, and user-defined <code>drop</code>).</p>
+<p>You've covered the features available in Miri v0.4.0-beta.2 — the second Beta release, which lays down the Core Standard Library (<code>Result&lt;T, E&gt;</code>, <code>system.math</code>, the <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> trait taxonomy, and <code>system.testing</code>) on top of the Memory Safety milestone from Beta 1.</p>
 <p>Here's what's coming next:</p>
 <ul>
   <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, GPU codegen, async/await, channel-based concurrency</li>

@@ -1,0 +1,27 @@
+use system.io
+use system.collections.list
+
+fn main()
+    let xs = List([1, 2, 3, 4, 5])
+
+    // Transformable: map, filter, flat_map.
+    let doubled = xs.map(fn(x int) int: x * 2)
+    let evens = xs.filter(fn(x int) bool: x % 2 == 0)
+
+    // Foldable: reduce, any, all, sum, min, max.
+    // sum/min/max return T? — None on empty, Some(value) otherwise.
+    let total = xs.sum() ?? 0
+    let any_big = xs.any(fn(x int) bool: x > 4)
+    let folded = xs.reduce(0, fn(acc int, x int) int: acc + x)
+
+    // Sequenced: take, skip, sorted_by, reversed, zip, enumerate.
+    let head = xs.take(3)
+    let tail = xs.skip(2)
+    let paired = List([1, 2, 3]).zip(List([10, 20, 30]))
+    let indexed = List(["a", "b", "c"]).enumerate()
+
+    // Queryable: is_empty, first, last, contains, index_of.
+    println(f"{xs.first() ?? 0} {xs.last() ?? 0}")
+    println(f"{xs.contains(3)} {xs.index_of(4)}")
+
+    println(f"{total} {folded} {any_big}")

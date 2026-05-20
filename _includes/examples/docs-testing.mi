@@ -1,0 +1,18 @@
+use system.io
+use system.testing
+
+fn add(a int, b int) int
+    a + b
+
+fn main()
+    // Pass silently.
+    assert_eq(add(2, 3), 5)
+    assert(add(1, 1) == 2, "addition should be commutative")
+    assert_ne(add(2, 2), 5)
+
+    // A failing assertion aborts with:
+    //   Runtime error: assertion failed at <path>:<line>: expected 6, got 5
+    // assert_eq(add(2, 3), 6)
+
+    // assert_panics catches Miri-level panic(...) calls.
+    assert_panics(fn(): panic("boom"), "boom")

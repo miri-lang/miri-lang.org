@@ -1,0 +1,20 @@
+use system.io
+use system.result
+
+fn divide(a int, b int) Result<int, String>
+    if b == 0
+        return Result.Err("division by zero")
+    return Result.Ok(a / b)
+
+fn main()
+    match divide(10, 2)
+        Result.Ok(v): println(f"got {v}")
+        Result.Err(e): println(f"err: {e}")
+
+    // unwrap_or returns the Ok value or a fallback.
+    let safe = divide(10, 0).unwrap_or(-1)
+    println(f"{safe}")
+
+    // Predicates for quick inspection.
+    let r = divide(8, 4)
+    println(f"{r.is_ok()} {r.is_err()}")
