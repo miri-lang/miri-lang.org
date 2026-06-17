@@ -1,0 +1,12 @@
+use system.gpu
+use system.io
+
+gpu var arr = [0, 0, 0, 0, 0, 0, 0, 0]
+
+gpu forall i in 0..8
+    arr[i] = i * i
+
+let h = arr
+
+for j in 0..4
+    println(f'{h[j]}')

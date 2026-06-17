@@ -1,0 +1,16 @@
+use system.gpu
+use system.io
+
+const N = 8
+
+gpu_reset_telemetry()
+gpu var data = [0, 0, 0, 0, 0, 0, 0, 0]
+
+gpu forall i in 0..N
+    data[i] = i + 8
+
+gpu forall i in 0..N
+    data[i] = data[i] + 8
+
+let host = data
+println(f'{host[7]} {gpu_uploads()} {gpu_launches()} {gpu_readbacks()} {gpu_fences()}')

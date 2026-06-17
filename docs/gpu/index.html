@@ -1,0 +1,338 @@
+---
+layout: docs
+title: "Getting Started with GPU — Miri Programming Language"
+description: "Write, compile, and run GPU programs in Miri using the residency surface: gpu let / gpu var, cross-residency readback, and gpu forall kernels."
+sidebar:
+  - id: gpu-intro
+    title: Introduction
+  - id: residency
+    title: The Residency Surface
+  - id: readback
+    title: Cross-Residency Readback
+  - id: cost-classes
+    title: The Four Cost Classes
+  - id: forbidden
+    title: The Forbidden Pattern
+  - id: cookbook
+    title: Cookbook
+  - id: api
+    title: API Reference
+  - id: limits
+    title: WGSL Backend Limits
+  - id: checklist
+    title: Review Checklist
+  - id: whats-next
+    title: What's Next
+---
+
+<h1>Getting Started with GPU</h1>
+<p>Miri is GPU-first: running code on an accelerator is part of the language, not a library bolted on top.
+  A GPU program in Miri reads top-to-bottom as a sequence of plain operations, and the <em>cost</em> of each
+  line — upload, kernel launch, readback — is visible in the source.</p>
+
+<p>This guide is built around the <strong>residency surface</strong>: the small set of keywords that move data
+  onto the device and launch work over it. Everything in the <a href="#cookbook">Cookbook</a> compiles and runs
+  today; the snippets are the same ones the compiler verifies in its test suite
+  (<code>cargo test docs::gpu</code>).</p>
+
+<div class="note">
+  <p><strong>Requirements.</strong> You need a Miri build (<code>make build</code>, see the
+    <a href="{{ '/docs/getting-started/' | relative_url }}#installation">install guide</a>) and a GPU adapter
+    reachable through WebGPU — any modern Metal, Vulkan, or DirectX 12 device. If no adapter is present the
+    program reports the GPU as unavailable rather than crashing.</p>
+</div>
+
+<!-- Introduction -->
+<h2 id="gpu-intro">Introduction: residency is a binding attribute</h2>
+<p>Miri does not have a separate "GPU array" type. An <code>Array&lt;f32, 4&gt;</code> is the same type whether it
+  lives on the host or the device — what differs is the binding's <strong>residency</strong>. Residency is an
+  attribute on the binding, exactly like mutability:</p>
+
+<pre><code class="language-miri">let  x = [1.0, 2.0, 3.0, 4.0]      // host-resident, immutable
+var  y = [1.0, 2.0, 3.0, 4.0]      // host-resident, mutable
+gpu let a = [1.0, 2.0, 3.0, 4.0]   // device-resident, immutable  (uploaded)
+gpu var d = [0.0, 0.0, 0.0, 0.0]   // device-resident, mutable</code></pre>
+
+<p>Two axes — mutability (<code>let</code>/<code>var</code>) and residency (host/<code>gpu</code>) — give four
+  binding forms and <strong>zero new types</strong>. The <code>gpu</code> keyword is the only source of device
+  residency. Reading any file, <code>grep 'gpu let\|gpu var'</code> enumerates every device-resident binding.</p>
+
+<!-- Residency surface -->
+<h2 id="residency">The residency surface</h2>
+<p>Four keywords cover the whole surface:</p>
+
+<table>
+  <thead>
+    <tr><th>Form</th><th>Meaning</th><th>Cost</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>gpu let g = …</code></td><td>Immutable device buffer</td><td>Upload (deferred to first capture)</td></tr>
+    <tr><td><code>gpu var g = …</code></td><td>Mutable device buffer</td><td>Upload (deferred to first capture)</td></tr>
+    <tr><td><code>gpu forall i in 0..n</code></td><td>Launch a kernel over indices <code>0..n</code></td><td>Kernel launch</td></tr>
+    <tr><td><code>let h = g</code></td><td>Copy a device buffer back to the host</td><td>Fence + readback</td></tr>
+  </tbody>
+</table>
+
+<p>A <code>gpu forall</code> body is a kernel: one GPU thread runs per index. It may capture device-resident
+  bindings, index into them, and do arithmetic, <code>if</code>, and <code>while</code>. It may <strong>not</strong>
+  do I/O, allocate, or capture host scalars — coefficients live as literals in the kernel body.</p>
+
+<h3>What may be device-resident</h3>
+<p>A type can be bound with <code>gpu</code> only if it implements the <code>Accelerable</code> capability trait.
+  The standard library ships impls for <code>Array&lt;T, N&gt;</code> and <code>List&lt;T&gt;</code> over the
+  accelerable scalars — <code>int</code>, <code>i32</code>, <code>i64</code>, <code>u32</code>, <code>u64</code>,
+  <code>f32</code>, <code>f64</code>, <code>bool</code> — plus tuples and structs whose every field is accelerable.
+  <code>String</code>, <code>Map</code>, <code>Set</code>, and function values are not accelerable; binding one
+  with <code>gpu</code> is a compile error that names the missing trait.</p>
+
+<div class="note">
+  <p><strong>No silent promotion.</strong> A host <code>Array</code> never becomes device-resident because a
+    kernel wants it. You write <code>gpu let</code> at the binding, and the upload is visible at that line.</p>
+</div>
+
+<!-- Readback -->
+<h2 id="readback">Cross-residency readback — the only way back</h2>
+<p>Assigning a device-resident binding to a host binding copies the bytes back to the host. This is the
+  <strong>only</strong> way to read device results, and it is always visible at the assignment line:</p>
+
+<pre><code class="language-miri">gpu var d = [0.0, 0.0, 0.0, 0.0]
+gpu forall i in 0..4
+    d[i] = d[i] + 1.0
+
+let host = d        // fence + readback — the whole buffer comes back here
+println(f'{host[0]}')</code></pre>
+
+<p>There is no <code>.to_host()</code> method and no hidden transfer. One concept, one surface: the keyword on
+  each side of the assignment marks the host/device boundary. The reverse direction works the same way —
+  <code>gpu let g = host_x</code> uploads <code>host_x</code>.</p>
+
+<!-- Cost classes -->
+<h2 id="cost-classes">The four cost classes</h2>
+<p>Every operation is one of four cost classes, and the surface form names the class. You can read the cost of a
+  program straight from the source, without running it:</p>
+
+<table>
+  <thead>
+    <tr><th>Cost class</th><th>Surface marker</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pure host op</td><td><code>let</code>, <code>var</code>, <code>for</code>, a call to a non-<code>gpu</code> function</td></tr>
+    <tr><td>Upload to device</td><td><code>gpu let</code>, <code>gpu var</code> (paid lazily at first capture)</td></tr>
+    <tr><td>Kernel launch</td><td><code>gpu forall</code>, a <code>gpu fn</code> call</td></tr>
+    <tr><td>Fence + readback</td><td>Cross-residency assignment (<code>let h = g</code>)</td></tr>
+  </tbody>
+</table>
+
+<p>The runtime exposes counters so you can confirm the cost class of each line. After
+  <code>gpu_reset_telemetry()</code>, the functions <code>gpu_uploads()</code>, <code>gpu_launches()</code>,
+  <code>gpu_readbacks()</code>, and <code>gpu_fences()</code> return the cumulative counts. The
+  <a href="#cb-buffer-reuse">buffer-reuse recipe</a> below asserts them directly.</p>
+
+<!-- Forbidden pattern -->
+<h2 id="forbidden">The forbidden pattern — element cross-read</h2>
+<p>Reading a single element of a device-resident binding from host code is a <strong>compile error</strong>.
+  It looks harmless, but each read would force its own readback — in a loop, that is N round-trips instead of
+  one bulk copy:</p>
+
+<pre><code class="language-miri">gpu var arr = [0, 0, 0, 0, 0, 0, 0, 0]
+gpu forall i in 0..8
+    arr[i] = i * i
+
+let v = arr[0]     // COMPILE ERROR: a per-element read would require a readback</code></pre>
+
+<p>The fix the compiler points to is to bulk-copy first, then index the host copy. This keeps the readback cost
+  visible at one line:</p>
+
+<pre><code class="language-miri">{% include examples/gpu-readback.mi %}</code></pre>
+
+<p>Output:</p>
+<pre><code>0
+1
+4
+9</code></pre>
+
+<!-- Cookbook -->
+<h2 id="cookbook">Cookbook</h2>
+<p>Each recipe below is verified by the compiler test suite. Copy one into a <code>.mi</code> file and run it
+  with <code>./target/release/miri run yourfile.mi</code>.</p>
+
+<h3 id="cb-vector-add">Vector add</h3>
+<p>The simplest kernel: two device buffers added element-wise into a third, then read back.</p>
+<pre><code class="language-miri">{% include examples/gpu-vector-add.mi %}</code></pre>
+<p>Output: <code>6.0 8.0 10.0 12.0</code>. Five lines of GPU logic; the CUDA equivalent is roughly forty.</p>
+
+<h3 id="cb-buffer-reuse">Buffer-reuse pipeline</h3>
+<p>Two kernels run over the same <code>gpu var</code> with no readback between them, so the device buffer is
+  uploaded once and reused. The telemetry counters prove the cost model: one upload, two launches, one readback.</p>
+<pre><code class="language-miri">{% include examples/gpu-buffer-reuse.mi %}</code></pre>
+<p>Output: <code>23 1 2 1 1</code> — <code>data[7] = 7 + 8 = 15</code>, then <code>15 + 8 = 23</code>; then
+  1 upload, 2 launches, 1 readback, 1 fence. No cross-residency assignment sits between the two
+  <code>gpu forall</code> blocks, which is the visible marker that the buffer is shared.</p>
+
+<h3 id="cb-matmul">Matrix multiply</h3>
+<p>A 2×2 product mapped as one thread per output cell, with the dot product computed by an in-kernel
+  <code>while</code> loop. The matrix dimension is inlined as the literal <code>2</code> because host scalars
+  cannot be captured into a kernel.</p>
+<pre><code class="language-miri">{% include examples/gpu-matmul.mi %}</code></pre>
+<p>Output: <code>19.0 22.0 43.0 50.0</code>. This is a correctness illustration — one thread per cell with a
+  strided read — not an optimized GEMM. Tiled, shared-memory GEMM depends on workgroup memory
+  (tracked as <strong>F36</strong> / <strong>10.1i</strong>).</p>
+
+<h3 id="cb-saxpy">SAXPY (fused multiply-add)</h3>
+<p>The scalar coefficient <code>2.0</code> is written directly in the kernel body.</p>
+<pre><code class="language-miri">{% include examples/gpu-saxpy.mi %}</code></pre>
+<p>Output: <code>7.0 10.0 13.0 16.0</code>.</p>
+
+<h3 id="cb-reduction">Parallel reduction</h3>
+<div class="note">
+  <p><strong>Planned — not yet runnable.</strong> On-device parallel reduction (<code>.reduce</code> lowering to a
+    tree reduction over workgroup memory, returning a scalar) is tracked as <strong>F13</strong>. The snippet
+    below shows the intended surface. Until F13 ships, sum on the host after a readback.</p>
+</div>
+<pre><code class="language-miri">use system.gpu
+
+gpu let data = [1, 2, 3, 4, 5, 6, 7, 8]
+let sum = data.reduce(0, fn(a int, b int) int: a + b)   // launch + scalar fence
+println(f'sum = {sum}')                                  // 36</code></pre>
+<p>The reduce result is a host scalar, so the fence is implicit but bounded — a single 4-byte readback.</p>
+
+<!-- API Reference -->
+<h2 id="api">API reference</h2>
+<p>The residency surface (<code>gpu let</code> / <code>gpu var</code> / <code>gpu forall</code> / readback) runs
+  today. The kernel-authoring surface below — <code>gpu fn</code>, the <code>kernel</code> context, atomics — is
+  the designed API; parts still landing are marked <strong>Planned (F…)</strong> and excluded from the verified
+  snippet set.</p>
+
+<h3 id="api-accelerable"><code>Accelerable</code></h3>
+<p>The capability trait that gates device residency. The compiler dispatches on the trait, never on a type name,
+  so adding a new GPU-eligible container is an <code>.mi</code> edit, not a compiler change.</p>
+<pre><code class="language-miri">public trait Accelerable
+    fn byte_size() int
+    fn binding_kind() AcceleratorBindingKind   // Storage | Uniform | PushConstant</code></pre>
+
+<h3 id="api-bindings"><code>gpu let</code> / <code>gpu var</code></h3>
+<p>Declare a device-resident binding. <code>gpu let</code> is immutable, <code>gpu var</code> is mutable. The
+  initializer is an array literal or a sized constructor (<code>Array&lt;f32, N&gt;()</code>). Upload is deferred
+  to the first kernel that captures the binding.</p>
+
+<h3 id="api-gpu-for"><code>gpu forall</code></h3>
+<p>Launch a kernel over an index range. The bound may be an integer literal, a <code>const</code>, or a runtime
+  value (<code>0..n</code>, <code>0..g.length()</code>). The body runs once per index on its own thread and may
+  capture device-resident bindings, index them, and use arithmetic, <code>if</code>, and <code>while</code>. A
+  two-dimensional form <code>gpu forall x, y in 0..W, 0..H</code> is available for literal bounds.</p>
+
+<h3 id="api-gpu-fn"><code>gpu fn</code> and the <code>kernel</code> context</h3>
+<p>A named kernel. Every parameter is implicitly device-resident, and the body has an implicit <code>kernel</code>
+  context object exposing the launch geometry:</p>
+<pre><code class="language-miri">gpu fn scale(src Array&lt;f32, 1024&gt;, dst out Array&lt;f32, 1024&gt;)
+    let i = kernel.thread_idx.x + kernel.block_idx.x * kernel.block_dim.x
+    if i &lt; src.length()
+        dst[i] = src[i] * 2.0</code></pre>
+<p>The four launch-geometry fields below are available today, each with <code>.x</code>, <code>.y</code>, and
+  <code>.z</code> components:</p>
+<table>
+  <thead>
+    <tr><th>Field</th><th>Meaning</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>kernel.thread_idx</code></td><td>Thread index within its block</td><td>Available</td></tr>
+    <tr><td><code>kernel.block_idx</code></td><td>Block index within the grid</td><td>Available</td></tr>
+    <tr><td><code>kernel.block_dim</code></td><td>Threads per block</td><td>Available</td></tr>
+    <tr><td><code>kernel.grid_dim</code></td><td>Blocks per grid</td><td>Available</td></tr>
+    <tr><td><code>kernel.global_idx</code></td><td><code>block_idx * block_dim + thread_idx</code></td><td>Planned (Task 3 follow-up)</td></tr>
+    <tr><td><code>kernel.barrier()</code></td><td>Workgroup synchronization</td><td>Planned (F32 / F36)</td></tr>
+    <tr><td><code>kernel.warp.*</code></td><td>Subgroup / warp ops (<code>lane_id</code>, <code>shuffle_down</code>, …)</td><td>Planned (F17)</td></tr>
+  </tbody>
+</table>
+<div class="note">
+  <p><strong>Planned.</strong> A <code>gpu fn</code> can be defined today, but the explicit
+    <code>.launch(grid = …, block = …)</code> dispatch surface is still landing. For runnable kernels today, use
+    <code>gpu forall</code>, which infers the launch geometry for you.</p>
+</div>
+
+<h3 id="api-atomics">Atomics</h3>
+<div class="note">
+  <p><strong>Planned — F11 / F18.</strong> <code>Atomic&lt;T&gt;</code> for <code>T ∈ {i32, u32}</code> with
+    <code>load</code> / <code>store</code> / <code>add</code> / <code>sub</code> / <code>max</code> / <code>min</code> /
+    <code>and</code> / <code>or</code> / <code>xor</code> / <code>compare_exchange</code> is the escape hatch for
+    concurrent writes that aren't a 1-to-1 function of the thread index. Until it ships, kernels must write each
+    element from exactly one thread.</p>
+</div>
+
+<h3 id="api-math"><code>system.math</code> on the device</h3>
+<p>The <code>system.math</code> intrinsics are usable inside kernels:
+  <code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>,
+  <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>,
+  <code>exp</code>.</p>
+<div class="note">
+  <p><strong>Known limitation (F23).</strong> A math intrinsic whose result is consumed by an <code>f32</code>
+    buffer is being narrowed to the buffer width; mixed-width math in kernels can produce wrong values on some
+    adapters until F23 is fully verified. Prefer host-side math for now where precision matters.</p>
+</div>
+
+<!-- WGSL limits -->
+<h2 id="limits">WGSL backend limits</h2>
+<p>Miri's first GPU backend targets WebGPU (WGSL) through <code>wgpu</code>, the most portable Rust GPU host
+  driver. WGSL's core lacks several features, so the following are gated until the native backends (SPIR-V, PTX,
+  Metal) land. Each gap names the follow-up that closes it:</p>
+
+<table>
+  <thead>
+    <tr><th>Not in WGSL core</th><th>Consequence</th><th>Closed by</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Native <code>i64</code> / <code>u64</code> / <code>f64</code></td><td>64-bit scalars are gated on device features; an unsupported adapter is refused before dispatch (not at runtime)</td><td>Native backends (M8)</td></tr>
+    <tr><td>64-bit atomics</td><td><code>Atomic&lt;i64&gt;</code> / <code>Atomic&lt;u64&gt;</code> unavailable on WGSL</td><td>F11 / F18 + native backends</td></tr>
+    <tr><td>Cooperative matrix</td><td>No tensor-core / cooperative-matrix path</td><td>Native backends (M8)</td></tr>
+    <tr><td><code>fp8</code> / <code>fp4</code> / <code>bf16</code></td><td>Low-precision types cannot lower to WGSL</td><td>F9 (and follow-ups) + native backends</td></tr>
+    <tr><td><code>f16</code></td><td>No half-precision primitive type yet</td><td>F9</td></tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <p>WGSL stays the browser and embedded path. The native primaries — SPIR-V, PTX, Metal — target these features
+    directly once the surface stabilizes. WGSL-first is an implementation milestone, not a long-term ranking.</p>
+</div>
+
+<!-- Review checklist -->
+<h2 id="checklist">Review checklist — verifying GPU code</h2>
+<p>A reviewer (human or LLM) verifying a Miri GPU change should answer these six questions in order. If any answer
+  is "no" or "not visible", the change needs work.</p>
+
+<ol>
+  <li><strong>Residency.</strong> Does every GPU-touching binding start with <code>gpu let</code> / <code>gpu var</code>?
+    Does every <code>gpu forall</code> capture refer to a device-resident binding? Does every <code>gpu fn</code>
+    parameter type implement <code>Accelerable</code>?</li>
+  <li><strong>Cost classes in order.</strong> List the cost events (upload, launch, fence + readback). Does the
+    order match the source top-to-bottom? Are there any unexpected fences beyond a cross-residency assignment?</li>
+  <li><strong>Buffer reuse.</strong> Do adjacent <code>gpu forall</code> blocks over the same <code>gpu var</code>
+    share the buffer (no cross-residency assignment between them)? Is there any
+    <code>let h = g; …; some_kernel(g)</code> where the readback is wasted?</li>
+  <li><strong>Mutability.</strong> Is every captured <code>gpu var</code> element written by exactly one thread?
+    Concurrent writes to a non-<code>Atomic</code> element are a compile error. For shared-memory patterns, is
+    every shared write followed by a <code>kernel.barrier()</code> before another thread reads it?</li>
+  <li><strong>Bounds + indexing.</strong> Does every in-kernel <code>arr[i]</code> have a visible bounds guard
+    when the index isn't bounded by the iteration range? In host code, are all indices into device-resident
+    bindings forbidden (caught by the compiler) or bulk-copied first?</li>
+  <li><strong>Portability.</strong> Does the change rely on any backend-specific path or hardware feature? If so,
+    is each one necessary, and is the requirement stated near the kernel?</li>
+</ol>
+
+<!-- What's next -->
+<h2 id="whats-next">What's Next</h2>
+<p>You can now write, compile, and run GPU programs using the residency surface: declare device buffers with
+  <code>gpu let</code> / <code>gpu var</code>, launch kernels with <code>gpu forall</code>, and read results back
+  with a cross-residency assignment.</p>
+<p>Coming next on the GPU roadmap:</p>
+<ul>
+  <li><strong>On-device reduction</strong> — <code>.reduce</code> over workgroup memory returning a device scalar (F13).</li>
+  <li><strong>Shared memory + barriers</strong> — <code>var&lt;workgroup&gt;</code> tiling and <code>kernel.barrier()</code> (F32 / F36).</li>
+  <li><strong>Atomics</strong> — <code>Atomic&lt;i32&gt;</code> / <code>Atomic&lt;u32&gt;</code> for scatter and histogram patterns (F11 / F18).</li>
+  <li><strong>Warp / subgroup ops</strong> and <strong>low-precision types</strong> (<code>f16</code>, <code>bf16</code>, <code>fp8</code>) — F17, F9.</li>
+  <li><strong>Native backends</strong> — SPIR-V, PTX, and Metal for the features WGSL core can't express (M8).</li>
+</ul>
+
+<div class="note">
+  <p>Found a rough edge? The GPU surface is evolving fast — open an issue on
+    <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a>.</p>
+</div>

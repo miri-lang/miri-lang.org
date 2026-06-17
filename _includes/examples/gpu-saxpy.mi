@@ -1,0 +1,14 @@
+use system.gpu
+use system.io
+
+const N = 4
+
+gpu let x = [1.0, 2.0, 3.0, 4.0]
+gpu let y = [5.0, 6.0, 7.0, 8.0]
+gpu var dst = [0.0, 0.0, 0.0, 0.0]
+
+gpu forall i in 0..N
+    dst[i] = 2.0 * x[i] + y[i]
+
+let host = dst
+println(f'{host[0]} {host[1]} {host[2]} {host[3]}')
