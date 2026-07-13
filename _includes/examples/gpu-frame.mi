@@ -1,0 +1,11 @@
+use system.io
+use system.gpu
+
+fn main()
+    gpu let a = [0.0, 0.0, 0.0, 0.0]
+    gpu var b = [0.0, 0.0, 0.0, 0.0]
+    gpu frame i in 0..4:
+        let t = frame.time
+        let d = frame.dt
+        b[i] = a[i] + t + d
+    println("ok")

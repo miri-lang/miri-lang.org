@@ -1,0 +1,12 @@
+use system.gpu
+use system.collections.array
+
+fn scale(a out Array<int,8>)
+    forall i in 0..a.length()
+        a[i] = a[i] * 2
+
+fn main()
+    gpu var data = [1, 2, 3, 4, 5, 6, 7, 8]
+    scale(data)
+    let host = data
+    println(f"{host[0]} {host[1]} {host[2]} {host[3]} {host[4]} {host[5]} {host[6]} {host[7]}")

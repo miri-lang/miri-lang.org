@@ -61,6 +61,10 @@ sidebar:
     title: Multi-File Projects
   - id: whats-next
     title: What's Next
+breadcrumb: getting-started
+pager_next:
+  title: GPU Programming
+  url: /docs/gpu/
 ---
 
 <h1>Getting Started</h1>
@@ -87,7 +91,8 @@ make build</code></pre>
 <!-- Hello World -->
 <h2 id="hello-world">Hello World</h2>
 <p>Create a file called <code>hello.mi</code>:</p>
-<pre><code class="language-miri">{% include examples/docs-hello.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-hello.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Compile and run:</p>
 <pre><code>./target/release/miri run hello.mi</code></pre>
@@ -102,13 +107,16 @@ make build</code></pre>
 <p>Miri has two ways to declare variables:</p>
 
 <h3><code>let</code> — Immutable bindings</h3>
-<pre><code class="language-miri">{% include examples/let-bindings.mi %}</code></pre>
+{% capture ex_src %}{% include examples/let-bindings.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3><code>var</code> — Mutable bindings</h3>
-<pre><code class="language-miri">{% include examples/var-bindings.mi %}</code></pre>
+{% capture ex_src %}{% include examples/var-bindings.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Types are inferred but can be explicitly annotated:</p>
-<pre><code class="language-miri">{% include examples/type-annotations.mi %}</code></pre>
+{% capture ex_src %}{% include examples/type-annotations.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Miri supports a full range of numeric types: <code>i8</code>, <code>i16</code>, <code>i32</code>,
   <code>i64</code>, <code>i128</code>, <code>u8</code>, <code>u16</code>, <code>u32</code>, <code>u64</code>,
@@ -119,7 +127,8 @@ make build</code></pre>
 <!-- Functions -->
 <h2 id="functions">Functions</h2>
 <p>Functions are declared with <code>fn</code>. Parameter types are required. Parameters use <code>name type</code> syntax (no colon).</p>
-<pre><code class="language-miri">{% include examples/docs-functions.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-functions.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Functions without a return type implicitly return <code>void</code>. Functions support named arguments at the call site.</p>
 
@@ -127,14 +136,17 @@ make build</code></pre>
 <h2 id="control-flow">Control Flow</h2>
 
 <h3>if / else</h3>
-<pre><code class="language-miri">{% include examples/if-else.mi %}</code></pre>
+{% capture ex_src %}{% include examples/if-else.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>unless</h3>
 <p>The inverse of <code>if</code> — runs the block when the condition is false:</p>
-<pre><code class="language-miri">{% include examples/unless.mi %}</code></pre>
+{% capture ex_src %}{% include examples/unless.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Loops</h3>
-<pre><code class="language-miri">{% include examples/loops.mi %}</code></pre>
+{% capture ex_src %}{% include examples/loops.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Miri supports <code>while</code>, <code>until</code>, <code>do-while</code>, <code>forever</code>, and <code>for..in</code> loops. All loop types support inline syntax with a colon: <code>for x in 1..10: print(x)</code>.</p>
 
@@ -143,13 +155,16 @@ make build</code></pre>
 <p>Pattern matching is a core feature of Miri. It's exhaustive — the compiler checks that all cases are covered.
 </p>
 
-<pre><code class="language-miri">{% include examples/enum-direction.mi %}</code></pre>
+{% capture ex_src %}{% include examples/enum-direction.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Destructuring</h3>
-<pre><code class="language-miri">{% include examples/destructuring.mi %}</code></pre>
+{% capture ex_src %}{% include examples/destructuring.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Matching on values</h3>
-<pre><code class="language-miri">{% include examples/match-values.mi %}</code></pre>
+{% capture ex_src %}{% include examples/match-values.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Match supports or-patterns (<code>2 | 3</code>), guard clauses (<code>x if x > 10</code>), and wildcard (<code>_</code>).</p>
 
@@ -157,13 +172,15 @@ make build</code></pre>
 <h2 id="strings">Strings &amp; Formatted Strings</h2>
 <p>Miri has built-in string support with f-string interpolation:</p>
 
-<pre><code class="language-miri">{% include examples/strings.mi %}</code></pre>
+{% capture ex_src %}{% include examples/strings.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <!-- Structs -->
 <h2 id="structs">Structs</h2>
 <p>Structs are value types with named fields. Construct them using named arguments.</p>
 
-<pre><code class="language-miri">{% include examples/docs-structs.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-structs.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Structs can be passed to and returned from functions. Small structs (all primitive fields, &lt;= 128 bytes) are auto-copied on assignment — no reference counting overhead.</p>
 
@@ -171,7 +188,8 @@ make build</code></pre>
 <h2 id="enums">Enums</h2>
 <p>Enums support variants with and without associated data. Pattern matching extracts the data from each variant.</p>
 
-<pre><code class="language-miri">{% include examples/docs-enums.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-enums.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Enums can have simple tag variants (<code>Red</code>, <code>Green</code>) or carry data (<code>Ok(int)</code>, <code>Error(String)</code>). Each variant can hold different types and numbers of fields.</p>
 
@@ -179,13 +197,15 @@ make build</code></pre>
 <h2 id="tuples">Tuples</h2>
 <p>Tuples are fixed-size, heterogeneous collections accessed by index. They support destructuring in match expressions.</p>
 
-<pre><code class="language-miri">{% include examples/docs-tuples.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-tuples.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <!-- Collections -->
 <h2 id="collections">Collections</h2>
 <p>Miri has four built-in collection types, each with a full method API and <code>for..in</code> iteration support.</p>
 
-<pre><code class="language-miri">{% include examples/docs-collections.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-collections.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Collection types at a glance</h3>
 <table>
@@ -206,7 +226,8 @@ make build</code></pre>
 <h2 id="option-types">Option Types</h2>
 <p>Option types represent values that may or may not be present. Add <code>?</code> to any type to make it optional. The compiler prevents using option values without checking first — eliminating null pointer errors at compile time.</p>
 
-<pre><code class="language-miri">{% include examples/docs-options.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-options.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Three ways to handle option types:</p>
 <ul>
@@ -219,23 +240,26 @@ make build</code></pre>
 <h2 id="result-type"><code>Result&lt;T, E&gt;</code></h2>
 <p>Fallible operations return <code>Result&lt;T, E&gt;</code> — an enum with two variants, <code>Ok(T)</code> and <code>Err(E)</code>. The compiler enforces <code>must_use</code> semantics: ignoring a <code>Result</code> value without inspecting it is a compile error, so fallible APIs cannot be silently dropped.</p>
 
-<pre><code class="language-miri">{% include examples/docs-result.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-result.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Inspect a result with <code>match</code> for full extraction, or with the helpers <code>is_ok()</code>, <code>is_err()</code>, and <code>unwrap_or(default)</code> for quick paths. There is no <code>unwrap()</code> that panics on <code>Err</code> — Miri's standard library does not panic, so the failure path is always explicit at the call site.</p>
 
 <!-- system.math -->
 <h2 id="math-module"><code>system.math</code></h2>
-<p>The math module ships a single set of numeric primitives that works on both CPU and (in upcoming releases) GPU kernels. Functions are imported as free names — no receiver object, no method-call syntax.</p>
+<p>The math module ships a single set of numeric primitives that works on both CPU and GPU kernels. Functions are imported as free names — no receiver object, no method-call syntax.</p>
 
-<pre><code class="language-miri">{% include examples/docs-math.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-math.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
-<p>The current surface covers <code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, plus the constants <code>PI</code>, <code>E</code>, and <code>INF</code>. CPU calls lower to <code>libm</code> / Cranelift intrinsics; GPU calls (in the upcoming GPU preview) lower to the target backend's built-in equivalents — same source, same answer.</p>
+<p>The current surface covers <code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, plus the constants <code>PI</code>, <code>E</code>, and <code>INF</code>. CPU calls lower to <code>libm</code> / Cranelift intrinsics; GPU calls lower to the target backend's built-in equivalents (<code>tanh</code>, <code>atan2</code>, <code>step</code>, <code>clamp</code>, and <code>mix</code> are available in kernels too) — same source, same answer.</p>
 
 <!-- Collection Traits -->
 <h2 id="collection-traits">Collection Traits</h2>
 <p>Collections share a four-trait taxonomy that breaks the classic "kitchen sink" iterator interface into focused, composable pieces. <code>List&lt;T&gt;</code> and <code>Array&lt;T, N&gt;</code> inherit the default method bodies on each trait, so the same fluent pipeline works across collection types.</p>
 
-<pre><code class="language-miri">{% include examples/docs-collection-traits.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-collection-traits.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <table>
   <thead>
@@ -257,7 +281,8 @@ make build</code></pre>
 <h2 id="testing">Testing</h2>
 <p><code>system.testing</code> provides four assertion intrinsics. Each is lowered directly by the compiler — the abort path is synthesized at the call site, embedding the source <code>path:line</code> in the failure message.</p>
 
-<pre><code class="language-miri">{% include examples/docs-testing.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-testing.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <table>
   <thead>
@@ -277,7 +302,8 @@ make build</code></pre>
 <h2 id="type-aliases">Type Aliases</h2>
 <p>Type aliases create semantic names for existing types. They are transparent to the type checker — fully interchangeable with the underlying type.</p>
 
-<pre><code class="language-miri">{% include examples/docs-type-aliases.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-type-aliases.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <!-- Memory Model -->
 <h2 id="memory-model">Memory Model</h2>
@@ -293,7 +319,8 @@ make build</code></pre>
 <h3>Copy-on-Write: assignment shares, mutation forks</h3>
 <p>When you assign a managed value to a new variable, both bindings point at the <em>same</em> underlying buffer — there is no eager deep copy. The buffer's reference count goes up by one. The instant either side mutates the value, Miri silently forks: it copies the buffer, decrements the old RC, sets the new RC to <code>1</code>, and applies the mutation to the fresh copy.</p>
 
-<pre><code class="language-miri">{% include examples/docs-memory-cow.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-memory-cow.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>The result is the best of both worlds: <strong>value semantics</strong> (mutating <code>b</code> never changes <code>a</code>), but with the <strong>performance of reference passing</strong> when no one mutates. CoW applies to <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>, and <code>String</code>.</p>
 
@@ -307,7 +334,8 @@ make build</code></pre>
 <h2 id="cloneable">Cloneable &amp; <code>.clone()</code></h2>
 <p>Sometimes you want an independent deep copy up front rather than waiting for Copy-on-Write to fire. The <code>Cloneable</code> trait provides a <code>.clone()</code> method that does exactly that.</p>
 
-<pre><code class="language-miri">{% include examples/docs-cloneable.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-cloneable.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>All managed types (<code>String</code>, <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>) implicitly implement <code>Cloneable</code>. User-defined classes get an auto-generated <code>__clone_TypeName</code> helper — primitives are copied bitwise, managed fields are recursively cloned. Resource types (those with <code>fn drop(self)</code>) intentionally do <em>not</em> implement <code>Cloneable</code>: copying a file handle or a network socket is almost always a bug.</p>
 
@@ -317,7 +345,8 @@ make build</code></pre>
 <h2 id="resource-types">Resource Types &amp; <code>fn drop(self)</code></h2>
 <p>Some values represent things in the outside world — open files, sockets, GPU buffers, lock guards — and need explicit cleanup. Miri's answer is the <code>fn drop(self)</code> method. Defining one on a class or struct turns it into a <em>resource type</em>:</p>
 
-<pre><code class="language-miri">{% include examples/docs-drop.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-drop.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <ul>
   <li>Miri guarantees <code>drop</code> runs <strong>exactly once</strong> when the value's lifetime ends.</li>
@@ -332,7 +361,8 @@ make build</code></pre>
 <h2 id="use-after-move">Use-After-Move &amp; Escape Analysis</h2>
 <p>Once you pass a resource to a function, the compiler refuses to let you use that variable again. This is enforced statically — there is no runtime check, just a compile error.</p>
 
-<pre><code class="language-miri">{% include examples/docs-use-after-move.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-use-after-move.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>The rule has two layers:</p>
 <ul>
@@ -346,7 +376,8 @@ make build</code></pre>
 <h2 id="out-keyword">The <code>out</code> Keyword</h2>
 <p>So far, every memory rule has been inferred. The one — and only — explicit memory concept in the language is <code>out</code>. Mark a parameter <code>out</code> to let a function modify a caller's variable in place.</p>
 
-<pre><code class="language-miri">{% include examples/docs-out-param.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-out-param.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Rules at a glance</h3>
 <ul>
@@ -362,7 +393,8 @@ make build</code></pre>
 <h2 id="classes">Classes</h2>
 <p>Classes are reference types with constructors, methods, visibility modifiers, and single inheritance. Method calls on base-typed variables are dispatched at runtime via vtables.</p>
 
-<pre><code class="language-miri">{% include examples/docs-classes.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-classes.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Key concepts</h3>
 <ul>
@@ -389,7 +421,8 @@ make build</code></pre>
 <h2 id="traits">Traits</h2>
 <p>Traits define shared interfaces — a set of abstract and optionally concrete method signatures that classes can implement. Traits support inheritance and default methods.</p>
 
-<pre><code class="language-miri">{% include examples/docs-traits.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-traits.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Key concepts</h3>
 <ul>
@@ -405,7 +438,8 @@ make build</code></pre>
 <h2 id="closures">Closures</h2>
 <p>Lambdas are first-class values. They can be stored in variables, passed as arguments, and returned from functions. Closures capture variables from the enclosing scope by value.</p>
 
-<pre><code class="language-miri">{% include examples/docs-closures.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-closures.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>At the ABI level, closures are represented as fat pointers <code>(fn_ptr, env_ptr)</code>. Captured variables are copied into an environment struct at the point of closure creation.</p>
 
@@ -413,7 +447,8 @@ make build</code></pre>
 <h2 id="generics">Generics</h2>
 <p>Generic functions and types are monomorphized at compile time — a specialized copy is emitted for each unique set of type arguments. No runtime cost.</p>
 
-<pre><code class="language-miri">{% include examples/docs-generics.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-generics.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Calling <code>identity(42)</code> and <code>identity("hello")</code> produces two separate compiled functions (<code>identity_int</code>, <code>identity_string</code>). Generic structs and classes work the same way — each unique instantiation gets its own compiled type.</p>
 
@@ -422,7 +457,8 @@ make build</code></pre>
 <p>Miri supports a module system that resolves imports, enforces visibility across module boundaries, and detects errors like circular dependencies and namespace collisions.</p>
 
 <h3>Import syntax</h3>
-<pre><code class="language-miri">{% include examples/docs-modules.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-modules.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Standard library modules</h3>
 <table>
@@ -445,7 +481,8 @@ make build</code></pre>
 <h3>Cross-module visibility</h3>
 <p>Visibility modifiers (<code>public</code>, <code>private</code>, <code>protected</code>) are enforced across module boundaries. Top-level functions and classes are <code>public</code> by default. Accessing a private symbol from another module produces a compile error.</p>
 
-<pre><code class="language-miri">{% include examples/docs-visibility.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-visibility.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <h3>Error detection</h3>
 <ul>
@@ -457,23 +494,31 @@ make build</code></pre>
 <h2 id="multi-file-projects">Multi-File Projects</h2>
 <p>Programs can span multiple <code>.mi</code> files. The compiler discovers, parses, and links all files in a project automatically. Local files are imported using the <code>local</code> prefix, with the path mapping directly to the file system relative to the project root.</p>
 
-<pre><code class="language-miri">{% include examples/docs-multi-file.mi %}</code></pre>
+{% capture ex_src %}{% include examples/docs-multi-file.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
 <p>Compile and run multi-file projects the same way — point the compiler at your entry file and it resolves all dependencies:</p>
 <pre><code>./target/release/miri run main.mi</code></pre>
 
 <!-- What's Next -->
 <h2 id="whats-next">What's Next</h2>
-<p>You've covered the features available in Miri v0.4.0-beta.2 — the second Beta release, which lays down the Core Standard Library (<code>Result&lt;T, E&gt;</code>, <code>system.math</code>, the <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> trait taxonomy, and <code>system.testing</code>) on top of the Memory Safety milestone from Beta 1.</p>
+<p>You've covered the core language available in Miri v0.5.0-beta.3. The headline of this release is the
+  <strong>GPU preview</strong>: device-resident bindings (<code>gpu let</code> / <code>gpu var</code>),
+  <code>forall</code> kernels, on-device reduction, shared memory, atomics, warp operations, vector types, and
+  interactive <code>gpu frame</code> programs that compile to the browser via WebGPU — all in the same language
+  you just learned, with no shader files and no FFI.</p>
+<p>Continue with the <a href="{{ '/docs/gpu/' | relative_url }}">GPU Programming guide</a> — it starts from your
+  first kernel and assumes no GPU background — or see the programs running live in the
+  <a href="{{ '/gpu-demos/' | relative_url }}">GPU Playground</a>.</p>
 <p>Here's what's coming next:</p>
 <ul>
-  <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, GPU codegen, async/await, channel-based concurrency</li>
+  <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, async/await and
+    <code>async gpu</code> streams, channel-based concurrency, native GPU backends (SPIR-V, PTX, Metal)</li>
 </ul>
 <p>More resources:</p>
 <ul>
   <li>Explore <a href="{{ site.github_url }}/tree/main/tests" target="_blank" rel="noopener">the
       test suite</a> for more code examples</li>
-  <li>Read about <a href="{{ '/#features' | relative_url }}">planned features</a> like GPU programming and async/await</li>
   <li>Star the project on <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a>
     and follow development</li>
   <li>Check the <a href="{{ site.github_url }}/issues" target="_blank" rel="noopener">issue
@@ -481,6 +526,6 @@ make build</code></pre>
 </ul>
 
 <div class="note">
-  <p><strong>Miri is evolving fast.</strong> GPU kernels, trait objects, and async are actively being
-    designed. Join us on GitHub to shape the language!</p>
+  <p><strong>Miri is evolving fast.</strong> Trait objects, async, and the native GPU backends are actively
+    being designed. Join us on GitHub to shape the language!</p>
 </div>

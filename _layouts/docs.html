@@ -2,16 +2,38 @@
 layout: default
 ---
 
-<div class="docs-layout">
-  <aside class="docs-sidebar">
-    <nav>
+<div class="docs-shell">
+  <aside class="docs-side">
+    <nav aria-label="Docs sections">
       {% for item in page.sidebar %}
-      <a href="#{{ item.id }}">{{ item.title }}</a>
+        {% if item.group %}<div class="docs-side-group">{{ item.group }}</div>{% endif %}
+        <a href="#{{ item.id }}">{{ item.title }}</a>
       {% endfor %}
     </nav>
   </aside>
 
-  <div class="docs-content">
+  <main class="docs-main">
+    {% if page.breadcrumb %}
+    <div class="docs-breadcrumb"><a href="{{ '/docs/getting-started/' | relative_url }}">docs</a> / <b>{{ page.breadcrumb }}</b></div>
+    {% endif %}
+
     {{ content }}
-  </div>
+
+    {% if page.pager_prev or page.pager_next %}
+    <div class="docs-pager">
+      {% if page.pager_prev %}
+      <a class="prev" href="{{ page.pager_prev.url | relative_url }}">
+        <span class="pager-label">← PREV</span>
+        <span class="pager-title">{{ page.pager_prev.title }}</span>
+      </a>
+      {% endif %}
+      {% if page.pager_next %}
+      <a class="next" href="{{ page.pager_next.url | relative_url }}">
+        <span class="pager-label">NEXT →</span>
+        <span class="pager-title">{{ page.pager_next.title }}</span>
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </main>
 </div>

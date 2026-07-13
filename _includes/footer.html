@@ -1,8 +1,15 @@
-<footer class="footer">
-  <ul class="footer-links">
-    <li><a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a></li>
-    <li><a href="{{ '/docs/getting-started/' | relative_url }}">Documentation</a></li>
-    <li><a href="{{ site.github_url }}/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0 License</a></li>
-  </ul>
-  <p>&copy; 2026 {{ site.author }}</p>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <a class="footer-brand" href="{{ '/' | relative_url }}">
+      <img src="{{ '/logo.png' | relative_url }}" alt="Miri logo">
+      <span>Miri</span>
+    </a>
+    <div class="footer-links">
+      <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a>
+      <a href="{{ '/docs/getting-started/' | relative_url }}">Documentation</a>
+      <a href="{{ '/gpu-demos/' | relative_url }}">GPU Demos</a>
+      <a href="{{ site.github_url }}/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0 License</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 {{ site.author }}</div>
+  </div>
 </footer>

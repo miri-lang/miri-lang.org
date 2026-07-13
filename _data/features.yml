@@ -40,8 +40,7 @@
 
 - title: "GPU-First Programming"
   icon: "&#x1f680;"
-  description: "Write GPU kernels alongside CPU code in the same language. No separate shader files, no foreign function interfaces."
-  coming_soon: true
+  description: "GPU kernels live alongside CPU code in the same language — no shader files, no FFI. Mark a binding gpu, launch with forall, and every upload, launch, and readback is visible in the source. Runs natively and in the browser via WebGPU."
 
 - title: "Async &amp; Parallelism"
   icon: "&#x26a1;"

@@ -1,5 +1,4 @@
 use system.gpu
-use system.io
 
 const N = 8
 

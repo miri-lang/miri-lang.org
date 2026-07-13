@@ -1,144 +1,458 @@
 ---
 layout: default
+hero: true
+examples: true
+demos: true
 title: "Miri Programming Language — GPU-First. Safe. Fast."
-description: "Miri is a modern, GPU-first, statically-typed, compiled programming language designed for balancing high
-performance and safety in the age of Generative AI."
+description: "Miri is a modern, GPU-first, statically-typed, compiled programming language designed for balancing high performance and safety in the age of Generative AI."
 ---
 
-<!-- Hero -->
+<!-- ================= HERO ================= -->
 <section class="hero">
-  <div class="hero-content">
-    <img src="{{ '/logo.png' | relative_url }}" alt="Miri programming language logo" class="hero-logo" width="120"
-      height="120">
-    <h1 class="hero-tagline">GPU-First. Safe. Fast.</h1>
-    <p class="hero-description">
-      A statically-typed language compiled to native code with clean syntax,
-      null safety, invisible ownership with copy-on-write collections,
-      and first-class GPU programming.
-    </p>
-    <div class="hero-buttons">
-      <a href="{{ '/docs/getting-started/' | relative_url }}" class="btn btn-primary">Get Started</a>
-      <a href="{{ site.github_url }}" class="btn btn-secondary" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" aria-hidden="true">
-          <path
-            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-        </svg>
-        GitHub
+  <canvas id="hero-gl"></canvas>
+  <div class="wrap hero-content">
+    <div class="hero-kicker">$ statically-typed · compiled · <b>gpu-first</b></div>
+    <h1><span class="hl">GPU-First.</span><br>Safe. Fast.</h1>
+    <p class="hero-sub">A statically-typed language compiled to native code with clean syntax, null safety, invisible ownership with copy-on-write collections, and first-class GPU programming.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="{{ '/docs/getting-started/' | relative_url }}">Get Started</a>
+      <a class="btn btn-ghost" href="{{ '/gpu-demos/' | relative_url }}">▶ Live GPU Demos</a>
+      <a class="btn btn-ghost" href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="hero-scroll">SCROLL ▾</div>
+</section>
+
+<!-- ================= EXAMPLES ================= -->
+<section class="section-pad" id="examples">
+  <div class="wrap">
+    <div class="kicker reveal">01 / THE LANGUAGE</div>
+    <h2 class="section-title reveal">See Miri in action</h2>
+    <p class="section-sub reveal">Clean syntax, powerful features, zero boilerplate. Pick a topic — every sample is real, runnable Miri.</p>
+
+    <div class="examples-layout reveal">
+      <div class="ex-rail" role="tablist" aria-label="Code examples"></div>
+      <div class="ex-code-col">
+        <div class="code-window">
+          <div class="code-titlebar">
+            <div class="code-dots"><span></span><span></span><span></span></div>
+            <span class="code-filename" id="ex-filename">hello.mi</span>
+          </div>
+          <div class="code-body" id="ex-panels"></div>
+          <div class="code-output" id="ex-output" hidden>
+            <span class="out-label">OUTPUT</span>
+            <span id="ex-output-text"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- example sources (hidden; rendered into the switcher by script) -->
+<div id="ex-data" hidden>
+  <pre data-name="Hello World" data-file="hello.mi" data-output="Hello, Miri!">
+use system.io
+
+// Hello, Miri!
+let name = "Miri"
+println(f"Hello, {name}!")</pre>
+  <pre data-name="GPU" data-file="gpu.mi" data-output="6.0 8.0 10.0 12.0">
+use system.gpu
+
+// gpu = device-resident; upload is visible at the binding
+gpu let a = [1.0, 2.0, 3.0, 4.0]
+gpu let b = [5.0, 6.0, 7.0, 8.0]
+gpu var dst = [0.0, 0.0, 0.0, 0.0]
+
+// one GPU thread per index
+gpu forall i in 0..4
+    dst[i] = a[i] + b[i]
+
+// readback: the only host&#8596;device copy in the program
+let host = dst
+println(f"{host[0]} {host[1]} {host[2]} {host[3]}")</pre>
+  <pre data-name="Structs" data-file="structs.mi" data-output="11, 22">
+use system.io
+
+struct Point
+    x int
+    y int
+
+fn offset(p Point, dx int, dy int) Point
+    Point(x: p.x + dx, y: p.y + dy)
+
+fn main()
+    let p = Point(x: 1, y: 2)
+    let q = offset(p, 10, 20)
+    println(f"{q.x}, {q.y}")</pre>
+  <pre data-name="Enums" data-file="enums.mi" data-output="Area: 78.5">
+use system.io
+
+enum Shape
+    Circle(float)
+    Rect(float, float)
+
+fn area(s Shape) float
+    match s
+        Shape.Circle(r): 3.14 * r * r
+        Shape.Rect(w, h): w * h
+
+fn main()
+    let s = Shape.Circle(5.0)
+    println(f"Area: {area(s)}")</pre>
+  <pre data-name="Collections" data-file="collections.mi" data-output="Length: 4&#10;Alice: 95">
+use system.io
+use system.collections.list
+use system.collections.map
+
+// Dynamic list
+var items = List([1, 2, 3])
+items.push(4)
+println(f"Length: {items.length()}")
+
+// Key-value map
+let scores = {"Alice": 95, "Bob": 87}
+println(f"Alice: {scores['Alice']}")</pre>
+  <pre data-name="Options" data-file="options.mi" data-output="got 10&#10;value: 10">
+use system.io
+
+fn find(name String?)
+    if let Some(s) = name
+        println(f"Found: {s}")
+
+fn main()
+    let val int? = 10
+
+    match val
+        Some(n): println(f"got {n}")
+        None: println("nothing")
+
+    let fallback = val ?? 0
+    println(f"value: {fallback}")</pre>
+  <pre data-name="Pattern Matching" data-file="match.mi" data-output="200: OK&#10;201: OK&#10;…&#10;404: Not Found&#10;…">
+use system.io
+
+fn status_code(code int) String
+    match code
+        200 | 201 | 202: "OK"
+        404: "Not Found"
+        500 | 501 | 502: "Internal Server Error"
+        503: "Service Unavailable"
+        c if code &gt;= 300 and code &lt; 400: f"Redirect {c}"
+        _: "Unknown"
+
+for code in 200..504
+    println(f"{code}: {status_code(code)}")</pre>
+  <pre data-name="Functions" data-file="functions.mi" data-output="3 + 4 = 7&#10;10! = 3628800">
+use system.io.{println}
+
+fn add(a int, b int) int: a + b
+
+fn factorial(n int) int
+    1 if n &lt;= 1 else n * factorial(n - 1)
+
+fn main()
+    let result = add(3, 4)
+    println(f"3 + 4 = {result}")
+    println(f"10! = {factorial(10)}")</pre>
+  <pre data-name="Classes" data-file="classes.mi" data-output="I am Rex&#10;Woof!">
+use system.io
+
+class Animal
+    protected name String
+
+    fn init(n String)
+        self.name = n
+
+    fn speak()
+        println(f"I am {self.name}")
+
+class Dog extends Animal
+    fn speak()
+        super.speak()
+        println("Woof!")
+
+fn main()
+    let d = Dog(n: "Rex")
+    d.speak()</pre>
+  <pre data-name="Traits" data-file="traits.mi" data-output="Woof!&#10;I am an animal">
+use system.io
+
+trait Speakable
+    fn speak()
+
+trait Describable extends Speakable
+    fn describe()
+        println("I am an animal")
+
+class Dog implements Describable
+    fn speak()
+        println("Woof!")
+
+fn main()
+    let d = Dog()
+    d.speak()
+    d.describe()</pre>
+  <pre data-name="Closures" data-file="closures.mi" data-output="142&#10;14">
+use system.io
+
+fn apply(f fn(int) int, x int) int
+    f(x)
+
+fn main()
+    var base = 100
+    let add = fn(n int) int: base + n
+    println(f"{add(42)}")
+
+    let double = fn(x int) int: x * 2
+    println(f"{apply(double, 7)}")</pre>
+  <pre data-name="Memory" data-file="memory.mi" data-output="3 4&#10;42">
+use system.io
+use system.collections.list
+
+fn inc(n out int)
+    n = n + 1
+
+fn main()
+    // Copy-on-Write — assignment shares, mutation forks.
+    let a = List([1, 2, 3])
+    var b = a
+    b.push(4)
+    println(f"{a.length()} {b.length()}")
+
+    // `out` — explicit, in-place mutation through a function.
+    var x = 41
+    inc(x)
+    println(f"{x}")</pre>
+  <pre data-name="Generics" data-file="generics.mi" data-output="42&#10;hello&#10;99">
+use system.io
+
+fn identity&lt;T&gt;(x T) T
+    x
+
+struct Wrapper&lt;T&gt;
+    value T
+
+fn main()
+    println(f"{identity(42)}")
+    println(f"{identity("hello")}")
+    let w = Wrapper&lt;int&gt;(value: 99)
+    println(f"{w.value}")</pre>
+  <pre data-name="Modules" data-file="modules.mi" data-output="4">
+use system.io
+use system.collections.list as L
+
+fn main()
+    var items = L.List([1, 2, 3])
+    items.push(4)
+    println(f"{items.length()}")</pre>
+  <pre data-name="Multi-File" data-file="main.mi" data-output="Hello, Alice">
+// models/user.mi
+use system.io
+
+class User
+    public name String
+
+    fn init(n String)
+        self.name = n
+
+    public fn greet()
+        println(f"Hello, {self.name}")
+
+// main.mi
+use local.models.user
+
+fn main()
+    let u = User(n: "Alice")
+    u.greet()</pre>
+</div>
+
+<!-- ================= FEATURES ================= -->
+<section class="section-pad" id="features">
+  <div class="wrap">
+    <div class="kicker reveal">02 / FEATURES</div>
+    <h2 class="section-title reveal">Built for the future</h2>
+    <p class="section-sub reveal">A modern language designed from the ground up.</p>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="pix" data-px="1110000000011100000000111"></div>
+        <h3>Clean Syntax</h3>
+        <p>Indentation-based blocks, no braces or semicolons. Balanced readability, expressiveness, and safety.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="0010001110111110111000100"></div>
+        <h3>AI-Assisted Development</h3>
+        <p>Designed with clear, consistent semantics that make AI code generation and assistance highly effective.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="0000100010101000100001000"></div>
+        <h3>Static Typing &amp; Type Inference</h3>
+        <p>Catch errors at compile time with a powerful type system that stays out of your way. Types are inferred where possible.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="0100000100000100010001000"></div>
+        <h3>Native Compilation</h3>
+        <p>Compiles to native machine code via Cranelift. Fast compilation, fast execution, small binaries.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="1000101010001000101010001"></div>
+        <h3>Pattern Matching</h3>
+        <p>Exhaustive pattern matching with destructuring across enums, structs, tuples, and literals. Guard clauses included.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="1111110001101011000111111"></div>
+        <h3>Option Types &amp; Null Safety</h3>
+        <p>The <code>?</code> type suffix marks values that may be absent. The compiler prevents use without checking — no null pointer errors.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="0111001010111111101111111"></div>
+        <h3>Memory Safety</h3>
+        <p>Invisible ownership with optimized reference counting. Copy-on-Write collections give value semantics with reference-pass speed. The only memory keyword you ever write is <code>out</code>.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="1111100000111110000011111"></div>
+        <h3>Classes &amp; Inheritance</h3>
+        <p>Full OOP with constructors, visibility modifiers, single inheritance, abstract classes, super calls, and runtime virtual dispatch via vtables.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="0010001010100010101000100"></div>
+        <h3>Traits &amp; Generics</h3>
+        <p>Trait interfaces with default methods and inheritance chains. Generic functions, structs, and classes monomorphized at compile time.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="1000001000001000101010001"></div>
+        <h3>First-Class Closures</h3>
+        <p>Lambdas that capture variables by value. Pass them as arguments, store in variables, return from functions. Compiled to native fat pointers.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix blue" data-px="1101111011000001101111011"></div>
+        <h3>GPU-First Programming</h3>
+        <p>GPU kernels live alongside CPU code in the same language — no shader files, no FFI. Mark a binding <code>gpu</code>, launch with <code>forall</code>, and every upload, launch, and readback is visible in the source. Runs natively and in the browser via WebGPU.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="soon-tag">COMING SOON</span>
+        <div class="pix blue" data-px="0101010101000000101010101"></div>
+        <h3>Async &amp; Parallelism</h3>
+        <p>First-class async/await and parallel primitives make concurrent programming intuitive and safe.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GPU DEMOS ================= -->
+<section class="section-pad demos-section" id="gpu-demos">
+  <div class="wrap">
+    <div class="kicker reveal">03 / GPU PLAYGROUND</div>
+    <h2 class="section-title reveal">Running on your GPU. <span style="color: var(--yellow);">Right now.</span></h2>
+    <p class="section-sub reveal">These aren't videos. Every tile below is computed live on your graphics card, and each one is a real, CI-tested Miri program that compiles to WebGPU. Click any demo to play with it and read its source.</p>
+
+    <div class="demos-grid">
+      <a class="demo-card span-3 reveal" href="{{ '/gpu-demos/#mandelbrot' | relative_url }}" data-demo="mandelbrot" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Mandelbrot Zoom</h3>
+          <span class="demo-tech">fragment kernel · ∞ zoom</span>
+        </div>
+      </a>
+      <a class="demo-card span-3 reveal" href="{{ '/gpu-demos/#fluid' | relative_url }}" data-demo="fluid" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Fluid Simulation</h3>
+          <span class="demo-tech">6 kernels · pressure solve</span>
+        </div>
+      </a>
+      <a class="demo-card span-2 reveal" href="{{ '/gpu-demos/#life' | relative_url }}" data-demo="life" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Game of Life</h3>
+          <span class="demo-tech">cellular automaton</span>
+        </div>
+      </a>
+      <a class="demo-card span-2 reveal" href="{{ '/gpu-demos/#particles' | relative_url }}" data-demo="particles" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Particle Flow</h3>
+          <span class="demo-tech">16,384 particles</span>
+        </div>
+      </a>
+      <a class="demo-card span-2 reveal" href="{{ '/gpu-demos/#raymarch' | relative_url }}" data-demo="raymarch" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Ray Marching</h3>
+          <span class="demo-tech">SDF · soft shadows</span>
+        </div>
+      </a>
+      <a class="demo-card span-6 reveal" href="{{ '/gpu-demos/#neural' | relative_url }}" data-demo="neural" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU · TRAINING</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Neural Network — watch it learn</h3>
+          <span class="demo-tech">2-12-12-1 MLP · live gradient descent · per-pixel inference</span>
+        </div>
+      </a>
+      <a class="demo-card span-6 reveal" href="{{ '/gpu-demos/#blackhole' | relative_url }}" data-demo="blackhole" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Black Hole — gravitational lensing</h3>
+          <span class="demo-tech">photon geodesics · accretion disk · Doppler beaming</span>
+        </div>
+      </a>
+      <a class="demo-card span-6 reveal" href="{{ '/gpu-demos/#wormhole' | relative_url }}" data-demo="wormhole" data-preview="">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="gl-fallback">WebGL2 unavailable on this device</div>
+        </div>
+        <span class="arrow">↗</span>
+        <div class="demo-meta">
+          <h3>Wormhole — a bridge between universes</h3>
+          <span class="demo-tech">Morris–Thorne throat · two-sided lensing</span>
+        </div>
       </a>
     </div>
-  </div>
-</section>
 
-<!-- Code Examples -->
-<section class="section" id="examples">
-  <h2 class="section-title">See Miri in Action</h2>
-  <p class="section-subtitle">Clean syntax, powerful features, zero boilerplate</p>
-
-  <div class="code-section">
-    <div class="code-tabs" role="tablist" aria-label="Code examples">
-      <button class="code-tab" role="tab" aria-selected="true" aria-controls="ex-hello" data-target="ex-hello">Hello
-        World</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-structs"
-        data-target="ex-structs">Structs</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-enums"
-        data-target="ex-enums">Enums</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-collections"
-        data-target="ex-collections">Collections</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-options"
-        data-target="ex-options">Options</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-matching"
-        data-target="ex-matching">Pattern Matching</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-functions"
-        data-target="ex-functions">Functions</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-classes"
-        data-target="ex-classes">Classes</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-traits"
-        data-target="ex-traits">Traits</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-closures"
-        data-target="ex-closures">Closures</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-memory"
-        data-target="ex-memory">Memory</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-generics"
-        data-target="ex-generics">Generics</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-modules"
-        data-target="ex-modules">Modules</button>
-      <button class="code-tab" role="tab" aria-selected="false" aria-controls="ex-multifile"
-        data-target="ex-multifile">Multi-File</button>
-    </div>
-
-    <div id="ex-hello" class="code-panel active" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/hello.mi %}</code></pre>
-    </div>
-
-    <div id="ex-structs" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/structs.mi %}</code></pre>
-    </div>
-
-    <div id="ex-enums" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/enums-data.mi %}</code></pre>
-    </div>
-
-    <div id="ex-collections" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/collections.mi %}</code></pre>
-    </div>
-
-    <div id="ex-options" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/options.mi %}</code></pre>
-    </div>
-
-    <div id="ex-matching" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/pattern-matching.mi %}</code></pre>
-    </div>
-
-    <div id="ex-functions" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/functions.mi %}</code></pre>
-    </div>
-
-    <div id="ex-classes" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/classes.mi %}</code></pre>
-    </div>
-
-    <div id="ex-traits" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/traits.mi %}</code></pre>
-    </div>
-
-    <div id="ex-closures" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/closures.mi %}</code></pre>
-    </div>
-
-    <div id="ex-memory" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/memory.mi %}</code></pre>
-    </div>
-
-    <div id="ex-generics" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/generics.mi %}</code></pre>
-    </div>
-
-    <div id="ex-modules" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/modules.mi %}</code></pre>
-    </div>
-
-    <div id="ex-multifile" class="code-panel" role="tabpanel">
-      <pre><code class="language-miri">{% include examples/multi-file.mi %}</code></pre>
+    <div class="demos-cta reveal">
+      <a class="btn btn-primary" href="{{ '/gpu-demos/' | relative_url }}">Open the GPU Playground →</a>
     </div>
   </div>
 </section>
 
-<!-- Features Grid -->
-<section class="section" id="features">
-  <h2 class="section-title">Built for the Future</h2>
-  <p class="section-subtitle">A modern language designed from the ground up</p>
-
-  <div class="features-grid">
-    {% for feature in site.data.features %}
-    <div class="feature-card">
-      {% if feature.coming_soon %}
-      <span class="badge-soon">Coming Soon</span>
-      {% endif %}
-      <span class="feature-icon" aria-hidden="true">{{ feature.icon }}</span>
-      <h3>{{ feature.title }}</h3>
-      <p>{{ feature.description }}</p>
+<!-- ================= CTA ================= -->
+<section class="section-pad cta-section">
+  <div class="wrap">
+    <img class="cta-mark reveal" src="{{ '/logo.png' | relative_url }}" alt="Miri logo">
+    <h2 class="section-title reveal">Start writing Miri</h2>
+    <div class="btn-row reveal">
+      <a class="btn btn-primary" href="{{ '/docs/getting-started/' | relative_url }}">Get Started</a>
+      <a class="btn btn-ghost" href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
-    {% endfor %}
   </div>
 </section>

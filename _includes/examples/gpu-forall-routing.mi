@@ -1,0 +1,12 @@
+use system.gpu
+use system.collections.array
+
+fn main()
+    gpu let g = [1, 2, 3]
+    gpu var result = [0, 0, 0]
+    forall i in 0..3
+        result[i] = g[i] * 2
+    let h = result
+    print(f"{h[0]}")
+    print(f"{h[1]}")
+    print(f"{h[2]}")

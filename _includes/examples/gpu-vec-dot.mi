@@ -1,0 +1,19 @@
+use system.gpu
+use system.gpu.vector
+use system.math
+use system.collections.array
+
+fn main()
+    gpu let ax = [1.0]
+    gpu let ay = [0.0]
+    gpu let az = [0.0]
+    gpu let bx = [2.0]
+    gpu let by = [3.0]
+    gpu let bz = [4.0]
+    gpu var result = [0.0]
+    gpu forall i in 0..1
+        let a = Vec3<f32>(ax[i], ay[i], az[i])
+        let b = Vec3<f32>(bx[i], by[i], bz[i])
+        result[i] = dot(a, b)
+    let host = result
+    println(f'{host[0]}')

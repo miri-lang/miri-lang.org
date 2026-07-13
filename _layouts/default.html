@@ -26,11 +26,12 @@
   <link rel="icon" type="image/png" href="{{ '/logo.png' | relative_url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 
 <body>
+  <div class="grid-bg"></div>
 
   {% include nav.html %}
 
@@ -40,7 +41,27 @@
 
   {% include footer.html %}
 
-  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/site.js' | relative_url }}"></script>
+
+  {% if page.hero or page.demos %}
+  <script src="{{ '/assets/js/gl-utils.js' | relative_url }}"></script>
+  {% endif %}
+  {% if page.hero %}
+  <script src="{{ '/assets/js/hero-shader.js' | relative_url }}"></script>
+  {% endif %}
+  {% if page.demos %}
+  <script src="{{ '/assets/js/demos/mandelbrot.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/demos/life.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/demos/particles.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/demos/fluid.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/demos/raymarch.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/demos/neural.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/demos/blackhole.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/demos/wormhole.js' | relative_url }}"></script>
+  {% endif %}
+  {% if page.examples %}
+  <script src="{{ '/assets/js/examples-switcher.js' | relative_url }}"></script>
+  {% endif %}
 </body>
 
 </html>
