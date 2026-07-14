@@ -1,0 +1,124 @@
+---
+layout: default
+nav_static: true
+title: "Documentation — Miri Programming Language"
+description: "Learn Miri: a 5-minute quickstart, the full language guide, and the GPU programming guide — everything from your first program to device-resident kernels."
+---
+
+<section class="docs-home">
+  <div class="wrap">
+    <div class="kicker reveal">DOCUMENTATION</div>
+    <h1 class="docs-home-title reveal">Learn Miri</h1>
+    <p class="docs-home-sub reveal">Start with a five-minute quickstart, take the full tour of the language, then
+      move to first-class GPU programming — all in one language, no shader files, no FFI.</p>
+
+    <!-- Learning paths -->
+    <div class="path-grid">
+      <a class="path-card reveal" href="{{ '/docs/getting-started/#installation' | relative_url }}">
+        <div class="path-top">
+          <span class="path-icon">▲</span>
+          <span class="path-tag">5 MIN</span>
+        </div>
+        <h3>Quickstart</h3>
+        <p>Install the compiler, write <code>hello.mi</code>, and run your first program. The fastest path from zero
+          to a running Miri binary.</p>
+        <span class="path-go">Install &amp; run →</span>
+      </a>
+
+      <a class="path-card reveal" href="{{ '/docs/getting-started/' | relative_url }}">
+        <div class="path-top">
+          <span class="path-icon">◆</span>
+          <span class="path-tag">GUIDE</span>
+        </div>
+        <h3>Language Guide</h3>
+        <p>The complete tour — variables, functions, pattern matching, structs, traits, generics, the memory model,
+          and modules. Read start to finish or jump to a topic.</p>
+        <span class="path-go">Tour the language →</span>
+      </a>
+
+      <a class="path-card reveal path-gpu" href="{{ '/docs/gpu/' | relative_url }}">
+        <div class="path-top">
+          <span class="path-icon">⛁</span>
+          <span class="path-tag">GPU</span>
+        </div>
+        <h3>GPU Programming</h3>
+        <p>Device-resident bindings, <code>forall</code> kernels, on-device reduction, shared memory, atomics, and
+          interactive <code>gpu frame</code> loops. Starts from your first kernel — no GPU background assumed.</p>
+        <span class="path-go">Write a kernel →</span>
+      </a>
+
+      <a class="path-card reveal" href="{{ '/gpu-demos/' | relative_url }}">
+        <div class="path-top">
+          <span class="path-icon">▶</span>
+          <span class="path-tag">LIVE</span>
+        </div>
+        <h3>GPU Playground</h3>
+        <p>See Miri GPU programs running live in your browser — Mandelbrot, fluid, particles, a black hole, and more,
+          each compiled to WebGPU from Miri source.</p>
+        <span class="path-go">Open the playground →</span>
+      </a>
+    </div>
+
+    <!-- Browse by topic -->
+    <div class="topic-head reveal">
+      <h2>Browse by topic</h2>
+      <p>Jump straight to any part of the reference.</p>
+    </div>
+
+    <div class="topic-grid">
+      <div class="topic-col reveal">
+        <div class="topic-label">Language basics</div>
+        <a href="{{ '/docs/getting-started/#variables' | relative_url }}">Variables — let &amp; var</a>
+        <a href="{{ '/docs/getting-started/#functions' | relative_url }}">Functions</a>
+        <a href="{{ '/docs/getting-started/#control-flow' | relative_url }}">Control flow</a>
+        <a href="{{ '/docs/getting-started/#pattern-matching' | relative_url }}">Pattern matching</a>
+        <a href="{{ '/docs/getting-started/#strings' | relative_url }}">Strings</a>
+      </div>
+
+      <div class="topic-col reveal">
+        <div class="topic-label">Types &amp; data</div>
+        <a href="{{ '/docs/getting-started/#structs' | relative_url }}">Structs</a>
+        <a href="{{ '/docs/getting-started/#enums' | relative_url }}">Enums</a>
+        <a href="{{ '/docs/getting-started/#collections' | relative_url }}">Collections</a>
+        <a href="{{ '/docs/getting-started/#option-types' | relative_url }}">Option types</a>
+        <a href="{{ '/docs/getting-started/#result-type' | relative_url }}">Result&lt;T, E&gt;</a>
+      </div>
+
+      <div class="topic-col reveal">
+        <div class="topic-label">Memory &amp; ownership</div>
+        <a href="{{ '/docs/getting-started/#memory-model' | relative_url }}">Memory model</a>
+        <a href="{{ '/docs/getting-started/#cloneable' | relative_url }}">Cloneable &amp; .clone()</a>
+        <a href="{{ '/docs/getting-started/#resource-types' | relative_url }}">Resource types &amp; drop</a>
+        <a href="{{ '/docs/getting-started/#use-after-move' | relative_url }}">Use-after-move</a>
+        <a href="{{ '/docs/getting-started/#out-keyword' | relative_url }}">The out keyword</a>
+      </div>
+
+      <div class="topic-col reveal">
+        <div class="topic-label">Abstraction</div>
+        <a href="{{ '/docs/getting-started/#classes' | relative_url }}">Classes</a>
+        <a href="{{ '/docs/getting-started/#traits' | relative_url }}">Traits</a>
+        <a href="{{ '/docs/getting-started/#closures' | relative_url }}">Closures</a>
+        <a href="{{ '/docs/getting-started/#generics' | relative_url }}">Generics</a>
+        <a href="{{ '/docs/getting-started/#imports-modules' | relative_url }}">Imports &amp; modules</a>
+      </div>
+
+      <div class="topic-col reveal">
+        <div class="topic-label">GPU essentials</div>
+        <a href="{{ '/docs/gpu/#residency' | relative_url }}">The residency surface</a>
+        <a href="{{ '/docs/gpu/#forall' | relative_url }}">Launching kernels</a>
+        <a href="{{ '/docs/gpu/#readback' | relative_url }}">Getting data back</a>
+        <a href="{{ '/docs/gpu/#cost-classes' | relative_url }}">The four cost classes</a>
+        <a href="{{ '/docs/gpu/#cookbook' | relative_url }}">Cookbook</a>
+      </div>
+
+      <div class="topic-col reveal">
+        <div class="topic-label">GPU advanced</div>
+        <a href="{{ '/docs/gpu/#reduction' | relative_url }}">On-device reduction</a>
+        <a href="{{ '/docs/gpu/#shared-memory' | relative_url }}">Shared memory &amp; barriers</a>
+        <a href="{{ '/docs/gpu/#atomics' | relative_url }}">Atomics</a>
+        <a href="{{ '/docs/gpu/#gpu-frame' | relative_url }}">Interactive frames</a>
+        <a href="{{ '/docs/gpu/#web-target' | relative_url }}">Building for the browser</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -11,12 +11,12 @@ description: "Eight live GPU demos — Mandelbrot, Game of Life, particle flow, 
 <section class="pg-header">
   <div class="wrap">
     <div class="kicker">GPU PLAYGROUND</div>
-    <h1 class="section-title">GPU programs.<br>No shader language.</h1>
-    <p class="section-sub">Every demo here is a Miri program. The kernels aren't GLSL, WGSL or
-      CUDA — they're the same statically-typed Miri you'd write for the CPU, turned
-      device-resident by one keyword: <code>gpu</code>. Miri infers the uploads, compiles the
-      kernels to WebGPU (and Metal, Vulkan, DX12), and runs them. The code beside each demo is
-      the whole program — nothing is hidden.</p>
+    <h1 class="section-title">GPU programs.<br>No shaders to write.</h1>
+    <p class="section-sub">Every demo here is a Miri program. You never hand-write GLSL, WGSL or
+      CUDA — the kernels are the same statically-typed Miri you'd write for the CPU, turned
+      device-resident by one keyword: <code>gpu</code>. Miri infers the uploads, transpiles the
+      kernels to WGSL, and runs them on WebGPU (and Metal, Vulkan, DX12). The code beside each
+      demo is the whole program — nothing is hidden.</p>
     <p class="pg-provenance">The animation you see is a WebGL preview, so it plays on any device.
       The Miri program compiles to WebGPU and draws the same thing —
       <a href="#run">build it yourself</a> in four steps at the bottom.</p>

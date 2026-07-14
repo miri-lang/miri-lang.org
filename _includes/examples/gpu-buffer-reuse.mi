@@ -5,10 +5,10 @@ const N = 8
 gpu_reset_telemetry()
 gpu var data = [0, 0, 0, 0, 0, 0, 0, 0]
 
-gpu forall i in 0..N
+forall i in 0..N
     data[i] = i + 8
 
-gpu forall i in 0..N
+forall i in 0..N
     data[i] = data[i] + 8
 
 let host = data

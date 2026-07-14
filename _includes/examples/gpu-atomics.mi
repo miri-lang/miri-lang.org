@@ -3,7 +3,7 @@ use system.gpu.atomic
 
 fn main()
     gpu var hist = Array<Atomic<u32>, 256>()
-    gpu forall i in 0..147456
+    forall i in 0..147456
         atomic_add(hist, i % 256, 1 as u32)
     let host = hist
     let bucket_0 = host[0]

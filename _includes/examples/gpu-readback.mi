@@ -2,7 +2,7 @@ use system.gpu
 
 gpu var arr = [0, 0, 0, 0, 0, 0, 0, 0]
 
-gpu forall i in 0..8
+forall i in 0..8
     arr[i] = i * i
 
 let h = arr

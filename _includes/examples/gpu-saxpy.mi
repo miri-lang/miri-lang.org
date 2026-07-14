@@ -5,7 +5,7 @@ gpu let y = [5.0, 6.0, 7.0, 8.0]
 gpu var dst = [0.0, 0.0, 0.0, 0.0]
 
 let a = 2.0
-gpu forall i in 0..4
+forall i in 0..4
     dst[i] = a * x[i] + y[i]
 
 let host = dst

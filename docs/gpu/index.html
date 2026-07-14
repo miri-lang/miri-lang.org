@@ -240,7 +240,7 @@ gpu forall i, j, k in 0..2, 0..2, 0..2  // 3D
   one bulk copy:</p>
 
 <pre><code class="language-miri">gpu var arr = [0, 0, 0, 0, 0, 0, 0, 0]
-gpu forall i in 0..8
+forall i in 0..8
     arr[i] = i * i
 
 let v = arr[0]     // COMPILE ERROR: a per-element read would require a readback</code></pre>
@@ -307,7 +307,7 @@ fn main()
 fn main()
     gpu let src = [1.0, 2.0, 3.0]
     gpu var dst = [0.0, 0.0, 0.0]
-    gpu forall i in 0..3
+    forall i in 0..3
         dst[i] = dbl(src[i])       // compiled into the kernel</code></pre>
 
 <h3>Residency-polymorphic functions</h3>
@@ -422,7 +422,7 @@ fn main()
 
 <pre><code class="language-miri">gpu let a = Array&lt;f16, 4&gt;()
 gpu var dst = Array&lt;f16, 4&gt;()
-gpu forall i in 0..4
+forall i in 0..4
     dst[i] = a[i] * 2.0        // float literals narrow to f16 automatically</code></pre>
 
 <p>64-bit scalars (<code>int</code>/<code>i64</code>, <code>u64</code>, <code>f64</code>) are gated on device
@@ -527,7 +527,7 @@ println(f"{t.size()}")       // 6</code></pre>
 <pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 <p>Output: <code>23 1 2 1 1</code> — <code>data[7] = 7 + 8 = 15</code>, then <code>15 + 8 = 23</code>; then
   1 upload, 2 launches, 1 readback, 1 fence. No cross-residency assignment sits between the two
-  <code>gpu forall</code> blocks, which is the visible marker that the buffer is shared.</p>
+  <code>forall</code> blocks, which is the visible marker that the buffer is shared.</p>
 
 <h3 id="cb-saxpy">SAXPY (fused multiply-add)</h3>
 <p>The coefficient is a host scalar, captured into the kernel as a read-only uniform.</p>

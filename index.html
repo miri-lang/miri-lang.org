@@ -65,8 +65,8 @@ gpu let a = [1.0, 2.0, 3.0, 4.0]
 gpu let b = [5.0, 6.0, 7.0, 8.0]
 gpu var dst = [0.0, 0.0, 0.0, 0.0]
 
-// one GPU thread per index
-gpu forall i in 0..4
+// one GPU thread per index; runs on the GPU because it captures device data
+forall i in 0..4
     dst[i] = a[i] + b[i]
 
 // readback: the only host&#8596;device copy in the program
