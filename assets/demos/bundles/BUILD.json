@@ -2,7 +2,7 @@
   "generatedBy": "tools/gen_demo_bundles.py",
   "compiledFrom": "assets/demos/<name>.mi",
   "compiler": {
-    "commit": "331309fb3a867721eddceebe8771c2a84dcfb6d7",
+    "commit": "49982eeec642a477ffea8d0654cdce4557d91fdd",
     "dirty": true
   },
   "runtimeJsBytes": 43517,
@@ -32,8 +32,8 @@
       "gzip": 16058
     },
     "blackhole": {
-      "raw": 158417,
-      "gzip": 12931
+      "raw": 158423,
+      "gzip": 12933
     },
     "wormhole": {
       "raw": 152218,
