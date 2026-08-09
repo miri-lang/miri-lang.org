@@ -43,21 +43,20 @@
 
   <script src="{{ '/assets/js/site.js' | relative_url }}"></script>
 
-  {% if page.hero or page.demos %}
-  <script src="{{ '/assets/js/gl-utils.js' | relative_url }}"></script>
-  {% endif %}
+  {%- comment -%}
+    WebGL2 helpers, now used only by the hero shader; the demos are compiled
+    Miri bundles and run through miri-gpu.js.
+  {%- endcomment -%}
   {% if page.hero %}
+  <script src="{{ '/assets/js/gl-utils.js' | relative_url }}"></script>
   <script src="{{ '/assets/js/hero-shader.js' | relative_url }}"></script>
   {% endif %}
-  {% if page.demos %}
-  <script src="{{ '/assets/js/demos/mandelbrot.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/demos/life.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/demos/particles.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/demos/fluid.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/demos/raymarch.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/demos/neural.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/demos/blackhole.js' | relative_url }}"></script>
-  <script src="{{ '/assets/js/demos/wormhole.js' | relative_url }}"></script>
+  {%- comment -%}
+    Every demo on the site — the playground's full-size stages and the homepage's
+    preview cards — is a compiled Miri bundle driven by this one module.
+  {%- endcomment -%}
+  {% if page.playground or page.demos %}
+  <script type="module" src="{{ '/assets/js/miri-demos.js' | relative_url }}"></script>
   {% endif %}
   {% if page.examples %}
   <script src="{{ '/assets/js/examples-switcher.js' | relative_url }}"></script>

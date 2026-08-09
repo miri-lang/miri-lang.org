@@ -1,4 +1,5 @@
-/* MiriGL — shared WebGL2 helpers + demo registry/mounting */
+/* MiriGL — WebGL2 helpers for the hero shader.
+   The GPU demos are compiled Miri bundles and use miri-gpu.js instead. */
 (function () {
   "use strict";
 
@@ -64,37 +65,6 @@
     };
   }
 
-  function makeTexture(gl, w, h, internalFormat, format, type, filter, data) {
-    var t = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, t);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texImage2D(gl.TEXTURE_2D, 0, internalFormat, w, h, 0, format, type, data || null);
-    return t;
-  }
-
-  function makeFBO(gl, w, h, internalFormat, format, type, filter) {
-    var tex = makeTexture(gl, w, h, internalFormat, format, type, filter);
-    var fbo = gl.createFramebuffer();
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    return { fbo: fbo, tex: tex, w: w, h: h };
-  }
-
-  function doubleFBO(gl, w, h, internalFormat, format, type, filter) {
-    var a = makeFBO(gl, w, h, internalFormat, format, type, filter);
-    var b = makeFBO(gl, w, h, internalFormat, format, type, filter);
-    return {
-      get read() { return a; },
-      get write() { return b; },
-      swap: function () { var t = a; a = b; b = t; },
-      w: w, h: h
-    };
-  }
-
   function resize(gl, canvas, dprCap) {
     var dpr = Math.min(window.devicePixelRatio || 1, dprCap || 2);
     var w = Math.max(1, Math.round(canvas.clientWidth * dpr));
@@ -104,79 +74,6 @@
       return true;
     }
     return false;
-  }
-
-  // ---------- demo registry ----------
-  var registry = {};
-
-  function register(name, factory) { registry[name] = factory; }
-
-  function mount(el) {
-    var name = el.getAttribute("data-demo");
-    var factory = registry[name];
-    var frame = el.querySelector(".demo-canvas-frame") || el;
-    var fallback = frame.querySelector(".gl-fallback");
-    if (!factory) return;
-
-    var canvas = document.createElement("canvas");
-    frame.insertBefore(canvas, frame.firstChild);
-
-    var opts = {
-      preview: el.hasAttribute("data-preview"),
-      dprCap: el.hasAttribute("data-preview") ? 1 : 2
-    };
-
-    var instance = null, failed = false, inView = true;
-
-    function ensure() {
-      if (instance || failed) return;
-      try {
-        instance = factory(canvas, opts);
-        if (!instance) throw new Error("no gl");
-      } catch (e) {
-        failed = true;
-        console.warn("Demo '" + name + "' unavailable:", e.message);
-        if (fallback) fallback.classList.add("show");
-        return;
-      }
-    }
-
-    if (!("IntersectionObserver" in window)) {
-      ensure(); if (instance) instance.start();
-      return;
-    }
-    var delivered = false;
-    var io = new IntersectionObserver(function (entries) {
-      delivered = true;
-      entries.forEach(function (en) {
-        inView = en.isIntersecting;
-        if (en.isIntersecting) {
-          ensure();
-          if (instance) instance.start();
-        } else if (instance) {
-          instance.stop();
-        }
-      });
-    }, { rootMargin: "60px" });
-    io.observe(el);
-    // Fallback: if the observer never delivers, start the demo anyway —
-    // IO is an optimization (pause offscreen), not a gate.
-    setTimeout(function () {
-      if (delivered) return;
-      ensure();
-      if (instance) instance.start();
-    }, 700);
-
-    document.addEventListener("visibilitychange", function () {
-      if (!instance) return;
-      if (document.hidden) instance.stop();
-      else if (inView) instance.start();
-    });
-  }
-
-  function mountAll() {
-    var els = document.querySelectorAll("[data-demo]");
-    for (var i = 0; i < els.length; i++) mount(els[i]);
   }
 
   function loop(fn) {
@@ -203,13 +100,7 @@
     createContext: createContext,
     program: program,
     quad: quad,
-    makeTexture: makeTexture,
-    makeFBO: makeFBO,
-    doubleFBO: doubleFBO,
     resize: resize,
     loop: loop
   };
-  window.MiriDemos = { register: register, mountAll: mountAll };
-
-  document.addEventListener("DOMContentLoaded", mountAll);
 })();

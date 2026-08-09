@@ -1,7 +1,7 @@
 ---
 layout: default
 permalink: /gpu-demos/
-demos: true
+playground: true
 nav_static: true
 title: "GPU Playground — Miri Programming Language"
 description: "Eight live GPU demos — Mandelbrot, Game of Life, particle flow, fluid, ray marching, an on-GPU neural net, a gravitationally-lensed black hole and a traversable wormhole — each a real Miri program you can copy, compile to WebGPU, and run."
@@ -17,9 +17,10 @@ description: "Eight live GPU demos — Mandelbrot, Game of Life, particle flow, 
       device-resident by one keyword: <code>gpu</code>. Miri infers the uploads, transpiles the
       kernels to WGSL, and runs them on WebGPU (and Metal, Vulkan, DX12). The code beside each
       demo is the whole program — nothing is hidden.</p>
-    <p class="pg-provenance">The animation you see is a WebGL preview, so it plays on any device.
-      The Miri program compiles to WebGPU and draws the same thing —
-      <a href="#run">build it yourself</a> in four steps at the bottom.</p>
+    <p class="pg-provenance">The animation you see <em>is</em> the program beside it: the same
+      source, compiled to WGSL by Miri and running on WebGPU in this tab. Nothing here is a
+      hand-written stand-in — <a href="#run">build it yourself</a> in four steps at the bottom
+      and you get the same kernels.</p>
   </div>
 </section>
 
@@ -51,12 +52,12 @@ description: "Eight live GPU demos — Mandelbrot, Game of Life, particle flow, 
 <section class="pg-demo" id="mandelbrot">
   <div class="wrap">
     <div class="pg-demo-head"><span class="pg-num">01</span><h2>Mandelbrot Zoom</h2></div>
-    <p class="pg-demo-desc">The escape-time fractal, live. Each frame runs two GPU passes — one integrates the pan/zoom view from your pointer, the next iterates <code>z² + c</code> for all 16,384 pixels and writes a smooth-shaded RGBA surface. The view state ping-pongs between two device buffers, so no pass ever reads the buffer it is writing.</p>
+    <p class="pg-demo-desc">The escape-time fractal, live. Each frame runs two GPU passes — one integrates the pan/zoom view from your pointer, the next iterates <code>z² + c</code> for all 921,600 pixels and writes a smooth-shaded RGBA surface. The view state ping-pongs between two device buffers, so no pass ever reads the buffer it is writing.</p>
     <div class="pg-demo-body">
       <div class="pg-stage" data-demo="mandelbrot">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
           <span class="hint">drag to pan · scroll to zoom</span>
@@ -76,9 +77,12 @@ use system.collections.array
 use system.math
 use system.io
 
-// Canvas: 1024×1024 pixels (square, so the aspect factor is 1); RGBA paint output.
-const CW = 1024
-const PIXELS = CW * CW
+// Canvas: 1280×720 pixels (16:9, matching the frame it is drawn in, so the set
+// is never stretched); RGBA paint output. The wider axis carries the extra span,
+// scaled by the aspect ratio, exactly as a widescreen viewport should.
+const CW = 1280
+const CH = 720
+const PIXELS = CW * CH
 const PAINT = PIXELS * 4
 
 // View state: [center_x, center_y, scale, _pad] — ping-ponged across frames.
@@ -115,19 +119,45 @@ forall i in 0..4
     view_a[2] = 3.0
     view_a[3] = 0.0
 
+// Clear the canvas to the interior colour. This 2-D pass over the exact display
+// extent also tells the web-gpu backend the canvas is 1280×720; a flat paint
+// buffer carries no shape of its own and would otherwise read as square.
+forall px, py in 0..CW, 0..CH
+    let base = (py * CW + px) * 4
+    paint[base] = 0.008
+    paint[base + 1] = 0.012
+    paint[base + 2] = 0.03
+    paint[base + 3] = 1.0
+
 gpu frame
     // Pass 1: integrate pan/zoom from pointer state into the next view.
     forall i in 0..4
         let cx = view_a[0]
         let cy = view_a[1]
         let scale = view_a[2]
-        // Drag pans by a scale-proportional delta; wheel zooms (clamped step).
-        let next_cx = cx - frame.drag_dx * scale * 0.0016
-        let next_cy = cy + frame.drag_dy * scale * 0.0016
+
+        // Drag pans the view under the pointer. The delta arrives in canvas
+        // CSS pixels, so dividing by the canvas height turns it into a fraction
+        // of the vertical span and multiplying by `scale` into plane units.
+        // `drag_dy` points up while the pointer's travel points down, hence both
+        // axes subtract.
+        let pan_x = cx - frame.drag_dx * scale / (CH as f32)
+        let pan_y = cy - frame.drag_dy * scale / (CH as f32)
+
+        // Wheel zooms about the pointer rather than the centre, so the point
+        // under the cursor stays under it. The step is clamped per frame so one
+        // flick of a high-resolution wheel cannot leap the whole depth range.
         let zoom = clamp(exp(frame.wheel * 0.0014) as f32, 0.6, 1.6) as f32
         let next_scale = clamp(scale * zoom, 0.00002, 4.0) as f32
-        view_b[0] = next_cx
-        view_b[1] = next_cy
+        // Fraction of the distance from the centre to the cursor that the view
+        // must travel to keep the cursor's point fixed. Zero when the scale did
+        // not change, so a frame with no wheel input never shifts the view.
+        let anchor = 1.0 - next_scale / scale
+        let ux = (frame.mouse_x - 0.5) * (CW as f32) / (CH as f32)
+        let uy = 0.5 - frame.mouse_y
+
+        view_b[0] = pan_x + ux * scale * anchor
+        view_b[1] = pan_y + uy * scale * anchor
         view_b[2] = next_scale
         view_b[3] = 0.0
 
@@ -139,9 +169,12 @@ gpu frame
         let cy = view_b[1]
         let scale = view_b[2]
 
-        // Map pixel to the complex plane around the current center.
-        let uu = (px as f32) / (CW as f32) - 0.5
-        let vv = (py as f32) / (CW as f32) - 0.5
+        // Map pixel to the complex plane around the current center. `scale` is
+        // the vertical span, so the horizontal one is widened by the aspect
+        // ratio. Row 0 is the top of the canvas, so the imaginary axis is
+        // flipped to point up the screen, as the plane is conventionally drawn.
+        let uu = ((px as f32) / (CW as f32) - 0.5) * (CW as f32) / (CH as f32)
+        let vv = 0.5 - (py as f32) / (CH as f32)
         let cre = cx + uu * scale
         let cim = cy + vv * scale
 
@@ -200,7 +233,7 @@ gpu frame
       <div class="pg-stage" data-demo="life">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
           <span class="hint">click / drag to seed cells · double-click to reset</span>
@@ -234,12 +267,19 @@ gpu var state_a = Array&lt;f32, CELLS&gt;()
 gpu var state_b = Array&lt;f32, CELLS&gt;()
 gpu var paint = Array&lt;f32, PIXELS * 4&gt;()
 
-// Seed the grid: a deterministic ~18%-density soup.
+// Seed the grid: a deterministic ~18%-density soup. The mix is deliberately
+// non-linear — a squaring step between two linear ones — because a purely
+// linear hash of the cell index lays the soup out on a visible lattice, and a
+// Life field that starts patterned keeps looking patterned for many
+// generations. Every intermediate stays well inside 32-bit range.
+fn soup(idx int) f32
+    let a = (idx * 1597 + 51749) % 40000
+    let b = (a * a + a * 37 + 11) % 40009
+    let c = (b * 613 + 7919) % 40009
+    return 1.0 if c % 100 &lt; 18 else 0.0
+
 forall idx in 0..CELLS
-    let x = idx % GW
-    let y = idx / GW
-    let hash = (x * x * 3 + y * y * 5 + x * y * 7 + x * 13 + y * 17) % 100
-    state_a[idx] = 1.0 if hash &lt; 18 else 0.0
+    state_a[idx] = soup(idx)
 
 // Clear the canvas to the background color. This 2-D pass over the exact
 // display extent also tells the web-gpu backend the canvas is 1280×720 (a flat
@@ -294,10 +334,7 @@ gpu frame
     // Pass 3: reseed a fresh soup on double-click.
     forall idx in 0..CELLS
         if frame.double_clicked
-            let x = idx % GW
-            let y = idx / GW
-            let hash = (x * x * 3 + y * y * 5 + x * y * 7 + x * 13 + y * 17) % 100
-            state_b[idx] = 1.0 if hash &lt; 18 else 0.0
+            state_b[idx] = soup(idx)
 
     // Pass 4: shade each display pixel. Cells are drawn as rounded dots (an
     // `inner` factor that falls off toward the cell edge) over a dark-blue
@@ -343,7 +380,7 @@ gpu frame
       <div class="pg-stage" data-demo="particles">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 with float buffers unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
           <span class="hint">move the pointer to stir the field</span>
@@ -365,7 +402,7 @@ use system.math
 use system.io
 
 // Canvas: 1280×720 intensity cells (16:9), one per display pixel, RGBA paint.
-// Particles: 1024x1024 = 1,048,576, four loose f32 components each (px, py in the
+// Particles: 384x384 = 147,456, four loose f32 components each (px, py in the
 // aspect-scaled play field; age in seconds; seed in [0, 1)). Particles live in
 // x ∈ [-1.7777778, 1.7777778], y ∈ [-1, 1] so the flow is isotropic on a wide
 // canvas (the aspect 1280/720 stretches x, not the swirls).
@@ -373,7 +410,7 @@ const CW = 1280
 const CH = 720
 const GRID = CW * CH
 const PAINT = GRID * 4
-const PARTICLES = 1024 * 1024
+const PARTICLES = 384 * 384
 const PSTATE = PARTICLES * 4
 
 gpu var pstate_a = Array&lt;f32, PSTATE&gt;()
@@ -382,6 +419,14 @@ gpu var pstate_b = Array&lt;f32, PSTATE&gt;()
 // Persistent fixed-point intensity surface (ping-ponged for the decay pass).
 gpu var accum_a = Array&lt;Atomic&lt;u32&gt;, GRID&gt;()
 gpu var accum_b = Array&lt;Atomic&lt;u32&gt;, GRID&gt;()
+
+// The warm particles' share of each cell, deposited and faded alongside the
+// total. One scalar surface cannot carry a hue, so a field scattered into a
+// single accumulator can only ramp one colour toward white; the reference draws
+// blue and yellow particles and keeps both. The ratio of the two surfaces is the
+// warm fraction, which is what the present pass mixes on.
+gpu var warm_a = Array&lt;Atomic&lt;u32&gt;, GRID&gt;()
+gpu var warm_b = Array&lt;Atomic&lt;u32&gt;, GRID&gt;()
 
 // Paint output (RGBA: 4 floats per pixel).
 gpu var paint = Array&lt;f32, PAINT&gt;()
@@ -432,7 +477,7 @@ fn curl_y(x f32, y f32) f32
 
 // Seed: scatter particles uniformly across the aspect-scaled play field with
 // randomized age and seed. x spans [-1.7777778, 1.7777778], y spans [-1, 1].
-forall i in 0..1048576
+forall i in 0..PARTICLES
     let sx = rand_unit(i * 4)
     let sy = rand_unit(i * 4 + 1)
     let sa = rand_unit(i * 4 + 2)
@@ -443,10 +488,12 @@ forall i in 0..1048576
     pstate_a[base + 2] = sa * 6.0
     pstate_a[base + 3] = ss
 
-// Clear both intensity surfaces.
+// Clear the intensity surfaces and their warm-share counterparts.
 forall i in 0..921600
     accum_a[i] = 0
     accum_b[i] = 0
+    warm_a[i] = 0
+    warm_b[i] = 0
 
 // Clear the paint buffer. This 2-D pass over the exact display extent also
 // tells the web-gpu backend the canvas is 1280×720 (a flat paint buffer that
@@ -461,7 +508,7 @@ forall px, py in 0..CW, 0..CH
 gpu frame
     // Pass 1: advect every particle through the curl field plus the pointer
     // vortex, then age and respawn expired or escaped particles.
-    forall i in 0..1048576
+    forall i in 0..PARTICLES
         let base = i * 4
         let px = pstate_a[base]
         let py = pstate_a[base + 1]
@@ -487,8 +534,13 @@ gpu frame
             let dirx = dx / r
             let diry = dy / r
             let g = exp(0.0 - r * 3.2) as f32
-            vx = (vx + (dirx * 0.45 - diry * 0.85) * g) as f32
-            vy = (vy + (diry * 0.45 + dirx * 0.85) * g) as f32
+            // Pull toward the pointer, plus a tangent for the swirl. The play
+            // field's y runs down the screen (a particle at y = -1 lands on the
+            // top row), so the tangent is the clockwise perpendicular
+            // (dy, -dx) — the anticlockwise one would spin the vortex the wrong
+            // way for a viewer.
+            vx = (vx + (dirx * 0.45 + diry * 0.85) * g) as f32
+            vy = (vy + (diry * 0.45 - dirx * 0.85) * g) as f32
 
         let dt = frame.dt
         var nx = (px + vx * dt) as f32
@@ -510,12 +562,18 @@ gpu frame
     // Pass 2: decay the persistent intensity surface (motion trails).
     forall p in 0..921600
         let prev = accum_a[p] as f32
-        accum_b[p] = (prev * 0.96) as u32
+        let prev_warm = warm_a[p] as f32
+        // Trails fade toward black at the same rate the reference blends its
+        // background over the previous frame, so a streak lives about a dozen
+        // frames — long enough to draw the flow line, short enough that the
+        // field never fills in.
+        accum_b[p] = (prev * 0.915) as u32
+        warm_b[p] = (prev_warm * 0.915) as u32
 
     // Pass 3: scatter — additively deposit each particle's intensity into its
     // pixel. Contended cells are correct because the deposit is atomic. The
     // aspect-scaled x ∈ [-1.7777778, 1.7777778] maps to the full 1280 columns.
-    forall i in 0..1048576
+    forall i in 0..PARTICLES
         let base = i * 4
         let px = pstate_b[base]
         let py = pstate_b[base + 1]
@@ -524,26 +582,43 @@ gpu frame
         let sy = ((py * 0.5 + 0.5) * 720.0) as i32
         let cx = max(0, min(1279, sx)) as i32
         let cy = max(0, min(719, sy)) as i32
-        let cell = cy * 1280 + cx
+        // One cell per particle. The reference draws points about 2.5 pixels
+        // across, but on a canvas nearly twice as wide as this one — scaled to
+        // this resolution that is a single cell, and spreading the deposit wider
+        // only blurs the streaks that carry the field's detail.
+        let cell = (cy * 1280 + cx) as i32
         // Warm (yellow-ish) particles deposit more; tone maps to white highs.
         let warm = 1.0 if seed &gt; 0.86 else 0.0
         let amount = (220.0 + warm * 160.0) as u32
+        let warm_amount = (amount as f32 * warm) as u32
         atomic_add(accum_b, cell, amount)
+        atomic_add(warm_b, cell, warm_amount)
 
     // Pass 4: present — tone-map the intensity surface to a saturated blue
     // field on black (empty cells stay black), whitening as intensity rises.
     // The per-pixel color is scaled by brightness so untouched cells are pure
     // black, matching the sparse blue/white streaks of the reference field.
     forall p in 0..921600
-        let v = (accum_b[p] as f32) / 600.0
-        let bright = v / (1.0 + v)
-        // Blue base (0.22, 0.42, 1.0) that ramps toward white with intensity.
-        let hue_r = (0.22 + 0.78 * bright) as f32
-        let hue_g = (0.42 + 0.58 * bright) as f32
+        let total = (accum_b[p] as f32) as f32
+        // The divisor sets where the tone map's knee falls. Saturated blue is a
+        // darker colour than the white the field used to ramp to, so the knee sits
+        // lower to keep the overall brightness the reference has.
+        let v = (total / 92.0) as f32
+        let bright = (v / (1.0 + v)) as f32
+        // Hue comes from the cell's warm share, so blue and yellow particles stay
+        // distinguishable however they pile up; a single accumulator could only
+        // have ramped one colour toward white.
+        let warmth = (warm_b[p] as f32) / (max(1.0, total) as f32)
+        let hue_r = mix(0.22, 1.0, warmth) as f32
+        let hue_g = mix(0.42, 0.82, warmth) as f32
+        let hue_b = mix(1.0, 0.25, warmth) as f32
+        // Dense cores wash toward white, the way additive blending saturates in
+        // the reference; sparse cells keep their colour.
+        let wash = (bright * bright * 0.75) as f32
         let base = p * 4
-        paint[base] = (hue_r * bright) as f32
-        paint[base + 1] = (hue_g * bright) as f32
-        paint[base + 2] = bright
+        paint[base] = ((hue_r + (1.0 - hue_r) * wash) * bright) as f32
+        paint[base + 1] = ((hue_g + (1.0 - hue_g) * wash) * bright) as f32
+        paint[base + 2] = ((hue_b + (1.0 - hue_b) * wash) * bright) as f32
         paint[base + 3] = 1.0
 </pre>
         </div>
@@ -561,7 +636,7 @@ gpu frame
       <div class="pg-stage" data-demo="fluid">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 with float buffers unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
           <span class="hint">drag across the fluid to inject dye</span>
@@ -642,18 +717,34 @@ gpu frame
         let fy = (y as f32) / 192.0
         let t = frame.time
 
-        // Pointer activity: moved this frame (hover or drag) or button held.
+        // Pointer activity is movement, with or without a button: the pointer
+        // pushes dye by dragging through the fluid, so a stationary pointer
+        // injects nothing however long it is held down. Holding also counting as
+        // activity would pour dye into one spot for as long as the button was
+        // pressed.
         let mvx = frame.move_x
         let mvy = frame.move_y
-        let held = 1.0 if frame.mouse_down else 0.0
-        let active = 1.0 if (abs(mvx) + abs(mvy)) &gt; 0.0006 or held &gt; 0.5 else 0.0
+        let active = 1.0 if (abs(mvx) + abs(mvy)) &gt; 0.0006 else 0.0
 
-        // Ambient swirl, on only while the pointer is idle.
-        let amb = (1.0 - active) as f32
-        let ax = (0.5 + 0.33 * (cos(t * 0.8) as f32)) as f32
-        let ay = (0.5 + 0.33 * (sin(t * 1.04) as f32)) as f32
-        let adx = (0.0 - (sin(t * 0.8) as f32)) * 30.0
-        let ady = (cos(t * 1.04) as f32) * 30.0
+        // Ambient swirl, on only while the pointer is idle. It fires as a puff
+        // roughly every 1.4 seconds rather than continuously: a source that ran
+        // every frame would inject dye some eighty times faster than it
+        // dissipates, so the field would keep brightening instead of settling.
+        // The window is one frame wide, so the phase test needs `dt`.
+        // The opening frame puffs too, so the field is never empty waiting for
+        // the first period to elapse; `dt` is zero only on that frame.
+        let period = 1.4
+        let cycle = (t / period) as f32
+        let phase = (cycle - (floor(cycle) as f32)) as f32
+        let puff = 1.0 if phase &lt; (frame.dt / period) or frame.dt &lt;= 0.0 else 0.0
+        let amb = ((1.0 - active) * puff) as f32
+        // The emission point walks a wobbling circle, so successive puffs land
+        // in different places and stir the whole field over time.
+        let a = (t * 0.8 + (sin(t * 0.37) as f32) * 3.0) as f32
+        let ax = (0.5 + 0.33 * (cos(a) as f32)) as f32
+        let ay = (0.5 + 0.33 * (sin(a * 1.3) as f32)) as f32
+        let adx = (0.0 - (sin(a) as f32)) * 220.0
+        let ady = (cos(a * 1.3) as f32) * 220.0
         let dxa = (fx - ax) as f32
         let dya = (fy - ay) as f32
         let ga = (exp((0.0 - (dxa * dxa + dya * dya)) / 0.0018) as f32) * amb
@@ -835,7 +926,7 @@ gpu frame
       <div class="pg-stage" data-demo="raymarch">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
           <span class="hint">drag to orbit the camera</span>
@@ -855,7 +946,8 @@ use system.collections.array
 use system.math
 use system.io
 
-// Canvas: 96×96 pixels (square, so the aspect factor is 1); RGBA paint output.
+// Canvas: 1280×720 pixels (16:9); the ray direction widens the horizontal axis
+// by that aspect ratio, so the scene is never stretched. RGBA paint output.
 const CW = 1280
 const CH = 720
 const PIXELS = CW * CH
@@ -1108,16 +1200,11 @@ gpu frame
       <div class="pg-stage" data-demo="neural">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
-          <span class="nn-chips">
-            <button class="nn-chip active" data-set="spiral">spiral</button>
-            <button class="nn-chip" data-set="rings">rings</button>
-            <button class="nn-chip" data-set="xor">xor</button>
-          </span>
-          <span class="hint">click canvas to re-init</span>
-          <span class="nn-stats">epoch <b>—</b> · loss <b>—</b></span>
+          <span class="hint">click canvas to re-init · dataset cycles</span>
+          <span class="nn-stats">epoch <b>—</b> · loss <b>—</b> · accuracy <b>—</b></span>
           <span class="pg-fps">fps <b>—</b></span>
         </div>
       </div>
@@ -1149,6 +1236,22 @@ const W3 = 192
 const B3 = 204
 const PARAMS = 205
 
+// One slot past the weights carries the epoch count, so it ping-pongs with them
+// and resets exactly when they do. The host reads it out for the HUD.
+const EPOCH = PARAMS
+const SLOTS = PARAMS + 1
+
+// Optimizer steps taken per displayed frame. The reference host takes three, and
+// the convergence rate a viewer sees is the product of this and the step size.
+const EPOCHS_PER_FRAME = 3
+
+// How long each shape stays on screen, and how many shapes the demo cycles
+// through. The net converges in well under a second, so a long hold would leave
+// the field frozen for most of the loop; this holds the settled boundary just
+// long enough to read before re-forming on the next shape.
+const SECS_PER_MODE = 6
+const MODES = 3
+
 // Dataset: 100 points, each (x, y, label in {0, 1}); PER_ARM points per class.
 // Training runs on a single GPU thread that walks the whole batch each epoch, so
 // the per-frame cost is linear in the sample count; 100 points keeps the frame
@@ -1169,15 +1272,15 @@ const CH = 540
 const PIXELS = CW * CH
 const PAINT = PIXELS * 4
 
-// Weights and velocities (ping-ponged a -&gt; b).
-gpu var w_a = Array&lt;f32, PARAMS&gt;()
-gpu var w_b = Array&lt;f32, PARAMS&gt;()
+// Weights (plus the trailing epoch slot) and velocities, ping-ponged a -&gt; b.
+gpu var w_a = Array&lt;f32, SLOTS&gt;()
+gpu var w_b = Array&lt;f32, SLOTS&gt;()
 gpu var v_a = Array&lt;f32, PARAMS&gt;()
 gpu var v_b = Array&lt;f32, PARAMS&gt;()
 
-// Dataset points and the [loss, accuracy] HUD stats.
+// Dataset points and the [loss, accuracy, epoch] HUD stats.
 gpu var data = Array&lt;f32, DATA&gt;()
-gpu var stats = Array&lt;f32, 2&gt;()
+gpu var stats = Array&lt;f32, 3&gt;()
 
 // Decision-field paint output (960×540 RGBA).
 gpu var paint = Array&lt;f32, PAINT&gt;()
@@ -1186,17 +1289,21 @@ fn rand_unit(key i32) f32
     let h = hash_u32(key as u32)
     return (h as f32) / (4294967295.0 as f32)
 
-// Seed weights with small per-layer scales (biases start at zero); zero the
-// velocities. Matches the reference net's Xavier-ish initialization.
+// Initial spread of parameter `i`, small and per-layer in the Xavier-ish manner
+// the reference net uses. Biases start at exactly zero, so they scale by 0.
+fn init_scale(i i32) f32
+    if i &lt; B1: return 0.65
+    if i &gt;= W2 and i &lt; B2: return 0.5
+    if i &gt;= W3 and i &lt; B3: return 0.68
+    return 0.0
+
+// Which shape is on screen at time `t`: spiral (0), then rings (1), then xor (2).
+fn mode_at(t f32) i32
+    return (floor(t / (SECS_PER_MODE as f32)) as i32) % MODES
+
+// Seed weights from that spread; zero the velocities.
 forall i in 0..PARAMS
-    var scale = 0.0
-    if i &lt; B1
-        scale = 0.65
-    if i &gt;= W2 and i &lt; B2
-        scale = 0.5
-    if i &gt;= W3 and i &lt; B3
-        scale = 0.68
-    w_a[i] = ((rand_unit(i + 1) * 2.0 - 1.0) * scale) as f32
+    w_a[i] = ((rand_unit(i + 1) * 2.0 - 1.0) * init_scale(i)) as f32
     v_a[i] = 0.0
 
 // Seed a two-arm spiral: points 0..PER_ARM are class 0, the rest class 1.
@@ -1223,92 +1330,144 @@ forall px, py in 0..CW, 0..CH
     paint[base + 3] = 1.0
 
 gpu frame
-    // Pass 1: one full-batch backprop epoch. A single thread forwards every
-    // sample from the previous frame's weights `w_a`, backpropagates the
-    // cross-entropy error into the exact gradient `g`, then applies one momentum
-    // SGD step, writing w_a/v_a -&gt; w_b/v_b (the host ping-pongs a/b each frame). Only
-    // the gradient and the tiny activation buffers are local scratch — the
-    // weights stay in device memory, so the kernel avoids the register spill that
-    // a burst of local weight copies would cause on the single training lane.
+    // Pass 1: several full-batch backprop epochs. A single thread takes the
+    // previous frame's weights from `w_a`/`v_a`, and for each epoch forwards
+    // every sample, backpropagates the cross-entropy error into the exact
+    // gradient `g`, and takes one momentum SGD step. The result is published to
+    // `w_b`/`v_b`, which the host ping-pongs back each frame. Weights, gradient
+    // and activations are all per-invocation scratch, which is what makes the
+    // whole training loop expressible on-device: no cross-thread reduction and
+    // no host round-trip.
     forall t in 0..1
+        // The epochs run against per-invocation copies of the weights. A pass may
+        // not both read and write a device buffer — the compiler rejects that as a
+        // race, and rightly, since it cannot know this pass is a single lane — so
+        // the ping-pong happens once at the edges of the frame rather than once
+        // per epoch.
+        var w = Array&lt;f32, PARAMS&gt;()
+        var vel = Array&lt;f32, PARAMS&gt;()
+        var c = 0
+        while c &lt; PARAMS
+            w[c] = w_a[c]
+            vel[c] = v_a[c]
+            c = c + 1
+
         var g = Array&lt;f32, PARAMS&gt;()
         var h1 = Array&lt;f32, H1&gt;()
         var h2 = Array&lt;f32, H2&gt;()
         var d1 = Array&lt;f32, H1&gt;()
         var d2 = Array&lt;f32, H2&gt;()
-        var s = 0
-        while s &lt; SAMPLES
-            let x0 = data[s * 3]
-            let x1 = data[s * 3 + 1]
-            let lbl = data[s * 3 + 2]
 
-            // Forward pass.
-            var j = 0
-            while j &lt; H1
-                let a1 = (w_a[W1 + j * IN] * x0 + w_a[W1 + j * IN + 1] * x1 + w_a[B1 + j]) as f32
-                h1[j] = tanh(a1) as f32
-                j = j + 1
-            j = 0
-            while j &lt; H2
-                var a2 = w_a[B2 + j]
-                var k = 0
-                while k &lt; H1
-                    a2 = (a2 + w_a[W2 + j * H1 + k] * h1[k]) as f32
-                    k = k + 1
-                h2[j] = tanh(a2) as f32
-                j = j + 1
-            var y = w_a[B3]
-            j = 0
-            while j &lt; H2
-                y = (y + w_a[W3 + j] * h2[j]) as f32
-                j = j + 1
-            let p = (1.0 / (1.0 + (exp(0.0 - y) as f32))) as f32
+        var epoch = 0
+        while epoch &lt; EPOCHS_PER_FRAME
+            // The gradient accumulates across the batch, so it must start each
+            // epoch at zero rather than carrying the previous epoch's sum.
+            var z = 0
+            while z &lt; PARAMS
+                g[z] = 0.0
+                z = z + 1
+            var s = 0
+            while s &lt; SAMPLES
+                let x0 = data[s * 3]
+                let x1 = data[s * 3 + 1]
+                let lbl = data[s * 3 + 2]
 
-            // Backward pass: accumulate the exact gradient into `g`.
-            let ds = (p - lbl) as f32
-            g[B3] = (g[B3] + ds) as f32
-            j = 0
-            while j &lt; H2
-                g[W3 + j] = (g[W3 + j] + ds * h2[j]) as f32
-                d2[j] = (ds * w_a[W3 + j] * (1.0 - h2[j] * h2[j])) as f32
-                j = j + 1
-            j = 0
-            while j &lt; H2
-                g[B2 + j] = (g[B2 + j] + d2[j]) as f32
-                var k = 0
-                while k &lt; H1
-                    g[W2 + j * H1 + k] = (g[W2 + j * H1 + k] + d2[j] * h1[k]) as f32
-                    k = k + 1
-                j = j + 1
-            var k = 0
-            while k &lt; H1
-                var acc = 0.0
+                // Forward pass.
+                var j = 0
+                while j &lt; H1
+                    let a1 = (w[W1 + j * IN] * x0 + w[W1 + j * IN + 1] * x1 + w[B1 + j]) as f32
+                    h1[j] = tanh(a1) as f32
+                    j = j + 1
                 j = 0
                 while j &lt; H2
-                    acc = (acc + d2[j] * w_a[W2 + j * H1 + k]) as f32
+                    var a2 = w[B2 + j]
+                    var k = 0
+                    while k &lt; H1
+                        a2 = (a2 + w[W2 + j * H1 + k] * h1[k]) as f32
+                        k = k + 1
+                    h2[j] = tanh(a2) as f32
                     j = j + 1
-                d1[k] = (acc * (1.0 - h1[k] * h1[k])) as f32
-                k = k + 1
-            k = 0
-            while k &lt; H1
-                g[B1 + k] = (g[B1 + k] + d1[k]) as f32
-                g[W1 + k * IN] = (g[W1 + k * IN] + d1[k] * x0) as f32
-                g[W1 + k * IN + 1] = (g[W1 + k * IN + 1] + d1[k] * x1) as f32
-                k = k + 1
-            s = s + 1
+                var y = w[B3]
+                j = 0
+                while j &lt; H2
+                    y = (y + w[W3 + j] * h2[j]) as f32
+                    j = j + 1
+                let p = (1.0 / (1.0 + (exp(0.0 - y) as f32))) as f32
 
-        // Momentum SGD (lr 0.25, momentum 0.9), gradient averaged over the batch,
-        // writing the new weights/velocities to w_b/v_b. No weight decay: the
-        // spiral needs the sharp, high-curvature boundary that L2 would smooth.
-        let sc = (0.25 / (SAMPLES as f32)) as f32
-        var i = 0
-        while i &lt; PARAMS
-            let nv = (0.9 * v_a[i] - sc * g[i]) as f32
-            v_b[i] = nv
-            w_b[i] = (w_a[i] + nv) as f32
-            i = i + 1
+                // Backward pass: accumulate the exact gradient into `g`.
+                let ds = (p - lbl) as f32
+                g[B3] = (g[B3] + ds) as f32
+                j = 0
+                while j &lt; H2
+                    g[W3 + j] = (g[W3 + j] + ds * h2[j]) as f32
+                    d2[j] = (ds * w[W3 + j] * (1.0 - h2[j] * h2[j])) as f32
+                    j = j + 1
+                j = 0
+                while j &lt; H2
+                    g[B2 + j] = (g[B2 + j] + d2[j]) as f32
+                    var k = 0
+                    while k &lt; H1
+                        g[W2 + j * H1 + k] = (g[W2 + j * H1 + k] + d2[j] * h1[k]) as f32
+                        k = k + 1
+                    j = j + 1
+                var k = 0
+                while k &lt; H1
+                    var acc = 0.0
+                    j = 0
+                    while j &lt; H2
+                        acc = (acc + d2[j] * w[W2 + j * H1 + k]) as f32
+                        j = j + 1
+                    d1[k] = (acc * (1.0 - h1[k] * h1[k])) as f32
+                    k = k + 1
+                k = 0
+                while k &lt; H1
+                    g[B1 + k] = (g[B1 + k] + d1[k]) as f32
+                    g[W1 + k * IN] = (g[W1 + k * IN] + d1[k] * x0) as f32
+                    g[W1 + k * IN + 1] = (g[W1 + k * IN + 1] + d1[k] * x1) as f32
+                    k = k + 1
+                s = s + 1
 
-    // Pass 2: post-step loss + accuracy over the batch for the HUD readback.
+            // Momentum SGD (lr 0.25, momentum 0.9), gradient averaged over the
+            // batch. No weight decay: the spiral needs the sharp, high-curvature
+            // boundary that L2 would smooth.
+            let sc = (0.25 / (SAMPLES as f32)) as f32
+            var i = 0
+            while i &lt; PARAMS
+                let nv = (0.9 * vel[i] - sc * g[i]) as f32
+                vel[i] = nv
+                w[i] = (w[i] + nv) as f32
+                i = i + 1
+            epoch = epoch + 1
+
+        // Publish the frame's result. Clicking the canvas restarts training from a
+        // fresh net instead of the one just refined; the keys are offset by the
+        // frame clock so each restart draws different weights rather than
+        // replaying the first run, and the offset wraps well inside 32-bit range.
+        // A dataset change restarts it for the same reason a trainer would not
+        // fine-tune across unrelated tasks: the converged weights are large enough
+        // to saturate every tanh, leaving no gradient to fit the new shape with.
+        let before = frame.time - frame.dt
+        let prev = before if before &gt; 0.0 else 0.0
+        let restart = frame.clicked or mode_at(frame.time) != mode_at(prev)
+        let key_base = ((((frame.time * 97.0) as i32) % 9973) * PARAMS) as i32
+        var o = 0
+        while o &lt; PARAMS
+            if restart
+                w_b[o] = ((rand_unit(key_base + o + 1) * 2.0 - 1.0) * init_scale(o)) as f32
+                v_b[o] = 0.0
+            else
+                w_b[o] = w[o]
+                v_b[o] = vel[o]
+            o = o + 1
+
+        // Epochs taken by the net now on screen: it counts from zero for each
+        // freshly seeded one, so it measures this shape's training, not the
+        // session's.
+        let epochs_before = 0.0 if restart else w_a[EPOCH]
+        w_b[EPOCH] = (epochs_before + (EPOCHS_PER_FRAME as f32)) as f32
+
+    // Pass 2: post-step loss + accuracy over the batch, plus the epoch count
+    // the train pass just advanced, for the HUD readback.
     forall t in 0..1
         var h1 = Array&lt;f32, H1&gt;()
         var h2 = Array&lt;f32, H2&gt;()
@@ -1345,17 +1504,17 @@ gpu frame
             s = s + 1
         stats[0] = (loss / (SAMPLES as f32)) as f32
         stats[1] = (correct / (SAMPLES as f32)) as f32
+        stats[2] = w_b[EPOCH]
 
     // Pass 3: regenerate the dataset for the current mode. A timer cycles the
     // shape every SECS_PER_MODE seconds (spiral -&gt; rings -&gt; xor), so the field
-    // visibly re-forms for each one; the net adapts in place (no weight reset).
+    // visibly re-forms for each one from the net the train pass just reseeded.
     // Within a mode the layout is a deterministic function of the point index,
     // so it is stable across frames and the net can learn it. `train` stays the
     // first pass (it owns the weight ping-pong); this pass feeds the render below
     // and next frame's training, so the shape only lags a frame at a boundary.
     forall s in 0..SAMPLES
-        // Mode advances every 10 seconds: spiral (0), rings (1), xor (2).
-        let mode = (floor(frame.time / 14.0) as i32) % 3
+        let mode = mode_at(frame.time)
         var dx = 0.0
         var dy = 0.0
         var lbl = 0.0
@@ -1495,7 +1654,7 @@ gpu frame
       <div class="pg-stage" data-demo="blackhole">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
           <span class="hint">drag to orbit · scroll to zoom</span>
@@ -1634,7 +1793,10 @@ gpu frame
         // After a brief idle the camera auto-orbits; drag always steers it.
         let auto = frame.dt * 0.08 if next_idle &gt; 0.1 else 0.0
         cam_b[0] = yaw + frame.drag_dx * 0.008 + auto
-        cam_b[1] = clamp(pitch + frame.drag_dy * 0.006, -1.45, 1.45) as f32
+        // `drag_dy` points up the screen while the pointer's travel points down,
+        // so raising the pointer must raise the camera: subtract, matching the
+        // reference's `rot.y += (clientY - lastY) * 0.006`.
+        cam_b[1] = clamp(pitch - frame.drag_dy * 0.006, -1.45, 1.45) as f32
         cam_b[2] = clamp(dist * (exp(frame.wheel * 0.0012) as f32), 4.5, 28.0) as f32
         cam_b[3] = next_idle
 
@@ -1851,7 +2013,7 @@ gpu frame
       <div class="pg-stage" data-demo="wormhole">
         <div class="demo-canvas-frame">
           <span class="demo-badge">LIVE · GPU</span>
-          <div class="gl-fallback">WebGPU / WebGL2 unavailable on this device</div>
+          <div class="demo-fallback">This demo needs WebGPU</div>
         </div>
         <div class="pg-controls">
           <span class="hint">drag to orbit · scroll to zoom</span>
@@ -1984,7 +2146,10 @@ gpu frame
         // After a brief idle the camera auto-orbits; drag always steers it.
         let auto = frame.dt * 0.09 if next_idle &gt; 0.1 else 0.0
         cam_b[0] = yaw + frame.drag_dx * 0.008 + auto
-        cam_b[1] = clamp(pitch + frame.drag_dy * 0.006, -1.45, 1.45) as f32
+        // `drag_dy` points up the screen while the pointer's travel points down,
+        // so raising the pointer must raise the camera: subtract, matching the
+        // reference's `rot.y += (clientY - lastY) * 0.006`.
+        cam_b[1] = clamp(pitch - frame.drag_dy * 0.006, -1.45, 1.45) as f32
         cam_b[2] = clamp(dist * (exp(frame.wheel * 0.0012) as f32), 3.5, 22.0) as f32
         cam_b[3] = next_idle
 
@@ -2198,24 +2363,6 @@ cd miri &amp;&amp; cargo build --release</code></pre>
 </section>
 
 <script>
-// shared fps meter for all visible readouts
-(function () {
-  document.addEventListener("DOMContentLoaded", function () {
-    var els = document.querySelectorAll(".pg-fps b");
-    var frames = 0, last = performance.now();
-    function tick(t) {
-      frames++;
-      if (t - last >= 500) {
-        var fps = Math.round(frames * 1000 / (t - last));
-        frames = 0; last = t;
-        for (var i = 0; i < els.length; i++) els[i].textContent = fps;
-      }
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  });
-})();
-
 // copy-to-clipboard for each Miri program
 (function () {
   document.addEventListener("click", function (e) {

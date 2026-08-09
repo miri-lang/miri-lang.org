@@ -1,0 +1,1863 @@
+{
+  "name": "mandelbrot",
+  "canvas": {
+    "width": 1280,
+    "height": 720
+  },
+  "buffers": [
+    {
+      "name": "paint",
+      "elemType": "f32",
+      "length": 3686400,
+      "initialData": null
+    },
+    {
+      "name": "view_a",
+      "elemType": "f32",
+      "length": 4,
+      "initialData": null
+    },
+    {
+      "name": "view_b",
+      "elemType": "f32",
+      "length": 4,
+      "initialData": null
+    }
+  ],
+  "seed": [
+    {
+      "entryPoint": "miri_gpu_forall_0",
+      "wgsl": "fn pal_r(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.016, 0.13, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.13, 0.35, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.35, 1.0, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(1.0, 1.0, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_g(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.027, 0.27, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.27, 0.62, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.62, 0.85, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.85, 0.97, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_b(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.059, 0.75, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.75, 1.0, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(1.0, 0.24, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.24, 0.85, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\n@group(0) @binding(0) var<storage, read_write> view_a: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_forall_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: i32 = 0;\n    var _13: f32 = 0.0;\n    var _14: i32 = 0;\n    var _15: f32 = 0.0;\n    var _16: i32 = 0;\n    var _17: f32 = 0.0;\n    var _18: i32 = 0;\n    var _19: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 256u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = (_9 < 4);\n    if (bool(_10)) {\n        _11 = -0.6;\n        _12 = 0;\n        view_a[i32(_12)] = _11;\n        _13 = _11;\n        _14 = 1;\n        view_a[i32(_14)] = 0.0;\n        _15 = 0.0;\n        _16 = 2;\n        view_a[i32(_16)] = 3.0;\n        _17 = 3.0;\n        _18 = 3;\n        view_a[i32(_18)] = 0.0;\n        _19 = 0.0;\n    }\n}\n\n",
+      "workgroups": [
+        1,
+        1,
+        1
+      ],
+      "bindings": [
+        {
+          "name": "view_a",
+          "access": "read_write",
+          "writes": true
+        }
+      ],
+      "sourceMap": [
+        {
+          "wgsl": 17,
+          "miri": 23
+        },
+        {
+          "wgsl": 19,
+          "miri": 23
+        },
+        {
+          "wgsl": 20,
+          "miri": 23
+        },
+        {
+          "wgsl": 21,
+          "miri": 23
+        },
+        {
+          "wgsl": 24,
+          "miri": 24
+        },
+        {
+          "wgsl": 26,
+          "miri": 24
+        },
+        {
+          "wgsl": 27,
+          "miri": 24
+        },
+        {
+          "wgsl": 28,
+          "miri": 24
+        },
+        {
+          "wgsl": 29,
+          "miri": 24
+        },
+        {
+          "wgsl": 32,
+          "miri": 25
+        },
+        {
+          "wgsl": 34,
+          "miri": 25
+        },
+        {
+          "wgsl": 35,
+          "miri": 25
+        },
+        {
+          "wgsl": 36,
+          "miri": 25
+        },
+        {
+          "wgsl": 37,
+          "miri": 25
+        },
+        {
+          "wgsl": 40,
+          "miri": 26
+        },
+        {
+          "wgsl": 41,
+          "miri": 26
+        },
+        {
+          "wgsl": 42,
+          "miri": 26
+        },
+        {
+          "wgsl": 43,
+          "miri": 26
+        },
+        {
+          "wgsl": 66,
+          "miri": 29
+        },
+        {
+          "wgsl": 68,
+          "miri": 29
+        },
+        {
+          "wgsl": 69,
+          "miri": 29
+        },
+        {
+          "wgsl": 70,
+          "miri": 29
+        },
+        {
+          "wgsl": 73,
+          "miri": 30
+        },
+        {
+          "wgsl": 75,
+          "miri": 30
+        },
+        {
+          "wgsl": 76,
+          "miri": 30
+        },
+        {
+          "wgsl": 77,
+          "miri": 30
+        },
+        {
+          "wgsl": 78,
+          "miri": 30
+        },
+        {
+          "wgsl": 81,
+          "miri": 31
+        },
+        {
+          "wgsl": 83,
+          "miri": 31
+        },
+        {
+          "wgsl": 84,
+          "miri": 31
+        },
+        {
+          "wgsl": 85,
+          "miri": 31
+        },
+        {
+          "wgsl": 86,
+          "miri": 31
+        },
+        {
+          "wgsl": 89,
+          "miri": 32
+        },
+        {
+          "wgsl": 90,
+          "miri": 32
+        },
+        {
+          "wgsl": 91,
+          "miri": 32
+        },
+        {
+          "wgsl": 92,
+          "miri": 32
+        },
+        {
+          "wgsl": 115,
+          "miri": 35
+        },
+        {
+          "wgsl": 117,
+          "miri": 35
+        },
+        {
+          "wgsl": 118,
+          "miri": 35
+        },
+        {
+          "wgsl": 119,
+          "miri": 35
+        },
+        {
+          "wgsl": 122,
+          "miri": 36
+        },
+        {
+          "wgsl": 124,
+          "miri": 36
+        },
+        {
+          "wgsl": 125,
+          "miri": 36
+        },
+        {
+          "wgsl": 126,
+          "miri": 36
+        },
+        {
+          "wgsl": 127,
+          "miri": 36
+        },
+        {
+          "wgsl": 130,
+          "miri": 37
+        },
+        {
+          "wgsl": 132,
+          "miri": 37
+        },
+        {
+          "wgsl": 133,
+          "miri": 37
+        },
+        {
+          "wgsl": 134,
+          "miri": 37
+        },
+        {
+          "wgsl": 135,
+          "miri": 37
+        },
+        {
+          "wgsl": 138,
+          "miri": 38
+        },
+        {
+          "wgsl": 139,
+          "miri": 38
+        },
+        {
+          "wgsl": 140,
+          "miri": 38
+        },
+        {
+          "wgsl": 141,
+          "miri": 38
+        },
+        {
+          "wgsl": 180,
+          "miri": 42
+        },
+        {
+          "wgsl": 181,
+          "miri": 42
+        },
+        {
+          "wgsl": 182,
+          "miri": 42
+        },
+        {
+          "wgsl": 183,
+          "miri": 42
+        },
+        {
+          "wgsl": 184,
+          "miri": 43
+        },
+        {
+          "wgsl": 185,
+          "miri": 43
+        },
+        {
+          "wgsl": 186,
+          "miri": 43
+        },
+        {
+          "wgsl": 187,
+          "miri": 44
+        },
+        {
+          "wgsl": 188,
+          "miri": 44
+        },
+        {
+          "wgsl": 189,
+          "miri": 44
+        },
+        {
+          "wgsl": 190,
+          "miri": 45
+        },
+        {
+          "wgsl": 191,
+          "miri": 45
+        },
+        {
+          "wgsl": 192,
+          "miri": 45
+        }
+      ]
+    },
+    {
+      "entryPoint": "miri_gpu_forall_1",
+      "wgsl": "fn pal_r(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.016, 0.13, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.13, 0.35, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.35, 1.0, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(1.0, 1.0, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_g(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.027, 0.27, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.27, 0.62, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.62, 0.85, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.85, 0.97, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_b(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.059, 0.75, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.75, 1.0, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(1.0, 0.24, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.24, 0.85, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\n@group(0) @binding(0) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(16, 16, 1)\nfn miri_gpu_forall_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: bool = false;\n    var _19: bool = false;\n    var _20: bool = false;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: f32 = 0.0;\n    var _27: i32 = 0;\n    var _28: f32 = 0.0;\n    var _29: i32 = 0;\n    var _30: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 16u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = _local_id.y;\n    _11 = _workgroup_id.y;\n    _12 = 16u;\n    _13 = (_11 * _12);\n    _14 = i32(_10);\n    _15 = i32(_13);\n    _16 = (_14 + _15);\n    _17 = (_16 + 0);\n    _18 = (_9 < 1280);\n    _19 = (_17 < 720);\n    _20 = (_18 & _19);\n    if (bool(_20)) {\n        _22 = (_17 * 1280);\n        _23 = (_22 + _9);\n        _21 = (_23 * 4);\n        paint[i32(_21)] = 0.008;\n        _24 = 0.008;\n        _25 = (_21 + 1);\n        paint[i32(_25)] = 0.012;\n        _26 = 0.012;\n        _27 = (_21 + 2);\n        paint[i32(_27)] = 0.03;\n        _28 = 0.03;\n        _29 = (_21 + 3);\n        paint[i32(_29)] = 1.0;\n        _30 = 1.0;\n    }\n}\n\n",
+      "workgroups": [
+        80,
+        45,
+        1
+      ],
+      "bindings": [
+        {
+          "name": "paint",
+          "access": "read_write",
+          "writes": true
+        }
+      ],
+      "sourceMap": [
+        {
+          "wgsl": 17,
+          "miri": 23
+        },
+        {
+          "wgsl": 19,
+          "miri": 23
+        },
+        {
+          "wgsl": 20,
+          "miri": 23
+        },
+        {
+          "wgsl": 21,
+          "miri": 23
+        },
+        {
+          "wgsl": 24,
+          "miri": 24
+        },
+        {
+          "wgsl": 26,
+          "miri": 24
+        },
+        {
+          "wgsl": 27,
+          "miri": 24
+        },
+        {
+          "wgsl": 28,
+          "miri": 24
+        },
+        {
+          "wgsl": 29,
+          "miri": 24
+        },
+        {
+          "wgsl": 32,
+          "miri": 25
+        },
+        {
+          "wgsl": 34,
+          "miri": 25
+        },
+        {
+          "wgsl": 35,
+          "miri": 25
+        },
+        {
+          "wgsl": 36,
+          "miri": 25
+        },
+        {
+          "wgsl": 37,
+          "miri": 25
+        },
+        {
+          "wgsl": 40,
+          "miri": 26
+        },
+        {
+          "wgsl": 41,
+          "miri": 26
+        },
+        {
+          "wgsl": 42,
+          "miri": 26
+        },
+        {
+          "wgsl": 43,
+          "miri": 26
+        },
+        {
+          "wgsl": 66,
+          "miri": 29
+        },
+        {
+          "wgsl": 68,
+          "miri": 29
+        },
+        {
+          "wgsl": 69,
+          "miri": 29
+        },
+        {
+          "wgsl": 70,
+          "miri": 29
+        },
+        {
+          "wgsl": 73,
+          "miri": 30
+        },
+        {
+          "wgsl": 75,
+          "miri": 30
+        },
+        {
+          "wgsl": 76,
+          "miri": 30
+        },
+        {
+          "wgsl": 77,
+          "miri": 30
+        },
+        {
+          "wgsl": 78,
+          "miri": 30
+        },
+        {
+          "wgsl": 81,
+          "miri": 31
+        },
+        {
+          "wgsl": 83,
+          "miri": 31
+        },
+        {
+          "wgsl": 84,
+          "miri": 31
+        },
+        {
+          "wgsl": 85,
+          "miri": 31
+        },
+        {
+          "wgsl": 86,
+          "miri": 31
+        },
+        {
+          "wgsl": 89,
+          "miri": 32
+        },
+        {
+          "wgsl": 90,
+          "miri": 32
+        },
+        {
+          "wgsl": 91,
+          "miri": 32
+        },
+        {
+          "wgsl": 92,
+          "miri": 32
+        },
+        {
+          "wgsl": 115,
+          "miri": 35
+        },
+        {
+          "wgsl": 117,
+          "miri": 35
+        },
+        {
+          "wgsl": 118,
+          "miri": 35
+        },
+        {
+          "wgsl": 119,
+          "miri": 35
+        },
+        {
+          "wgsl": 122,
+          "miri": 36
+        },
+        {
+          "wgsl": 124,
+          "miri": 36
+        },
+        {
+          "wgsl": 125,
+          "miri": 36
+        },
+        {
+          "wgsl": 126,
+          "miri": 36
+        },
+        {
+          "wgsl": 127,
+          "miri": 36
+        },
+        {
+          "wgsl": 130,
+          "miri": 37
+        },
+        {
+          "wgsl": 132,
+          "miri": 37
+        },
+        {
+          "wgsl": 133,
+          "miri": 37
+        },
+        {
+          "wgsl": 134,
+          "miri": 37
+        },
+        {
+          "wgsl": 135,
+          "miri": 37
+        },
+        {
+          "wgsl": 138,
+          "miri": 38
+        },
+        {
+          "wgsl": 139,
+          "miri": 38
+        },
+        {
+          "wgsl": 140,
+          "miri": 38
+        },
+        {
+          "wgsl": 141,
+          "miri": 38
+        },
+        {
+          "wgsl": 201,
+          "miri": 51
+        },
+        {
+          "wgsl": 202,
+          "miri": 51
+        },
+        {
+          "wgsl": 203,
+          "miri": 51
+        },
+        {
+          "wgsl": 204,
+          "miri": 52
+        },
+        {
+          "wgsl": 205,
+          "miri": 52
+        },
+        {
+          "wgsl": 206,
+          "miri": 53
+        },
+        {
+          "wgsl": 207,
+          "miri": 53
+        },
+        {
+          "wgsl": 208,
+          "miri": 53
+        },
+        {
+          "wgsl": 209,
+          "miri": 54
+        },
+        {
+          "wgsl": 210,
+          "miri": 54
+        },
+        {
+          "wgsl": 211,
+          "miri": 54
+        },
+        {
+          "wgsl": 212,
+          "miri": 55
+        },
+        {
+          "wgsl": 213,
+          "miri": 55
+        },
+        {
+          "wgsl": 214,
+          "miri": 55
+        }
+      ]
+    }
+  ],
+  "framePasses": [
+    {
+      "entryPoint": "miri_gpu_for_2_0",
+      "wgsl": "fn pal_r(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.016, 0.13, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.13, 0.35, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.35, 1.0, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(1.0, 1.0, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_g(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.027, 0.27, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.27, 0.62, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.62, 0.85, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.85, 0.97, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_b(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.059, 0.75, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.75, 1.0, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(1.0, 0.24, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.24, 0.85, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read> view_a: array<f32>;\n@group(0) @binding(1) var<storage, read_write> view_b: array<f32>;\n@group(0) @binding(2) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_2_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: i32 = 0;\n    var _25: bool = false;\n    var _26: f32 = 0.0;\n    var _27: i32 = 0;\n    var _28: f32 = 0.0;\n    var _29: i32 = 0;\n    var _30: f32 = 0.0;\n    var _31: i32 = 0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: f32 = 0.0;\n    var _44: f32 = 0.0;\n    var _45: f32 = 0.0;\n    var _46: f32 = 0.0;\n    var _47: f32 = 0.0;\n    var _48: f32 = 0.0;\n    var _49: f32 = 0.0;\n    var _50: f32 = 0.0;\n    var _51: f32 = 0.0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: f32 = 0.0;\n    var _55: f32 = 0.0;\n    var _56: f32 = 0.0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: i32 = 0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: f32 = 0.0;\n    var _63: f32 = 0.0;\n    var _64: i32 = 0;\n    var _65: f32 = 0.0;\n    var _66: i32 = 0;\n    var _67: f32 = 0.0;\n    var _68: i32 = 0;\n    var _69: f32 = 0.0;\n    _17 = _local_id.x;\n    _18 = _workgroup_id.x;\n    _19 = 256u;\n    _20 = (_18 * _19);\n    _21 = i32(_17);\n    _22 = i32(_20);\n    _23 = (_21 + _22);\n    _24 = (_23 + 0);\n    _25 = (_24 < 4);\n    if (bool(_25)) {\n        _27 = 0;\n        _26 = view_a[i32(_27)];\n        _29 = 1;\n        _28 = view_a[i32(_29)];\n        _31 = 2;\n        _30 = view_a[i32(_31)];\n        _33 = (_inputs.f6 * _30);\n        _34 = f32(720);\n        _35 = (_33 / _34);\n        _32 = (_26 - _35);\n        _37 = (_inputs.f7 * _30);\n        _38 = f32(720);\n        _39 = (_37 / _38);\n        _36 = (_28 - _39);\n        _41 = (_inputs.f8 * 0.0014);\n        _42 = exp(_41);\n        _43 = f32(_42);\n        _44 = clamp(_43, 0.6, 1.6);\n        _40 = f32(_44);\n        _46 = (_30 * _40);\n        _47 = clamp(_46, 2e-5, 4.0);\n        _45 = f32(_47);\n        _49 = (_45 / _30);\n        _48 = (1.0 - _49);\n        _51 = (_inputs.f3 - 0.5);\n        _52 = f32(1280);\n        _53 = (_51 * _52);\n        _54 = f32(720);\n        _50 = (_53 / _54);\n        _55 = (0.5 - _inputs.f4);\n        _56 = (_50 * _30);\n        _57 = (_56 * _48);\n        _58 = (_32 + _57);\n        _59 = 0;\n        view_b[i32(_59)] = _58;\n        _60 = _58;\n        _61 = (_55 * _30);\n        _62 = (_61 * _48);\n        _63 = (_36 + _62);\n        _64 = 1;\n        view_b[i32(_64)] = _63;\n        _65 = _63;\n        _66 = 2;\n        view_b[i32(_66)] = _45;\n        _67 = _45;\n        _68 = 3;\n        view_b[i32(_68)] = 0.0;\n        _69 = 0.0;\n    }\n}\n\n",
+      "workgroups": [
+        1,
+        1,
+        1
+      ],
+      "bindings": [
+        {
+          "name": "view_a",
+          "access": "read",
+          "writes": false
+        },
+        {
+          "name": "view_b",
+          "access": "read_write",
+          "writes": true
+        }
+      ],
+      "read": "view_a",
+      "write": "view_b",
+      "inputs": [
+        {
+          "name": "time",
+          "ty": "f32",
+          "offset": 0
+        },
+        {
+          "name": "dt",
+          "ty": "f32",
+          "offset": 4
+        },
+        {
+          "name": "index",
+          "ty": "i32",
+          "offset": 8
+        },
+        {
+          "name": "mouse_x",
+          "ty": "f32",
+          "offset": 12
+        },
+        {
+          "name": "mouse_y",
+          "ty": "f32",
+          "offset": 16
+        },
+        {
+          "name": "mouse_down",
+          "ty": "u32",
+          "offset": 20
+        },
+        {
+          "name": "drag_dx",
+          "ty": "f32",
+          "offset": 24
+        },
+        {
+          "name": "drag_dy",
+          "ty": "f32",
+          "offset": 28
+        },
+        {
+          "name": "wheel",
+          "ty": "f32",
+          "offset": 32
+        },
+        {
+          "name": "clicked",
+          "ty": "u32",
+          "offset": 36
+        },
+        {
+          "name": "double_clicked",
+          "ty": "u32",
+          "offset": 40
+        },
+        {
+          "name": "move_x",
+          "ty": "f32",
+          "offset": 44
+        },
+        {
+          "name": "move_y",
+          "ty": "f32",
+          "offset": 48
+        },
+        {
+          "name": "hovering",
+          "ty": "u32",
+          "offset": 52
+        }
+      ],
+      "sourceMap": [
+        {
+          "wgsl": 17,
+          "miri": 23
+        },
+        {
+          "wgsl": 19,
+          "miri": 23
+        },
+        {
+          "wgsl": 20,
+          "miri": 23
+        },
+        {
+          "wgsl": 21,
+          "miri": 23
+        },
+        {
+          "wgsl": 24,
+          "miri": 24
+        },
+        {
+          "wgsl": 26,
+          "miri": 24
+        },
+        {
+          "wgsl": 27,
+          "miri": 24
+        },
+        {
+          "wgsl": 28,
+          "miri": 24
+        },
+        {
+          "wgsl": 29,
+          "miri": 24
+        },
+        {
+          "wgsl": 32,
+          "miri": 25
+        },
+        {
+          "wgsl": 34,
+          "miri": 25
+        },
+        {
+          "wgsl": 35,
+          "miri": 25
+        },
+        {
+          "wgsl": 36,
+          "miri": 25
+        },
+        {
+          "wgsl": 37,
+          "miri": 25
+        },
+        {
+          "wgsl": 40,
+          "miri": 26
+        },
+        {
+          "wgsl": 41,
+          "miri": 26
+        },
+        {
+          "wgsl": 42,
+          "miri": 26
+        },
+        {
+          "wgsl": 43,
+          "miri": 26
+        },
+        {
+          "wgsl": 66,
+          "miri": 29
+        },
+        {
+          "wgsl": 68,
+          "miri": 29
+        },
+        {
+          "wgsl": 69,
+          "miri": 29
+        },
+        {
+          "wgsl": 70,
+          "miri": 29
+        },
+        {
+          "wgsl": 73,
+          "miri": 30
+        },
+        {
+          "wgsl": 75,
+          "miri": 30
+        },
+        {
+          "wgsl": 76,
+          "miri": 30
+        },
+        {
+          "wgsl": 77,
+          "miri": 30
+        },
+        {
+          "wgsl": 78,
+          "miri": 30
+        },
+        {
+          "wgsl": 81,
+          "miri": 31
+        },
+        {
+          "wgsl": 83,
+          "miri": 31
+        },
+        {
+          "wgsl": 84,
+          "miri": 31
+        },
+        {
+          "wgsl": 85,
+          "miri": 31
+        },
+        {
+          "wgsl": 86,
+          "miri": 31
+        },
+        {
+          "wgsl": 89,
+          "miri": 32
+        },
+        {
+          "wgsl": 90,
+          "miri": 32
+        },
+        {
+          "wgsl": 91,
+          "miri": 32
+        },
+        {
+          "wgsl": 92,
+          "miri": 32
+        },
+        {
+          "wgsl": 115,
+          "miri": 35
+        },
+        {
+          "wgsl": 117,
+          "miri": 35
+        },
+        {
+          "wgsl": 118,
+          "miri": 35
+        },
+        {
+          "wgsl": 119,
+          "miri": 35
+        },
+        {
+          "wgsl": 122,
+          "miri": 36
+        },
+        {
+          "wgsl": 124,
+          "miri": 36
+        },
+        {
+          "wgsl": 125,
+          "miri": 36
+        },
+        {
+          "wgsl": 126,
+          "miri": 36
+        },
+        {
+          "wgsl": 127,
+          "miri": 36
+        },
+        {
+          "wgsl": 130,
+          "miri": 37
+        },
+        {
+          "wgsl": 132,
+          "miri": 37
+        },
+        {
+          "wgsl": 133,
+          "miri": 37
+        },
+        {
+          "wgsl": 134,
+          "miri": 37
+        },
+        {
+          "wgsl": 135,
+          "miri": 37
+        },
+        {
+          "wgsl": 138,
+          "miri": 38
+        },
+        {
+          "wgsl": 139,
+          "miri": 38
+        },
+        {
+          "wgsl": 140,
+          "miri": 38
+        },
+        {
+          "wgsl": 141,
+          "miri": 38
+        },
+        {
+          "wgsl": 234,
+          "miri": 60
+        },
+        {
+          "wgsl": 235,
+          "miri": 60
+        },
+        {
+          "wgsl": 236,
+          "miri": 61
+        },
+        {
+          "wgsl": 237,
+          "miri": 61
+        },
+        {
+          "wgsl": 238,
+          "miri": 62
+        },
+        {
+          "wgsl": 239,
+          "miri": 62
+        },
+        {
+          "wgsl": 240,
+          "miri": 69
+        },
+        {
+          "wgsl": 241,
+          "miri": 69
+        },
+        {
+          "wgsl": 242,
+          "miri": 69
+        },
+        {
+          "wgsl": 243,
+          "miri": 69
+        },
+        {
+          "wgsl": 244,
+          "miri": 70
+        },
+        {
+          "wgsl": 245,
+          "miri": 70
+        },
+        {
+          "wgsl": 246,
+          "miri": 70
+        },
+        {
+          "wgsl": 247,
+          "miri": 70
+        },
+        {
+          "wgsl": 248,
+          "miri": 75
+        },
+        {
+          "wgsl": 249,
+          "miri": 75
+        },
+        {
+          "wgsl": 250,
+          "miri": 75
+        },
+        {
+          "wgsl": 251,
+          "miri": 75
+        },
+        {
+          "wgsl": 252,
+          "miri": 75
+        },
+        {
+          "wgsl": 253,
+          "miri": 76
+        },
+        {
+          "wgsl": 254,
+          "miri": 76
+        },
+        {
+          "wgsl": 255,
+          "miri": 76
+        },
+        {
+          "wgsl": 256,
+          "miri": 80
+        },
+        {
+          "wgsl": 257,
+          "miri": 80
+        },
+        {
+          "wgsl": 258,
+          "miri": 81
+        },
+        {
+          "wgsl": 259,
+          "miri": 81
+        },
+        {
+          "wgsl": 260,
+          "miri": 81
+        },
+        {
+          "wgsl": 261,
+          "miri": 81
+        },
+        {
+          "wgsl": 262,
+          "miri": 81
+        },
+        {
+          "wgsl": 263,
+          "miri": 82
+        },
+        {
+          "wgsl": 264,
+          "miri": 84
+        },
+        {
+          "wgsl": 265,
+          "miri": 84
+        },
+        {
+          "wgsl": 266,
+          "miri": 84
+        },
+        {
+          "wgsl": 267,
+          "miri": 84
+        },
+        {
+          "wgsl": 268,
+          "miri": 84
+        },
+        {
+          "wgsl": 269,
+          "miri": 84
+        },
+        {
+          "wgsl": 270,
+          "miri": 85
+        },
+        {
+          "wgsl": 271,
+          "miri": 85
+        },
+        {
+          "wgsl": 272,
+          "miri": 85
+        },
+        {
+          "wgsl": 273,
+          "miri": 85
+        },
+        {
+          "wgsl": 274,
+          "miri": 85
+        },
+        {
+          "wgsl": 275,
+          "miri": 85
+        },
+        {
+          "wgsl": 276,
+          "miri": 86
+        },
+        {
+          "wgsl": 277,
+          "miri": 86
+        },
+        {
+          "wgsl": 278,
+          "miri": 86
+        },
+        {
+          "wgsl": 279,
+          "miri": 87
+        },
+        {
+          "wgsl": 280,
+          "miri": 87
+        },
+        {
+          "wgsl": 281,
+          "miri": 87
+        }
+      ]
+    },
+    {
+      "entryPoint": "miri_gpu_for_3_1",
+      "wgsl": "fn pal_r(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.016, 0.13, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.13, 0.35, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.35, 1.0, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(1.0, 1.0, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_g(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.027, 0.27, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.27, 0.62, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(0.62, 0.85, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.85, 0.97, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\nfn pal_b(_1: f32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: bool = false;\n    var _7: f32 = 0.0;\n    var _8: f32 = 0.0;\n    var _9: f32 = 0.0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    _3 = (_1 < 0.35);\n    if (bool(_3)) {\n        _4 = (_1 / 0.35);\n        _5 = mix(0.059, 0.75, _4);\n        _0 = f32(_5);\n        return _0;\n    } else {\n        _6 = (_1 < 0.62);\n        if (bool(_6)) {\n            _7 = (_1 - 0.35);\n            _8 = (_7 / 0.27);\n            _9 = mix(0.75, 1.0, _8);\n            _0 = f32(_9);\n            return _0;\n        } else {\n            _10 = (_1 < 0.85);\n            if (bool(_10)) {\n                _11 = (_1 - 0.62);\n                _12 = (_11 / 0.23);\n                _13 = mix(1.0, 0.24, _12);\n                _0 = f32(_13);\n                return _0;\n            } else {\n                _14 = (_1 - 0.85);\n                _15 = (_14 / 0.15);\n                _16 = mix(0.24, 0.85, _15);\n                _0 = f32(_16);\n                return _0;\n            }\n        }\n    }\n}\n\n@group(0) @binding(0) var<storage, read> view_b: array<f32>;\n@group(0) @binding(1) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_3_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: bool = false;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: i32 = 0;\n    var _16: f32 = 0.0;\n    var _17: i32 = 0;\n    var _18: f32 = 0.0;\n    var _19: i32 = 0;\n    var _20: f32 = 0.0;\n    var _21: f32 = 0.0;\n    var _22: f32 = 0.0;\n    var _23: f32 = 0.0;\n    var _24: f32 = 0.0;\n    var _25: f32 = 0.0;\n    var _26: f32 = 0.0;\n    var _27: f32 = 0.0;\n    var _28: f32 = 0.0;\n    var _29: f32 = 0.0;\n    var _30: f32 = 0.0;\n    var _31: f32 = 0.0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: i32 = 0;\n    var _44: f32 = 0.0;\n    var _45: f32 = 0.0;\n    var _46: f32 = 0.0;\n    var _47: i32 = 0;\n    var _48: f32 = 0.0;\n    var _49: i32 = 0;\n    var _50: bool = false;\n    var _51: f32 = 0.0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: f32 = 0.0;\n    var _55: f32 = 0.0;\n    var _56: f32 = 0.0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: f32 = 0.0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: f32 = 0.0;\n    var _63: f32 = 0.0;\n    var _64: bool = false;\n    var _65: i32 = 0;\n    var _66: i32 = 0;\n    var _67: i32 = 0;\n    var _68: i32 = 0;\n    var _69: i32 = 0;\n    var _70: bool = false;\n    var _71: f32 = 0.0;\n    var _72: i32 = 0;\n    var _73: f32 = 0.0;\n    var _74: i32 = 0;\n    var _75: f32 = 0.0;\n    var _76: i32 = 0;\n    var _77: f32 = 0.0;\n    var _78: f32 = 0.0;\n    var _79: f32 = 0.0;\n    var _80: f32 = 0.0;\n    var _81: f32 = 0.0;\n    var _82: f32 = 0.0;\n    var _83: f32 = 0.0;\n    var _84: f32 = 0.0;\n    var _85: f32 = 0.0;\n    var _86: f32 = 0.0;\n    var _87: f32 = 0.0;\n    var _88: f32 = 0.0;\n    var _89: f32 = 0.0;\n    var _90: f32 = 0.0;\n    var _91: f32 = 0.0;\n    var _92: f32 = 0.0;\n    var _93: f32 = 0.0;\n    var _94: f32 = 0.0;\n    var _95: f32 = 0.0;\n    var _96: f32 = 0.0;\n    var _97: f32 = 0.0;\n    var _98: f32 = 0.0;\n    var _99: i32 = 0;\n    var _100: f32 = 0.0;\n    var _101: f32 = 0.0;\n    var _102: f32 = 0.0;\n    var _103: i32 = 0;\n    var _104: f32 = 0.0;\n    var _105: i32 = 0;\n    var _106: f32 = 0.0;\n    _3 = _local_id.x;\n    _4 = _workgroup_id.x;\n    _5 = 256u;\n    _6 = (_4 * _5);\n    _7 = i32(_3);\n    _8 = i32(_6);\n    _9 = (_7 + _8);\n    _10 = (_9 + 0);\n    _11 = (_10 < 921600);\n    if (bool(_11)) {\n        _12 = (_10 % 1280);\n        _13 = (_10 / 1280);\n        _15 = 0;\n        _14 = view_b[i32(_15)];\n        _17 = 1;\n        _16 = view_b[i32(_17)];\n        _19 = 2;\n        _18 = view_b[i32(_19)];\n        _21 = f32(_12);\n        _22 = f32(1280);\n        _23 = (_21 / _22);\n        _24 = (_23 - 0.5);\n        _25 = f32(1280);\n        _26 = (_24 * _25);\n        _27 = f32(720);\n        _20 = (_26 / _27);\n        _29 = f32(_13);\n        _30 = f32(720);\n        _31 = (_29 / _30);\n        _28 = (0.5 - _31);\n        _33 = (_20 * _18);\n        _32 = (_14 + _33);\n        _35 = (_28 * _18);\n        _34 = (_16 + _35);\n        _37 = (3.0 / _18);\n        _38 = (_37 + 1.0);\n        _39 = log2(_38);\n        _40 = f32(_39);\n        _41 = (60.0 * _40);\n        _42 = (_41 * 2.2);\n        _36 = (120.0 + _42);\n        _44 = min(_36, 880.0);\n        _43 = i32(_44);\n        _45 = 0.0;\n        _46 = 0.0;\n        _47 = -1;\n        _48 = 0.0;\n        _49 = 0;\n        loop {\n            _50 = (_49 < _43);\n            if (!(bool(_50))) { break; }\n            _52 = (_45 * _45);\n            _53 = (_46 * _46);\n            _54 = (_52 - _53);\n            _51 = (_54 + _32);\n            _56 = (2.0 * _45);\n            _57 = (_56 * _46);\n            _55 = (_57 + _34);\n            _45 = _51;\n            _58 = _51;\n            _46 = _55;\n            _59 = _55;\n            _60 = (_45 * _45);\n            _61 = (_46 * _46);\n            _62 = (_60 + _61);\n            _48 = _62;\n            _63 = _62;\n            _64 = (_48 > 64.0);\n            if (bool(_64)) {\n                _47 = _49;\n                _65 = _49;\n                _49 = _43;\n                _66 = _43;\n            } else {\n                _67 = (_49 + 1);\n                _49 = _67;\n                _68 = _67;\n            }\n            continuing {\n            }\n        }\n        _69 = (_10 * 4);\n        _70 = (_47 < 0);\n        if (bool(_70)) {\n            paint[i32(_69)] = 0.008;\n            _71 = 0.008;\n            _72 = (_69 + 1);\n            paint[i32(_72)] = 0.012;\n            _73 = 0.012;\n            _74 = (_69 + 2);\n            paint[i32(_74)] = 0.03;\n            _75 = 0.03;\n            _76 = (_69 + 3);\n            paint[i32(_76)] = 1.0;\n            _77 = 1.0;\n        } else {\n            _79 = f32(_47);\n            _80 = log2(_48);\n            _81 = f32(_80);\n            _82 = log2(_81);\n            _83 = f32(_82);\n            _84 = (_79 - _83);\n            _78 = (_84 + 4.0);\n            _86 = (_78 * 0.022);\n            _85 = (_86 + 0.62);\n            _88 = floor(_85);\n            _89 = f32(_88);\n            _87 = (_85 - _89);\n            _91 = smoothstep(0.0, 12.0, _78);\n            _92 = f32(_91);\n            _93 = (0.45 * _92);\n            _90 = (0.55 + _93);\n            _94 = pal_r(_87);\n            _95 = (_94 * _90);\n            paint[i32(_69)] = _95;\n            _96 = _95;\n            _97 = pal_g(_87);\n            _98 = (_97 * _90);\n            _99 = (_69 + 1);\n            paint[i32(_99)] = _98;\n            _100 = _98;\n            _101 = pal_b(_87);\n            _102 = (_101 * _90);\n            _103 = (_69 + 2);\n            paint[i32(_103)] = _102;\n            _104 = _102;\n            _105 = (_69 + 3);\n            paint[i32(_105)] = 1.0;\n            _106 = 1.0;\n        }\n        return;\n    } else {\n    }\n}\n\n",
+      "workgroups": [
+        3600,
+        1,
+        1
+      ],
+      "bindings": [
+        {
+          "name": "view_b",
+          "access": "read",
+          "writes": false
+        },
+        {
+          "name": "paint",
+          "access": "read_write",
+          "writes": true
+        }
+      ],
+      "read": "view_b",
+      "write": "paint",
+      "inputs": [
+        {
+          "name": "time",
+          "ty": "f32",
+          "offset": 0
+        },
+        {
+          "name": "dt",
+          "ty": "f32",
+          "offset": 4
+        },
+        {
+          "name": "index",
+          "ty": "i32",
+          "offset": 8
+        },
+        {
+          "name": "mouse_x",
+          "ty": "f32",
+          "offset": 12
+        },
+        {
+          "name": "mouse_y",
+          "ty": "f32",
+          "offset": 16
+        },
+        {
+          "name": "mouse_down",
+          "ty": "u32",
+          "offset": 20
+        },
+        {
+          "name": "drag_dx",
+          "ty": "f32",
+          "offset": 24
+        },
+        {
+          "name": "drag_dy",
+          "ty": "f32",
+          "offset": 28
+        },
+        {
+          "name": "wheel",
+          "ty": "f32",
+          "offset": 32
+        },
+        {
+          "name": "clicked",
+          "ty": "u32",
+          "offset": 36
+        },
+        {
+          "name": "double_clicked",
+          "ty": "u32",
+          "offset": 40
+        },
+        {
+          "name": "move_x",
+          "ty": "f32",
+          "offset": 44
+        },
+        {
+          "name": "move_y",
+          "ty": "f32",
+          "offset": 48
+        },
+        {
+          "name": "hovering",
+          "ty": "u32",
+          "offset": 52
+        }
+      ],
+      "sourceMap": [
+        {
+          "wgsl": 17,
+          "miri": 23
+        },
+        {
+          "wgsl": 19,
+          "miri": 23
+        },
+        {
+          "wgsl": 20,
+          "miri": 23
+        },
+        {
+          "wgsl": 21,
+          "miri": 23
+        },
+        {
+          "wgsl": 24,
+          "miri": 24
+        },
+        {
+          "wgsl": 26,
+          "miri": 24
+        },
+        {
+          "wgsl": 27,
+          "miri": 24
+        },
+        {
+          "wgsl": 28,
+          "miri": 24
+        },
+        {
+          "wgsl": 29,
+          "miri": 24
+        },
+        {
+          "wgsl": 32,
+          "miri": 25
+        },
+        {
+          "wgsl": 34,
+          "miri": 25
+        },
+        {
+          "wgsl": 35,
+          "miri": 25
+        },
+        {
+          "wgsl": 36,
+          "miri": 25
+        },
+        {
+          "wgsl": 37,
+          "miri": 25
+        },
+        {
+          "wgsl": 40,
+          "miri": 26
+        },
+        {
+          "wgsl": 41,
+          "miri": 26
+        },
+        {
+          "wgsl": 42,
+          "miri": 26
+        },
+        {
+          "wgsl": 43,
+          "miri": 26
+        },
+        {
+          "wgsl": 66,
+          "miri": 29
+        },
+        {
+          "wgsl": 68,
+          "miri": 29
+        },
+        {
+          "wgsl": 69,
+          "miri": 29
+        },
+        {
+          "wgsl": 70,
+          "miri": 29
+        },
+        {
+          "wgsl": 73,
+          "miri": 30
+        },
+        {
+          "wgsl": 75,
+          "miri": 30
+        },
+        {
+          "wgsl": 76,
+          "miri": 30
+        },
+        {
+          "wgsl": 77,
+          "miri": 30
+        },
+        {
+          "wgsl": 78,
+          "miri": 30
+        },
+        {
+          "wgsl": 81,
+          "miri": 31
+        },
+        {
+          "wgsl": 83,
+          "miri": 31
+        },
+        {
+          "wgsl": 84,
+          "miri": 31
+        },
+        {
+          "wgsl": 85,
+          "miri": 31
+        },
+        {
+          "wgsl": 86,
+          "miri": 31
+        },
+        {
+          "wgsl": 89,
+          "miri": 32
+        },
+        {
+          "wgsl": 90,
+          "miri": 32
+        },
+        {
+          "wgsl": 91,
+          "miri": 32
+        },
+        {
+          "wgsl": 92,
+          "miri": 32
+        },
+        {
+          "wgsl": 115,
+          "miri": 35
+        },
+        {
+          "wgsl": 117,
+          "miri": 35
+        },
+        {
+          "wgsl": 118,
+          "miri": 35
+        },
+        {
+          "wgsl": 119,
+          "miri": 35
+        },
+        {
+          "wgsl": 122,
+          "miri": 36
+        },
+        {
+          "wgsl": 124,
+          "miri": 36
+        },
+        {
+          "wgsl": 125,
+          "miri": 36
+        },
+        {
+          "wgsl": 126,
+          "miri": 36
+        },
+        {
+          "wgsl": 127,
+          "miri": 36
+        },
+        {
+          "wgsl": 130,
+          "miri": 37
+        },
+        {
+          "wgsl": 132,
+          "miri": 37
+        },
+        {
+          "wgsl": 133,
+          "miri": 37
+        },
+        {
+          "wgsl": 134,
+          "miri": 37
+        },
+        {
+          "wgsl": 135,
+          "miri": 37
+        },
+        {
+          "wgsl": 138,
+          "miri": 38
+        },
+        {
+          "wgsl": 139,
+          "miri": 38
+        },
+        {
+          "wgsl": 140,
+          "miri": 38
+        },
+        {
+          "wgsl": 141,
+          "miri": 38
+        },
+        {
+          "wgsl": 267,
+          "miri": 91
+        },
+        {
+          "wgsl": 268,
+          "miri": 92
+        },
+        {
+          "wgsl": 269,
+          "miri": 93
+        },
+        {
+          "wgsl": 270,
+          "miri": 93
+        },
+        {
+          "wgsl": 271,
+          "miri": 94
+        },
+        {
+          "wgsl": 272,
+          "miri": 94
+        },
+        {
+          "wgsl": 273,
+          "miri": 95
+        },
+        {
+          "wgsl": 274,
+          "miri": 95
+        },
+        {
+          "wgsl": 275,
+          "miri": 101
+        },
+        {
+          "wgsl": 276,
+          "miri": 101
+        },
+        {
+          "wgsl": 277,
+          "miri": 101
+        },
+        {
+          "wgsl": 278,
+          "miri": 101
+        },
+        {
+          "wgsl": 279,
+          "miri": 101
+        },
+        {
+          "wgsl": 280,
+          "miri": 101
+        },
+        {
+          "wgsl": 281,
+          "miri": 101
+        },
+        {
+          "wgsl": 282,
+          "miri": 101
+        },
+        {
+          "wgsl": 283,
+          "miri": 102
+        },
+        {
+          "wgsl": 284,
+          "miri": 102
+        },
+        {
+          "wgsl": 285,
+          "miri": 102
+        },
+        {
+          "wgsl": 286,
+          "miri": 102
+        },
+        {
+          "wgsl": 287,
+          "miri": 103
+        },
+        {
+          "wgsl": 288,
+          "miri": 103
+        },
+        {
+          "wgsl": 289,
+          "miri": 104
+        },
+        {
+          "wgsl": 290,
+          "miri": 104
+        },
+        {
+          "wgsl": 291,
+          "miri": 107
+        },
+        {
+          "wgsl": 292,
+          "miri": 107
+        },
+        {
+          "wgsl": 293,
+          "miri": 107
+        },
+        {
+          "wgsl": 294,
+          "miri": 107
+        },
+        {
+          "wgsl": 295,
+          "miri": 107
+        },
+        {
+          "wgsl": 296,
+          "miri": 107
+        },
+        {
+          "wgsl": 297,
+          "miri": 107
+        },
+        {
+          "wgsl": 298,
+          "miri": 108
+        },
+        {
+          "wgsl": 299,
+          "miri": 108
+        },
+        {
+          "wgsl": 300,
+          "miri": 110
+        },
+        {
+          "wgsl": 301,
+          "miri": 111
+        },
+        {
+          "wgsl": 302,
+          "miri": 112
+        },
+        {
+          "wgsl": 303,
+          "miri": 113
+        },
+        {
+          "wgsl": 304,
+          "miri": 114
+        },
+        {
+          "wgsl": 306,
+          "miri": 115
+        },
+        {
+          "wgsl": 308,
+          "miri": 116
+        },
+        {
+          "wgsl": 309,
+          "miri": 116
+        },
+        {
+          "wgsl": 310,
+          "miri": 116
+        },
+        {
+          "wgsl": 311,
+          "miri": 116
+        },
+        {
+          "wgsl": 312,
+          "miri": 117
+        },
+        {
+          "wgsl": 313,
+          "miri": 117
+        },
+        {
+          "wgsl": 314,
+          "miri": 117
+        },
+        {
+          "wgsl": 315,
+          "miri": 118
+        },
+        {
+          "wgsl": 316,
+          "miri": 118
+        },
+        {
+          "wgsl": 317,
+          "miri": 119
+        },
+        {
+          "wgsl": 318,
+          "miri": 119
+        },
+        {
+          "wgsl": 319,
+          "miri": 120
+        },
+        {
+          "wgsl": 320,
+          "miri": 120
+        },
+        {
+          "wgsl": 321,
+          "miri": 120
+        },
+        {
+          "wgsl": 322,
+          "miri": 120
+        },
+        {
+          "wgsl": 323,
+          "miri": 120
+        },
+        {
+          "wgsl": 324,
+          "miri": 121
+        },
+        {
+          "wgsl": 326,
+          "miri": 122
+        },
+        {
+          "wgsl": 327,
+          "miri": 122
+        },
+        {
+          "wgsl": 328,
+          "miri": 123
+        },
+        {
+          "wgsl": 329,
+          "miri": 123
+        },
+        {
+          "wgsl": 331,
+          "miri": 125
+        },
+        {
+          "wgsl": 332,
+          "miri": 125
+        },
+        {
+          "wgsl": 333,
+          "miri": 125
+        },
+        {
+          "wgsl": 338,
+          "miri": 127
+        },
+        {
+          "wgsl": 339,
+          "miri": 128
+        },
+        {
+          "wgsl": 341,
+          "miri": 130
+        },
+        {
+          "wgsl": 342,
+          "miri": 130
+        },
+        {
+          "wgsl": 343,
+          "miri": 131
+        },
+        {
+          "wgsl": 344,
+          "miri": 131
+        },
+        {
+          "wgsl": 345,
+          "miri": 131
+        },
+        {
+          "wgsl": 346,
+          "miri": 132
+        },
+        {
+          "wgsl": 347,
+          "miri": 132
+        },
+        {
+          "wgsl": 348,
+          "miri": 132
+        },
+        {
+          "wgsl": 349,
+          "miri": 133
+        },
+        {
+          "wgsl": 350,
+          "miri": 133
+        },
+        {
+          "wgsl": 351,
+          "miri": 133
+        },
+        {
+          "wgsl": 353,
+          "miri": 136
+        },
+        {
+          "wgsl": 354,
+          "miri": 136
+        },
+        {
+          "wgsl": 355,
+          "miri": 136
+        },
+        {
+          "wgsl": 356,
+          "miri": 136
+        },
+        {
+          "wgsl": 357,
+          "miri": 136
+        },
+        {
+          "wgsl": 358,
+          "miri": 136
+        },
+        {
+          "wgsl": 359,
+          "miri": 136
+        },
+        {
+          "wgsl": 360,
+          "miri": 137
+        },
+        {
+          "wgsl": 361,
+          "miri": 137
+        },
+        {
+          "wgsl": 362,
+          "miri": 138
+        },
+        {
+          "wgsl": 363,
+          "miri": 138
+        },
+        {
+          "wgsl": 364,
+          "miri": 138
+        },
+        {
+          "wgsl": 365,
+          "miri": 140
+        },
+        {
+          "wgsl": 366,
+          "miri": 140
+        },
+        {
+          "wgsl": 367,
+          "miri": 140
+        },
+        {
+          "wgsl": 368,
+          "miri": 140
+        },
+        {
+          "wgsl": 369,
+          "miri": 141
+        },
+        {
+          "wgsl": 370,
+          "miri": 141
+        },
+        {
+          "wgsl": 371,
+          "miri": 141
+        },
+        {
+          "wgsl": 372,
+          "miri": 141
+        },
+        {
+          "wgsl": 373,
+          "miri": 142
+        },
+        {
+          "wgsl": 374,
+          "miri": 142
+        },
+        {
+          "wgsl": 375,
+          "miri": 142
+        },
+        {
+          "wgsl": 376,
+          "miri": 142
+        },
+        {
+          "wgsl": 377,
+          "miri": 142
+        },
+        {
+          "wgsl": 378,
+          "miri": 143
+        },
+        {
+          "wgsl": 379,
+          "miri": 143
+        },
+        {
+          "wgsl": 380,
+          "miri": 143
+        },
+        {
+          "wgsl": 381,
+          "miri": 143
+        },
+        {
+          "wgsl": 382,
+          "miri": 143
+        },
+        {
+          "wgsl": 383,
+          "miri": 144
+        },
+        {
+          "wgsl": 384,
+          "miri": 144
+        },
+        {
+          "wgsl": 385,
+          "miri": 144
+        }
+      ]
+    }
+  ],
+  "paint": "paint",
+  "paintMode": "rgba"
+}
