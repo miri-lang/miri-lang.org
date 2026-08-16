@@ -28,7 +28,9 @@ assets/
   js/miri-demos.js    Loads and drives every compiled demo bundle
   demos/              Compiled Miri → WebGPU bundles + poster images
   fonts/              Self-hosted woff2 (see below)
-tools/                Build-side scripts (font fetch, demo bundle generation)
+  img/                Logo SVGs and app icons — generated (see below)
+  og/                 1200×630 share cards — generated (see below)
+tools/                Build-side scripts (fonts, demos, brand assets, share cards)
 notes/                Working notes — excluded from the build and from git
 impressum.html
 datenschutz.html      German legal pages, gated on the address in _config.yml
@@ -41,6 +43,8 @@ datenschutz.html      German legal pages, gated on the address in _config.yml
 **Fonts are self-hosted on purpose.** Space Grotesk and JetBrains Mono are served from this origin, not from `fonts.googleapis.com`, because that request would transmit every visitor's IP to a third party before any consent exists — and `/datenschutz/` states that this site makes no third-party requests. Regenerate with `tools/fetch-fonts.rb`. Keep it that way.
 
 **The positioning string is one string.** `entity.positioning` in `_config.yml` is `Miri: GPU-first programming language`, and it must stay character-for-character identical to the `miri-lang/miri` repo About line and that repo's README H1. The one-sentence description lives once, in `_config.yml` `description`, and is inherited by the homepage meta description and by the `WebSite` JSON-LD node — don't add a second copy to a page's front matter.
+
+**The logo and every icon are generated, and the logo is vector.** `tools/gen_brand_assets.py` holds the mark as a 19×19 cell grid and emits `assets/img/logo.svg` (nav, footer, CTA, share cards), `assets/img/favicon.svg` (the same glyph solidified so it survives 16 px), the PNG app icons and `favicon.ico`. `tools/gen_og_images.py` renders the 1200×630 share cards in headless Chrome from the site's own palette and self-hosted fonts. Don't hand-edit anything under `assets/img/` or `assets/og/` — change the script and re-run it. A page picks a non-default card with `og_image:` (and optionally `og_image_alt:`) in its front matter.
 
 **Structured data comes from `_includes/schema.html`.** One `@graph` with stable `@id`s, emitted on every page, driven entirely by the `entity:` block in `_config.yml`. `_layouts/docs.html` adds a `BreadcrumbList` from each docs page's `breadcrumb` front matter. After touching either, re-check with the [schema.org validator](https://validator.schema.org/) — the target is zero errors *and* zero warnings.
 

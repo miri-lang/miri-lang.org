@@ -63,6 +63,13 @@
       "operatingSystem": {{ site.entity.operating_systems | jsonify }},
       "url": {{ site.url | append: '/' | jsonify }},
       {%- comment -%}
+        The same 1200x630 card the Open Graph tags point at (P0-4), so a crawler
+        reading the markup and one reading the meta tags get one image for the
+        entity. No `logo` alongside it: schema.org defines that on Organization,
+        not on SoftwareApplication, and the validator warns.
+      {%- endcomment %}
+      "image": {{ '/assets/og/default.png' | absolute_url | jsonify }},
+      {%- comment -%}
         `codeRepository` and `programmingLanguage` are NOT defined on
         SoftwareApplication — schema.org puts both on SoftwareSourceCode, and the
         validator warns if they appear here. They live on the #source node below,
