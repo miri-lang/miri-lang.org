@@ -2,7 +2,7 @@
   "generatedBy": "tools/gen_demo_bundles.py",
   "compiledFrom": "assets/demos/<name>.mi",
   "compiler": {
-    "commit": "49982eeec642a477ffea8d0654cdce4557d91fdd",
+    "commit": "6b412258c45417cc5e886f10ff4ee03225d14e24",
     "dirty": true
   },
   "runtimeJsBytes": 43517,
@@ -12,28 +12,28 @@
       "gzip": 4484
     },
     "game_of_life": {
-      "raw": 49721,
-      "gzip": 4191
+      "raw": 50007,
+      "gzip": 4208
     },
     "particles": {
-      "raw": 129518,
-      "gzip": 7674
+      "raw": 129511,
+      "gzip": 7670
     },
     "fluid": {
       "raw": 234918,
       "gzip": 10484
     },
     "raymarch": {
-      "raw": 127739,
-      "gzip": 10029
+      "raw": 129097,
+      "gzip": 10030
     },
     "neural": {
-      "raw": 172764,
-      "gzip": 16058
+      "raw": 171110,
+      "gzip": 16003
     },
     "blackhole": {
-      "raw": 158423,
-      "gzip": 12933
+      "raw": 158597,
+      "gzip": 12932
     },
     "wormhole": {
       "raw": 152218,

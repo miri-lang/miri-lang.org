@@ -27,7 +27,7 @@
   "seed": [
     {
       "entryPoint": "miri_gpu_forall_0",
-      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _14 = (_11 % 100);\n    _15 = (_14 < 18);\n    if (bool(_15)) {\n        _0 = 1.0;\n    } else {\n        _0 = 0.0;\n    }\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> state_a: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_forall_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 256u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = (_9 < 57600);\n    if (bool(_10)) {\n        _11 = soup(_9);\n        state_a[i32(_9)] = _11;\n        _12 = _11;\n    }\n}\n\n",
+      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: i32 = 0;\n    var _16: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _15 = (_11 % 100);\n    _16 = (_15 < 18);\n    if (bool(_16)) {\n        _14 = 1.0;\n    } else {\n        _14 = 0.0;\n    }\n    _0 = f32(_14);\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> state_a: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_forall_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: bool = false;\n    var _11: f32 = 0.0;\n    var _12: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 256u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = (_9 < 57600);\n    if (bool(_10)) {\n        _11 = soup(_9);\n        state_a[i32(_9)] = _11;\n        _12 = _11;\n    }\n}\n\n",
       "workgroups": [
         225,
         1,
@@ -42,10 +42,6 @@
       ],
       "sourceMap": [
         {
-          "wgsl": 16,
-          "miri": 25
-        },
-        {
           "wgsl": 17,
           "miri": 25
         },
@@ -55,7 +51,7 @@
         },
         {
           "wgsl": 19,
-          "miri": 26
+          "miri": 25
         },
         {
           "wgsl": 20,
@@ -75,7 +71,7 @@
         },
         {
           "wgsl": 24,
-          "miri": 27
+          "miri": 26
         },
         {
           "wgsl": 25,
@@ -87,7 +83,7 @@
         },
         {
           "wgsl": 27,
-          "miri": 28
+          "miri": 27
         },
         {
           "wgsl": 28,
@@ -114,22 +110,26 @@
           "miri": 28
         },
         {
-          "wgsl": 62,
-          "miri": 31
-        },
-        {
-          "wgsl": 63,
-          "miri": 31
+          "wgsl": 34,
+          "miri": 28
         },
         {
           "wgsl": 64,
+          "miri": 31
+        },
+        {
+          "wgsl": 65,
+          "miri": 31
+        },
+        {
+          "wgsl": 66,
           "miri": 31
         }
       ]
     },
     {
       "entryPoint": "miri_gpu_forall_1",
-      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _14 = (_11 % 100);\n    _15 = (_14 < 18);\n    if (bool(_15)) {\n        _0 = 1.0;\n    } else {\n        _0 = 0.0;\n    }\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(16, 16, 1)\nfn miri_gpu_forall_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: bool = false;\n    var _19: bool = false;\n    var _20: bool = false;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: f32 = 0.0;\n    var _27: i32 = 0;\n    var _28: f32 = 0.0;\n    var _29: i32 = 0;\n    var _30: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 16u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = _local_id.y;\n    _11 = _workgroup_id.y;\n    _12 = 16u;\n    _13 = (_11 * _12);\n    _14 = i32(_10);\n    _15 = i32(_13);\n    _16 = (_14 + _15);\n    _17 = (_16 + 0);\n    _18 = (_9 < 1280);\n    _19 = (_17 < 720);\n    _20 = (_18 & _19);\n    if (bool(_20)) {\n        _22 = (_17 * 1280);\n        _23 = (_22 + _9);\n        _21 = (_23 * 4);\n        paint[i32(_21)] = 0.012;\n        _24 = 0.012;\n        _25 = (_21 + 1);\n        paint[i32(_25)] = 0.02;\n        _26 = 0.02;\n        _27 = (_21 + 2);\n        paint[i32(_27)] = 0.046;\n        _28 = 0.046;\n        _29 = (_21 + 3);\n        paint[i32(_29)] = 1.0;\n        _30 = 1.0;\n    }\n}\n\n",
+      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: i32 = 0;\n    var _16: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _15 = (_11 % 100);\n    _16 = (_15 < 18);\n    if (bool(_16)) {\n        _14 = 1.0;\n    } else {\n        _14 = 0.0;\n    }\n    _0 = f32(_14);\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(16, 16, 1)\nfn miri_gpu_forall_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: bool = false;\n    var _19: bool = false;\n    var _20: bool = false;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: f32 = 0.0;\n    var _27: i32 = 0;\n    var _28: f32 = 0.0;\n    var _29: i32 = 0;\n    var _30: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 16u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = _local_id.y;\n    _11 = _workgroup_id.y;\n    _12 = 16u;\n    _13 = (_11 * _12);\n    _14 = i32(_10);\n    _15 = i32(_13);\n    _16 = (_14 + _15);\n    _17 = (_16 + 0);\n    _18 = (_9 < 1280);\n    _19 = (_17 < 720);\n    _20 = (_18 & _19);\n    if (bool(_20)) {\n        _22 = (_17 * 1280);\n        _23 = (_22 + _9);\n        _21 = (_23 * 4);\n        paint[i32(_21)] = 0.012;\n        _24 = 0.012;\n        _25 = (_21 + 1);\n        paint[i32(_25)] = 0.02;\n        _26 = 0.02;\n        _27 = (_21 + 2);\n        paint[i32(_27)] = 0.046;\n        _28 = 0.046;\n        _29 = (_21 + 3);\n        paint[i32(_29)] = 1.0;\n        _30 = 1.0;\n    }\n}\n\n",
       "workgroups": [
         80,
         45,
@@ -144,10 +144,6 @@
       ],
       "sourceMap": [
         {
-          "wgsl": 16,
-          "miri": 25
-        },
-        {
           "wgsl": 17,
           "miri": 25
         },
@@ -157,7 +153,7 @@
         },
         {
           "wgsl": 19,
-          "miri": 26
+          "miri": 25
         },
         {
           "wgsl": 20,
@@ -177,7 +173,7 @@
         },
         {
           "wgsl": 24,
-          "miri": 27
+          "miri": 26
         },
         {
           "wgsl": 25,
@@ -189,7 +185,7 @@
         },
         {
           "wgsl": 27,
-          "miri": 28
+          "miri": 27
         },
         {
           "wgsl": 28,
@@ -216,12 +212,8 @@
           "miri": 28
         },
         {
-          "wgsl": 90,
-          "miri": 37
-        },
-        {
-          "wgsl": 91,
-          "miri": 37
+          "wgsl": 34,
+          "miri": 28
         },
         {
           "wgsl": 92,
@@ -229,19 +221,19 @@
         },
         {
           "wgsl": 93,
-          "miri": 38
+          "miri": 37
         },
         {
           "wgsl": 94,
-          "miri": 38
+          "miri": 37
         },
         {
           "wgsl": 95,
-          "miri": 39
+          "miri": 38
         },
         {
           "wgsl": 96,
-          "miri": 39
+          "miri": 38
         },
         {
           "wgsl": 97,
@@ -249,11 +241,11 @@
         },
         {
           "wgsl": 98,
-          "miri": 40
+          "miri": 39
         },
         {
           "wgsl": 99,
-          "miri": 40
+          "miri": 39
         },
         {
           "wgsl": 100,
@@ -261,14 +253,22 @@
         },
         {
           "wgsl": 101,
-          "miri": 41
+          "miri": 40
         },
         {
           "wgsl": 102,
-          "miri": 41
+          "miri": 40
         },
         {
           "wgsl": 103,
+          "miri": 41
+        },
+        {
+          "wgsl": 104,
+          "miri": 41
+        },
+        {
+          "wgsl": 105,
           "miri": 41
         }
       ]
@@ -277,7 +277,7 @@
   "framePasses": [
     {
       "entryPoint": "miri_gpu_for_2_0",
-      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _14 = (_11 % 100);\n    _15 = (_14 < 18);\n    if (bool(_15)) {\n        _0 = 1.0;\n    } else {\n        _0 = 0.0;\n    }\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read> state_a: array<f32>;\n@group(0) @binding(1) var<storage, read_write> state_b: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_2_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: bool = false;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: i32 = 0;\n    var _19: i32 = 0;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: i32 = 0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: bool = false;\n    var _28: i32 = 0;\n    var _29: i32 = 0;\n    var _30: i32 = 0;\n    var _31: bool = false;\n    var _32: i32 = 0;\n    var _33: i32 = 0;\n    var _34: i32 = 0;\n    var _35: bool = false;\n    var _36: i32 = 0;\n    var _37: i32 = 0;\n    var _38: i32 = 0;\n    var _39: bool = false;\n    var _40: i32 = 0;\n    var _41: i32 = 0;\n    var _42: i32 = 0;\n    var _43: bool = false;\n    var _44: i32 = 0;\n    var _45: i32 = 0;\n    var _46: i32 = 0;\n    var _47: bool = false;\n    var _48: i32 = 0;\n    var _49: i32 = 0;\n    var _50: i32 = 0;\n    var _51: bool = false;\n    var _52: i32 = 0;\n    var _53: i32 = 0;\n    var _54: i32 = 0;\n    var _55: bool = false;\n    var _56: i32 = 0;\n    var _57: i32 = 0;\n    var _58: i32 = 0;\n    var _59: i32 = 0;\n    var _60: i32 = 0;\n    var _61: i32 = 0;\n    var _62: i32 = 0;\n    var _63: bool = false;\n    var _64: bool = false;\n    var _65: bool = false;\n    var _66: bool = false;\n    var _67: bool = false;\n    var _68: bool = false;\n    var _69: bool = false;\n    var _70: bool = false;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: f32 = 0.0;\n    _3 = _local_id.x;\n    _4 = _workgroup_id.x;\n    _5 = 256u;\n    _6 = (_4 * _5);\n    _7 = i32(_3);\n    _8 = i32(_6);\n    _9 = (_7 + _8);\n    _10 = (_9 + 0);\n    _11 = (_10 < 57600);\n    if (bool(_11)) {\n        _12 = (_10 / 320);\n        _13 = (_10 % 320);\n        _15 = (_12 - 1);\n        _16 = (_15 + 180);\n        _14 = (_16 % 180);\n        _18 = (_12 + 1);\n        _17 = (_18 % 180);\n        _20 = (_13 - 1);\n        _21 = (_20 + 320);\n        _19 = (_21 % 320);\n        _23 = (_13 + 1);\n        _22 = (_23 % 320);\n        _25 = (_14 * 320);\n        _26 = (_25 + _19);\n        _27 = (state_a[i32(_26)] > 0.99);\n        if (bool(_27)) {\n            _24 = 1;\n        } else {\n            _24 = 0;\n        }\n        _29 = (_14 * 320);\n        _30 = (_29 + _13);\n        _31 = (state_a[i32(_30)] > 0.99);\n        if (bool(_31)) {\n            _28 = 1;\n        } else {\n            _28 = 0;\n        }\n        _33 = (_14 * 320);\n        _34 = (_33 + _22);\n        _35 = (state_a[i32(_34)] > 0.99);\n        if (bool(_35)) {\n            _32 = 1;\n        } else {\n            _32 = 0;\n        }\n        _37 = (_12 * 320);\n        _38 = (_37 + _19);\n        _39 = (state_a[i32(_38)] > 0.99);\n        if (bool(_39)) {\n            _36 = 1;\n        } else {\n            _36 = 0;\n        }\n        _41 = (_12 * 320);\n        _42 = (_41 + _22);\n        _43 = (state_a[i32(_42)] > 0.99);\n        if (bool(_43)) {\n            _40 = 1;\n        } else {\n            _40 = 0;\n        }\n        _45 = (_17 * 320);\n        _46 = (_45 + _19);\n        _47 = (state_a[i32(_46)] > 0.99);\n        if (bool(_47)) {\n            _44 = 1;\n        } else {\n            _44 = 0;\n        }\n        _49 = (_17 * 320);\n        _50 = (_49 + _13);\n        _51 = (state_a[i32(_50)] > 0.99);\n        if (bool(_51)) {\n            _48 = 1;\n        } else {\n            _48 = 0;\n        }\n        _53 = (_17 * 320);\n        _54 = (_53 + _22);\n        _55 = (state_a[i32(_54)] > 0.99);\n        if (bool(_55)) {\n            _52 = 1;\n        } else {\n            _52 = 0;\n        }\n        _57 = (_24 + _28);\n        _58 = (_57 + _32);\n        _59 = (_58 + _36);\n        _60 = (_59 + _40);\n        _61 = (_60 + _44);\n        _62 = (_61 + _48);\n        _56 = (_62 + _52);\n        _63 = (state_a[i32(_10)] > 0.99);\n        _64 = false;\n        if (bool(_63)) {\n            _66 = (_56 == 2);\n            _65 = _66;\n            if (!bool(_65)) {\n                _67 = (_56 == 3);\n                _65 = _67;\n            } else {\n                _65 = true;\n            }\n            _64 = _65;\n            _68 = _65;\n        } else {\n            _69 = (_56 == 3);\n            _64 = _69;\n            _70 = _69;\n        }\n        if (bool(_64)) {\n            _71 = 1.0;\n        } else {\n            _72 = (state_a[i32(_10)] * 0.94);\n            _71 = _72;\n        }\n        state_b[i32(_10)] = _71;\n        _73 = _71;\n    }\n}\n\n",
+      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: i32 = 0;\n    var _16: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _15 = (_11 % 100);\n    _16 = (_15 < 18);\n    if (bool(_16)) {\n        _14 = 1.0;\n    } else {\n        _14 = 0.0;\n    }\n    _0 = f32(_14);\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read> state_a: array<f32>;\n@group(0) @binding(1) var<storage, read_write> state_b: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_2_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: bool = false;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: i32 = 0;\n    var _19: i32 = 0;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: i32 = 0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: bool = false;\n    var _28: i32 = 0;\n    var _29: i32 = 0;\n    var _30: i32 = 0;\n    var _31: bool = false;\n    var _32: i32 = 0;\n    var _33: i32 = 0;\n    var _34: i32 = 0;\n    var _35: bool = false;\n    var _36: i32 = 0;\n    var _37: i32 = 0;\n    var _38: i32 = 0;\n    var _39: bool = false;\n    var _40: i32 = 0;\n    var _41: i32 = 0;\n    var _42: i32 = 0;\n    var _43: bool = false;\n    var _44: i32 = 0;\n    var _45: i32 = 0;\n    var _46: i32 = 0;\n    var _47: bool = false;\n    var _48: i32 = 0;\n    var _49: i32 = 0;\n    var _50: i32 = 0;\n    var _51: bool = false;\n    var _52: i32 = 0;\n    var _53: i32 = 0;\n    var _54: i32 = 0;\n    var _55: bool = false;\n    var _56: i32 = 0;\n    var _57: i32 = 0;\n    var _58: i32 = 0;\n    var _59: i32 = 0;\n    var _60: i32 = 0;\n    var _61: i32 = 0;\n    var _62: i32 = 0;\n    var _63: bool = false;\n    var _64: bool = false;\n    var _65: bool = false;\n    var _66: bool = false;\n    var _67: bool = false;\n    var _68: bool = false;\n    var _69: bool = false;\n    var _70: bool = false;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: f32 = 0.0;\n    _3 = _local_id.x;\n    _4 = _workgroup_id.x;\n    _5 = 256u;\n    _6 = (_4 * _5);\n    _7 = i32(_3);\n    _8 = i32(_6);\n    _9 = (_7 + _8);\n    _10 = (_9 + 0);\n    _11 = (_10 < 57600);\n    if (bool(_11)) {\n        _12 = (_10 / 320);\n        _13 = (_10 % 320);\n        _15 = (_12 - 1);\n        _16 = (_15 + 180);\n        _14 = (_16 % 180);\n        _18 = (_12 + 1);\n        _17 = (_18 % 180);\n        _20 = (_13 - 1);\n        _21 = (_20 + 320);\n        _19 = (_21 % 320);\n        _23 = (_13 + 1);\n        _22 = (_23 % 320);\n        _25 = (_14 * 320);\n        _26 = (_25 + _19);\n        _27 = (state_a[i32(_26)] > 0.99);\n        if (bool(_27)) {\n            _24 = 1;\n        } else {\n            _24 = 0;\n        }\n        _29 = (_14 * 320);\n        _30 = (_29 + _13);\n        _31 = (state_a[i32(_30)] > 0.99);\n        if (bool(_31)) {\n            _28 = 1;\n        } else {\n            _28 = 0;\n        }\n        _33 = (_14 * 320);\n        _34 = (_33 + _22);\n        _35 = (state_a[i32(_34)] > 0.99);\n        if (bool(_35)) {\n            _32 = 1;\n        } else {\n            _32 = 0;\n        }\n        _37 = (_12 * 320);\n        _38 = (_37 + _19);\n        _39 = (state_a[i32(_38)] > 0.99);\n        if (bool(_39)) {\n            _36 = 1;\n        } else {\n            _36 = 0;\n        }\n        _41 = (_12 * 320);\n        _42 = (_41 + _22);\n        _43 = (state_a[i32(_42)] > 0.99);\n        if (bool(_43)) {\n            _40 = 1;\n        } else {\n            _40 = 0;\n        }\n        _45 = (_17 * 320);\n        _46 = (_45 + _19);\n        _47 = (state_a[i32(_46)] > 0.99);\n        if (bool(_47)) {\n            _44 = 1;\n        } else {\n            _44 = 0;\n        }\n        _49 = (_17 * 320);\n        _50 = (_49 + _13);\n        _51 = (state_a[i32(_50)] > 0.99);\n        if (bool(_51)) {\n            _48 = 1;\n        } else {\n            _48 = 0;\n        }\n        _53 = (_17 * 320);\n        _54 = (_53 + _22);\n        _55 = (state_a[i32(_54)] > 0.99);\n        if (bool(_55)) {\n            _52 = 1;\n        } else {\n            _52 = 0;\n        }\n        _57 = (_24 + _28);\n        _58 = (_57 + _32);\n        _59 = (_58 + _36);\n        _60 = (_59 + _40);\n        _61 = (_60 + _44);\n        _62 = (_61 + _48);\n        _56 = (_62 + _52);\n        _63 = (state_a[i32(_10)] > 0.99);\n        _64 = false;\n        if (bool(_63)) {\n            _66 = (_56 == 2);\n            _65 = _66;\n            if (!bool(_65)) {\n                _67 = (_56 == 3);\n                _65 = _67;\n            } else {\n                _65 = true;\n            }\n            _64 = _65;\n            _68 = _65;\n        } else {\n            _69 = (_56 == 3);\n            _64 = _69;\n            _70 = _69;\n        }\n        if (bool(_64)) {\n            _71 = 1.0;\n        } else {\n            _72 = (state_a[i32(_10)] * 0.94);\n            _71 = _72;\n        }\n        state_b[i32(_10)] = _71;\n        _73 = _71;\n    }\n}\n\n",
       "workgroups": [
         225,
         1,
@@ -371,10 +371,6 @@
       ],
       "sourceMap": [
         {
-          "wgsl": 16,
-          "miri": 25
-        },
-        {
           "wgsl": 17,
           "miri": 25
         },
@@ -384,7 +380,7 @@
         },
         {
           "wgsl": 19,
-          "miri": 26
+          "miri": 25
         },
         {
           "wgsl": 20,
@@ -404,7 +400,7 @@
         },
         {
           "wgsl": 24,
-          "miri": 27
+          "miri": 26
         },
         {
           "wgsl": 25,
@@ -416,7 +412,7 @@
         },
         {
           "wgsl": 27,
-          "miri": 28
+          "miri": 27
         },
         {
           "wgsl": 28,
@@ -443,20 +439,16 @@
           "miri": 28
         },
         {
-          "wgsl": 123,
-          "miri": 48
-        },
-        {
-          "wgsl": 124,
-          "miri": 49
+          "wgsl": 34,
+          "miri": 28
         },
         {
           "wgsl": 125,
-          "miri": 50
+          "miri": 48
         },
         {
           "wgsl": 126,
-          "miri": 50
+          "miri": 49
         },
         {
           "wgsl": 127,
@@ -464,19 +456,19 @@
         },
         {
           "wgsl": 128,
-          "miri": 51
+          "miri": 50
         },
         {
           "wgsl": 129,
-          "miri": 51
+          "miri": 50
         },
         {
           "wgsl": 130,
-          "miri": 52
+          "miri": 51
         },
         {
           "wgsl": 131,
-          "miri": 52
+          "miri": 51
         },
         {
           "wgsl": 132,
@@ -484,19 +476,19 @@
         },
         {
           "wgsl": 133,
-          "miri": 53
+          "miri": 52
         },
         {
           "wgsl": 134,
-          "miri": 53
+          "miri": 52
         },
         {
           "wgsl": 135,
-          "miri": 54
+          "miri": 53
         },
         {
           "wgsl": 136,
-          "miri": 54
+          "miri": 53
         },
         {
           "wgsl": 137,
@@ -524,11 +516,11 @@
         },
         {
           "wgsl": 143,
-          "miri": 55
+          "miri": 54
         },
         {
           "wgsl": 144,
-          "miri": 55
+          "miri": 54
         },
         {
           "wgsl": 145,
@@ -556,11 +548,11 @@
         },
         {
           "wgsl": 151,
-          "miri": 56
+          "miri": 55
         },
         {
           "wgsl": 152,
-          "miri": 56
+          "miri": 55
         },
         {
           "wgsl": 153,
@@ -588,11 +580,11 @@
         },
         {
           "wgsl": 159,
-          "miri": 57
+          "miri": 56
         },
         {
           "wgsl": 160,
-          "miri": 57
+          "miri": 56
         },
         {
           "wgsl": 161,
@@ -620,11 +612,11 @@
         },
         {
           "wgsl": 167,
-          "miri": 58
+          "miri": 57
         },
         {
           "wgsl": 168,
-          "miri": 58
+          "miri": 57
         },
         {
           "wgsl": 169,
@@ -652,11 +644,11 @@
         },
         {
           "wgsl": 175,
-          "miri": 59
+          "miri": 58
         },
         {
           "wgsl": 176,
-          "miri": 59
+          "miri": 58
         },
         {
           "wgsl": 177,
@@ -684,11 +676,11 @@
         },
         {
           "wgsl": 183,
-          "miri": 60
+          "miri": 59
         },
         {
           "wgsl": 184,
-          "miri": 60
+          "miri": 59
         },
         {
           "wgsl": 185,
@@ -716,11 +708,11 @@
         },
         {
           "wgsl": 191,
-          "miri": 61
+          "miri": 60
         },
         {
           "wgsl": 192,
-          "miri": 61
+          "miri": 60
         },
         {
           "wgsl": 193,
@@ -748,11 +740,11 @@
         },
         {
           "wgsl": 199,
-          "miri": 62
+          "miri": 61
         },
         {
           "wgsl": 200,
-          "miri": 62
+          "miri": 61
         },
         {
           "wgsl": 201,
@@ -776,19 +768,19 @@
         },
         {
           "wgsl": 206,
-          "miri": 63
+          "miri": 62
         },
         {
           "wgsl": 207,
-          "miri": 64
+          "miri": 62
+        },
+        {
+          "wgsl": 208,
+          "miri": 63
         },
         {
           "wgsl": 209,
-          "miri": 66
-        },
-        {
-          "wgsl": 210,
-          "miri": 66
+          "miri": 64
         },
         {
           "wgsl": 211,
@@ -823,24 +815,24 @@
           "miri": 66
         },
         {
-          "wgsl": 220,
-          "miri": 68
+          "wgsl": 219,
+          "miri": 66
         },
         {
-          "wgsl": 221,
-          "miri": 68
+          "wgsl": 220,
+          "miri": 66
         },
         {
           "wgsl": 222,
           "miri": 68
         },
         {
-          "wgsl": 224,
-          "miri": 69
+          "wgsl": 223,
+          "miri": 68
         },
         {
-          "wgsl": 225,
-          "miri": 69
+          "wgsl": 224,
+          "miri": 68
         },
         {
           "wgsl": 226,
@@ -865,12 +857,20 @@
         {
           "wgsl": 231,
           "miri": 69
+        },
+        {
+          "wgsl": 232,
+          "miri": 69
+        },
+        {
+          "wgsl": 233,
+          "miri": 69
         }
       ]
     },
     {
       "entryPoint": "miri_gpu_for_3_1",
-      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _14 = (_11 % 100);\n    _15 = (_14 < 18);\n    if (bool(_15)) {\n        _0 = 1.0;\n    } else {\n        _0 = 0.0;\n    }\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read_write> state_b: array<f32>;\n@group(0) @binding(1) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_3_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: bool = false;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: f32 = 0.0;\n    var _28: f32 = 0.0;\n    var _29: f32 = 0.0;\n    var _30: f32 = 0.0;\n    var _31: f32 = 0.0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: bool = false;\n    var _39: f32 = 0.0;\n    _16 = _local_id.x;\n    _17 = _workgroup_id.x;\n    _18 = 256u;\n    _19 = (_17 * _18);\n    _20 = i32(_16);\n    _21 = i32(_19);\n    _22 = (_20 + _21);\n    _23 = (_22 + 0);\n    _24 = (_23 < 57600);\n    if (bool(_24)) {\n        if (bool(bool(_inputs.f5))) {\n            _25 = (_23 % 320);\n            _26 = (_23 / 320);\n            _28 = f32(320);\n            _27 = (_inputs.f3 * _28);\n            _30 = f32(180);\n            _29 = (_inputs.f4 * _30);\n            _32 = f32(_25);\n            _31 = (_32 - _27);\n            _34 = f32(_26);\n            _33 = (_34 - _29);\n            _35 = (_31 * _31);\n            _36 = (_33 * _33);\n            _37 = (_35 + _36);\n            _38 = (_37 < 36.0);\n            if (bool(_38)) {\n                state_b[i32(_23)] = 1.0;\n                _39 = 1.0;\n            } else {\n            }\n        } else {\n        }\n    }\n}\n\n",
+      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: i32 = 0;\n    var _16: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _15 = (_11 % 100);\n    _16 = (_15 < 18);\n    if (bool(_16)) {\n        _14 = 1.0;\n    } else {\n        _14 = 0.0;\n    }\n    _0 = f32(_14);\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read_write> state_b: array<f32>;\n@group(0) @binding(1) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_3_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: bool = false;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: f32 = 0.0;\n    var _28: f32 = 0.0;\n    var _29: f32 = 0.0;\n    var _30: f32 = 0.0;\n    var _31: f32 = 0.0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: bool = false;\n    var _39: f32 = 0.0;\n    _16 = _local_id.x;\n    _17 = _workgroup_id.x;\n    _18 = 256u;\n    _19 = (_17 * _18);\n    _20 = i32(_16);\n    _21 = i32(_19);\n    _22 = (_20 + _21);\n    _23 = (_22 + 0);\n    _24 = (_23 < 57600);\n    if (bool(_24)) {\n        if (bool(bool(_inputs.f5))) {\n            _25 = (_23 % 320);\n            _26 = (_23 / 320);\n            _28 = f32(320);\n            _27 = (_inputs.f3 * _28);\n            _30 = f32(180);\n            _29 = (_inputs.f4 * _30);\n            _32 = f32(_25);\n            _31 = (_32 - _27);\n            _34 = f32(_26);\n            _33 = (_34 - _29);\n            _35 = (_31 * _31);\n            _36 = (_33 * _33);\n            _37 = (_35 + _36);\n            _38 = (_37 < 36.0);\n            if (bool(_38)) {\n                state_b[i32(_23)] = 1.0;\n                _39 = 1.0;\n            } else {\n            }\n        } else {\n        }\n    }\n}\n\n",
       "workgroups": [
         225,
         1,
@@ -958,10 +958,6 @@
       ],
       "sourceMap": [
         {
-          "wgsl": 16,
-          "miri": 25
-        },
-        {
           "wgsl": 17,
           "miri": 25
         },
@@ -971,7 +967,7 @@
         },
         {
           "wgsl": 19,
-          "miri": 26
+          "miri": 25
         },
         {
           "wgsl": 20,
@@ -991,7 +987,7 @@
         },
         {
           "wgsl": 24,
-          "miri": 27
+          "miri": 26
         },
         {
           "wgsl": 25,
@@ -1003,7 +999,7 @@
         },
         {
           "wgsl": 27,
-          "miri": 28
+          "miri": 27
         },
         {
           "wgsl": 28,
@@ -1030,52 +1026,48 @@
           "miri": 28
         },
         {
-          "wgsl": 94,
-          "miri": 74
-        },
-        {
-          "wgsl": 95,
-          "miri": 75
+          "wgsl": 34,
+          "miri": 28
         },
         {
           "wgsl": 96,
-          "miri": 76
+          "miri": 74
         },
         {
           "wgsl": 97,
-          "miri": 76
+          "miri": 75
         },
         {
           "wgsl": 98,
-          "miri": 77
+          "miri": 76
         },
         {
           "wgsl": 99,
-          "miri": 77
+          "miri": 76
         },
         {
           "wgsl": 100,
-          "miri": 78
+          "miri": 77
         },
         {
           "wgsl": 101,
-          "miri": 78
+          "miri": 77
         },
         {
           "wgsl": 102,
-          "miri": 79
+          "miri": 78
         },
         {
           "wgsl": 103,
-          "miri": 79
+          "miri": 78
         },
         {
           "wgsl": 104,
-          "miri": 80
+          "miri": 79
         },
         {
           "wgsl": 105,
-          "miri": 80
+          "miri": 79
         },
         {
           "wgsl": 106,
@@ -1086,18 +1078,26 @@
           "miri": 80
         },
         {
+          "wgsl": 108,
+          "miri": 80
+        },
+        {
           "wgsl": 109,
+          "miri": 80
+        },
+        {
+          "wgsl": 111,
           "miri": 81
         },
         {
-          "wgsl": 110,
+          "wgsl": 112,
           "miri": 81
         }
       ]
     },
     {
       "entryPoint": "miri_gpu_for_4_2",
-      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _14 = (_11 % 100);\n    _15 = (_14 < 18);\n    if (bool(_15)) {\n        _0 = 1.0;\n    } else {\n        _0 = 0.0;\n    }\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read_write> state_b: array<f32>;\n@group(0) @binding(1) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_4_2(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: bool = false;\n    var _25: f32 = 0.0;\n    var _26: f32 = 0.0;\n    _16 = _local_id.x;\n    _17 = _workgroup_id.x;\n    _18 = 256u;\n    _19 = (_17 * _18);\n    _20 = i32(_16);\n    _21 = i32(_19);\n    _22 = (_20 + _21);\n    _23 = (_22 + 0);\n    _24 = (_23 < 57600);\n    if (bool(_24)) {\n        if (bool(bool(_inputs.f10))) {\n            _25 = soup(_23);\n            state_b[i32(_23)] = _25;\n            _26 = _25;\n        } else {\n        }\n    }\n}\n\n",
+      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: i32 = 0;\n    var _16: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _15 = (_11 % 100);\n    _16 = (_15 < 18);\n    if (bool(_16)) {\n        _14 = 1.0;\n    } else {\n        _14 = 0.0;\n    }\n    _0 = f32(_14);\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read_write> state_b: array<f32>;\n@group(0) @binding(1) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_4_2(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: bool = false;\n    var _25: f32 = 0.0;\n    var _26: f32 = 0.0;\n    _16 = _local_id.x;\n    _17 = _workgroup_id.x;\n    _18 = 256u;\n    _19 = (_17 * _18);\n    _20 = i32(_16);\n    _21 = i32(_19);\n    _22 = (_20 + _21);\n    _23 = (_22 + 0);\n    _24 = (_23 < 57600);\n    if (bool(_24)) {\n        if (bool(bool(_inputs.f10))) {\n            _25 = soup(_23);\n            state_b[i32(_23)] = _25;\n            _26 = _25;\n        } else {\n        }\n    }\n}\n\n",
       "workgroups": [
         225,
         1,
@@ -1185,10 +1185,6 @@
       ],
       "sourceMap": [
         {
-          "wgsl": 16,
-          "miri": 25
-        },
-        {
           "wgsl": 17,
           "miri": 25
         },
@@ -1198,7 +1194,7 @@
         },
         {
           "wgsl": 19,
-          "miri": 26
+          "miri": 25
         },
         {
           "wgsl": 20,
@@ -1218,7 +1214,7 @@
         },
         {
           "wgsl": 24,
-          "miri": 27
+          "miri": 26
         },
         {
           "wgsl": 25,
@@ -1230,7 +1226,7 @@
         },
         {
           "wgsl": 27,
-          "miri": 28
+          "miri": 27
         },
         {
           "wgsl": 28,
@@ -1257,22 +1253,26 @@
           "miri": 28
         },
         {
-          "wgsl": 81,
-          "miri": 86
-        },
-        {
-          "wgsl": 82,
-          "miri": 86
+          "wgsl": 34,
+          "miri": 28
         },
         {
           "wgsl": 83,
+          "miri": 86
+        },
+        {
+          "wgsl": 84,
+          "miri": 86
+        },
+        {
+          "wgsl": 85,
           "miri": 86
         }
       ]
     },
     {
       "entryPoint": "miri_gpu_for_5_3",
-      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _14 = (_11 % 100);\n    _15 = (_14 < 18);\n    if (bool(_15)) {\n        _0 = 1.0;\n    } else {\n        _0 = 0.0;\n    }\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read> state_b: array<f32>;\n@group(0) @binding(1) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_5_3(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: bool = false;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: f32 = 0.0;\n    var _19: i32 = 0;\n    var _20: f32 = 0.0;\n    var _21: i32 = 0;\n    var _22: f32 = 0.0;\n    var _23: f32 = 0.0;\n    var _24: f32 = 0.0;\n    var _25: f32 = 0.0;\n    var _26: f32 = 0.0;\n    var _27: bool = false;\n    var _28: f32 = 0.0;\n    var _29: f32 = 0.0;\n    var _30: f32 = 0.0;\n    var _31: f32 = 0.0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: bool = false;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: f32 = 0.0;\n    var _44: bool = false;\n    var _45: f32 = 0.0;\n    var _46: f32 = 0.0;\n    var _47: f32 = 0.0;\n    var _48: f32 = 0.0;\n    var _49: f32 = 0.0;\n    var _50: f32 = 0.0;\n    var _51: f32 = 0.0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: f32 = 0.0;\n    var _56: f32 = 0.0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: f32 = 0.0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: f32 = 0.0;\n    var _63: f32 = 0.0;\n    var _64: i32 = 0;\n    var _65: f32 = 0.0;\n    var _66: f32 = 0.0;\n    var _67: f32 = 0.0;\n    var _68: f32 = 0.0;\n    var _69: f32 = 0.0;\n    var _70: i32 = 0;\n    var _71: f32 = 0.0;\n    var _72: i32 = 0;\n    var _73: f32 = 0.0;\n    _3 = _local_id.x;\n    _4 = _workgroup_id.x;\n    _5 = 256u;\n    _6 = (_4 * _5);\n    _7 = i32(_3);\n    _8 = i32(_6);\n    _9 = (_7 + _8);\n    _10 = (_9 + 0);\n    _11 = (_10 < 921600);\n    if (bool(_11)) {\n        _12 = (_10 % 1280);\n        _13 = (_10 / 1280);\n        _15 = (_13 / 4);\n        _16 = (_15 * 320);\n        _17 = (_12 / 4);\n        _14 = (_16 + _17);\n        _19 = (_12 % 4);\n        _18 = f32(_19);\n        _21 = (_13 % 4);\n        _20 = f32(_21);\n        _23 = (_18 + 0.5);\n        _24 = f32(4);\n        _25 = (_23 / _24);\n        _22 = (_25 - 0.5);\n        _27 = (_22 >= 0.0);\n        if (bool(_27)) {\n            _26 = _22;\n        } else {\n            _28 = (0.0 - _22);\n            _26 = _28;\n        }\n        _22 = _26;\n        _29 = _26;\n        _31 = (_20 + 0.5);\n        _32 = f32(4);\n        _33 = (_31 / _32);\n        _30 = (_33 - 0.5);\n        _35 = (_30 >= 0.0);\n        if (bool(_35)) {\n            _34 = _30;\n        } else {\n            _36 = (0.0 - _30);\n            _34 = _36;\n        }\n        _30 = _34;\n        _37 = _34;\n        _39 = max(_22, _30);\n        _40 = smoothstep(0.32, 0.46, _39);\n        _41 = f32(_40);\n        _38 = (1.0 - _41);\n        _42 = state_b[i32(_14)];\n        _44 = (_42 > 0.99);\n        if (bool(_44)) {\n            _43 = 1.0;\n        } else {\n            _43 = 0.0;\n        }\n        _46 = (1.0 - _43);\n        _45 = (_42 * _46);\n        _48 = (_45 * _45);\n        _49 = (0.75 * _38);\n        _50 = (0.25 + _49);\n        _47 = (_48 * _50);\n        _52 = (0.95 * _38);\n        _53 = (0.22 + _52);\n        _51 = (_43 * _53);\n        _54 = (_10 * 4);\n        _55 = (0.18 * _47);\n        _56 = (0.012 + _55);\n        _57 = (1.0 * _51);\n        _58 = (_56 + _57);\n        paint[i32(_54)] = _58;\n        _59 = _58;\n        _60 = (0.32 * _47);\n        _61 = (0.02 + _60);\n        _62 = (0.84 * _51);\n        _63 = (_61 + _62);\n        _64 = (_54 + 1);\n        paint[i32(_64)] = _63;\n        _65 = _63;\n        _66 = (0.8 * _47);\n        _67 = (0.046 + _66);\n        _68 = (0.24 * _51);\n        _69 = (_67 + _68);\n        _70 = (_54 + 2);\n        paint[i32(_70)] = _69;\n        _71 = _69;\n        _72 = (_54 + 3);\n        paint[i32(_72)] = 1.0;\n        _73 = 1.0;\n    }\n}\n\n",
+      "wgsl": "fn soup(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: i32 = 0;\n    var _4: i32 = 0;\n    var _5: i32 = 0;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: i32 = 0;\n    var _16: bool = false;\n    _4 = (_1 * 1597);\n    _5 = (_4 + 51749);\n    _3 = (_5 % 40000);\n    _7 = (_3 * _3);\n    _8 = (_3 * 37);\n    _9 = (_7 + _8);\n    _10 = (_9 + 11);\n    _6 = (_10 % 40009);\n    _12 = (_6 * 613);\n    _13 = (_12 + 7919);\n    _11 = (_13 % 40009);\n    _15 = (_11 % 100);\n    _16 = (_15 < 18);\n    if (bool(_16)) {\n        _14 = 1.0;\n    } else {\n        _14 = 0.0;\n    }\n    _0 = f32(_14);\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read> state_b: array<f32>;\n@group(0) @binding(1) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_5_3(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: bool = false;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: f32 = 0.0;\n    var _19: i32 = 0;\n    var _20: f32 = 0.0;\n    var _21: i32 = 0;\n    var _22: f32 = 0.0;\n    var _23: f32 = 0.0;\n    var _24: f32 = 0.0;\n    var _25: f32 = 0.0;\n    var _26: f32 = 0.0;\n    var _27: bool = false;\n    var _28: f32 = 0.0;\n    var _29: f32 = 0.0;\n    var _30: f32 = 0.0;\n    var _31: f32 = 0.0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: bool = false;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: f32 = 0.0;\n    var _44: bool = false;\n    var _45: f32 = 0.0;\n    var _46: f32 = 0.0;\n    var _47: f32 = 0.0;\n    var _48: f32 = 0.0;\n    var _49: f32 = 0.0;\n    var _50: f32 = 0.0;\n    var _51: f32 = 0.0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: f32 = 0.0;\n    var _56: f32 = 0.0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: f32 = 0.0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: f32 = 0.0;\n    var _63: f32 = 0.0;\n    var _64: i32 = 0;\n    var _65: f32 = 0.0;\n    var _66: f32 = 0.0;\n    var _67: f32 = 0.0;\n    var _68: f32 = 0.0;\n    var _69: f32 = 0.0;\n    var _70: i32 = 0;\n    var _71: f32 = 0.0;\n    var _72: i32 = 0;\n    var _73: f32 = 0.0;\n    _3 = _local_id.x;\n    _4 = _workgroup_id.x;\n    _5 = 256u;\n    _6 = (_4 * _5);\n    _7 = i32(_3);\n    _8 = i32(_6);\n    _9 = (_7 + _8);\n    _10 = (_9 + 0);\n    _11 = (_10 < 921600);\n    if (bool(_11)) {\n        _12 = (_10 % 1280);\n        _13 = (_10 / 1280);\n        _15 = (_13 / 4);\n        _16 = (_15 * 320);\n        _17 = (_12 / 4);\n        _14 = (_16 + _17);\n        _19 = (_12 % 4);\n        _18 = f32(_19);\n        _21 = (_13 % 4);\n        _20 = f32(_21);\n        _23 = (_18 + 0.5);\n        _24 = f32(4);\n        _25 = (_23 / _24);\n        _22 = (_25 - 0.5);\n        _27 = (_22 >= 0.0);\n        if (bool(_27)) {\n            _26 = _22;\n        } else {\n            _28 = (0.0 - _22);\n            _26 = _28;\n        }\n        _22 = _26;\n        _29 = _26;\n        _31 = (_20 + 0.5);\n        _32 = f32(4);\n        _33 = (_31 / _32);\n        _30 = (_33 - 0.5);\n        _35 = (_30 >= 0.0);\n        if (bool(_35)) {\n            _34 = _30;\n        } else {\n            _36 = (0.0 - _30);\n            _34 = _36;\n        }\n        _30 = _34;\n        _37 = _34;\n        _39 = max(_22, _30);\n        _40 = smoothstep(0.32, 0.46, _39);\n        _41 = f32(_40);\n        _38 = (1.0 - _41);\n        _42 = state_b[i32(_14)];\n        _44 = (_42 > 0.99);\n        if (bool(_44)) {\n            _43 = 1.0;\n        } else {\n            _43 = 0.0;\n        }\n        _46 = (1.0 - _43);\n        _45 = (_42 * _46);\n        _48 = (_45 * _45);\n        _49 = (0.75 * _38);\n        _50 = (0.25 + _49);\n        _47 = (_48 * _50);\n        _52 = (0.95 * _38);\n        _53 = (0.22 + _52);\n        _51 = (_43 * _53);\n        _54 = (_10 * 4);\n        _55 = (0.18 * _47);\n        _56 = (0.012 + _55);\n        _57 = (1.0 * _51);\n        _58 = (_56 + _57);\n        paint[i32(_54)] = _58;\n        _59 = _58;\n        _60 = (0.32 * _47);\n        _61 = (0.02 + _60);\n        _62 = (0.84 * _51);\n        _63 = (_61 + _62);\n        _64 = (_54 + 1);\n        paint[i32(_64)] = _63;\n        _65 = _63;\n        _66 = (0.8 * _47);\n        _67 = (0.046 + _66);\n        _68 = (0.24 * _51);\n        _69 = (_67 + _68);\n        _70 = (_54 + 2);\n        paint[i32(_70)] = _69;\n        _71 = _69;\n        _72 = (_54 + 3);\n        paint[i32(_72)] = 1.0;\n        _73 = 1.0;\n    }\n}\n\n",
       "workgroups": [
         3600,
         1,
@@ -1366,10 +1366,6 @@
       ],
       "sourceMap": [
         {
-          "wgsl": 16,
-          "miri": 25
-        },
-        {
           "wgsl": 17,
           "miri": 25
         },
@@ -1379,7 +1375,7 @@
         },
         {
           "wgsl": 19,
-          "miri": 26
+          "miri": 25
         },
         {
           "wgsl": 20,
@@ -1399,7 +1395,7 @@
         },
         {
           "wgsl": 24,
-          "miri": 27
+          "miri": 26
         },
         {
           "wgsl": 25,
@@ -1411,7 +1407,7 @@
         },
         {
           "wgsl": 27,
-          "miri": 28
+          "miri": 27
         },
         {
           "wgsl": 28,
@@ -1438,20 +1434,16 @@
           "miri": 28
         },
         {
-          "wgsl": 123,
-          "miri": 92
-        },
-        {
-          "wgsl": 124,
-          "miri": 93
+          "wgsl": 34,
+          "miri": 28
         },
         {
           "wgsl": 125,
-          "miri": 94
+          "miri": 92
         },
         {
           "wgsl": 126,
-          "miri": 94
+          "miri": 93
         },
         {
           "wgsl": 127,
@@ -1463,27 +1455,27 @@
         },
         {
           "wgsl": 129,
-          "miri": 97
+          "miri": 94
         },
         {
           "wgsl": 130,
-          "miri": 97
+          "miri": 94
         },
         {
           "wgsl": 131,
-          "miri": 98
+          "miri": 97
         },
         {
           "wgsl": 132,
-          "miri": 98
+          "miri": 97
         },
         {
           "wgsl": 133,
-          "miri": 99
+          "miri": 98
         },
         {
           "wgsl": 134,
-          "miri": 99
+          "miri": 98
         },
         {
           "wgsl": 135,
@@ -1495,11 +1487,11 @@
         },
         {
           "wgsl": 137,
-          "miri": 100
+          "miri": 99
         },
         {
           "wgsl": 138,
-          "miri": 100
+          "miri": 99
         },
         {
           "wgsl": 139,
@@ -1531,11 +1523,11 @@
         },
         {
           "wgsl": 146,
-          "miri": 101
+          "miri": 100
         },
         {
           "wgsl": 147,
-          "miri": 101
+          "miri": 100
         },
         {
           "wgsl": 148,
@@ -1547,11 +1539,11 @@
         },
         {
           "wgsl": 150,
-          "miri": 102
+          "miri": 101
         },
         {
           "wgsl": 151,
-          "miri": 102
+          "miri": 101
         },
         {
           "wgsl": 152,
@@ -1583,11 +1575,11 @@
         },
         {
           "wgsl": 159,
-          "miri": 103
+          "miri": 102
         },
         {
           "wgsl": 160,
-          "miri": 103
+          "miri": 102
         },
         {
           "wgsl": 161,
@@ -1599,15 +1591,15 @@
         },
         {
           "wgsl": 163,
-          "miri": 105
+          "miri": 103
         },
         {
           "wgsl": 164,
-          "miri": 106
+          "miri": 103
         },
         {
           "wgsl": 165,
-          "miri": 106
+          "miri": 105
         },
         {
           "wgsl": 166,
@@ -1627,19 +1619,19 @@
         },
         {
           "wgsl": 170,
-          "miri": 107
+          "miri": 106
         },
         {
           "wgsl": 171,
-          "miri": 107
+          "miri": 106
         },
         {
           "wgsl": 172,
-          "miri": 108
+          "miri": 107
         },
         {
           "wgsl": 173,
-          "miri": 108
+          "miri": 107
         },
         {
           "wgsl": 174,
@@ -1651,11 +1643,11 @@
         },
         {
           "wgsl": 176,
-          "miri": 109
+          "miri": 108
         },
         {
           "wgsl": 177,
-          "miri": 109
+          "miri": 108
         },
         {
           "wgsl": 178,
@@ -1663,15 +1655,15 @@
         },
         {
           "wgsl": 179,
-          "miri": 111
+          "miri": 109
         },
         {
           "wgsl": 180,
-          "miri": 112
+          "miri": 109
         },
         {
           "wgsl": 181,
-          "miri": 112
+          "miri": 111
         },
         {
           "wgsl": 182,
@@ -1691,11 +1683,11 @@
         },
         {
           "wgsl": 186,
-          "miri": 113
+          "miri": 112
         },
         {
           "wgsl": 187,
-          "miri": 113
+          "miri": 112
         },
         {
           "wgsl": 188,
@@ -1719,11 +1711,11 @@
         },
         {
           "wgsl": 193,
-          "miri": 114
+          "miri": 113
         },
         {
           "wgsl": 194,
-          "miri": 114
+          "miri": 113
         },
         {
           "wgsl": 195,
@@ -1747,14 +1739,22 @@
         },
         {
           "wgsl": 200,
-          "miri": 115
+          "miri": 114
         },
         {
           "wgsl": 201,
-          "miri": 115
+          "miri": 114
         },
         {
           "wgsl": 202,
+          "miri": 115
+        },
+        {
+          "wgsl": 203,
+          "miri": 115
+        },
+        {
+          "wgsl": 204,
           "miri": 115
         }
       ]
