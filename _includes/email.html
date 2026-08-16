@@ -1,0 +1,27 @@
+{%- comment -%}
+  Contact address, lightly hardened against scraping.
+
+  The "@" and every "." are emitted as HTML entities, so the raw source never
+  contains a literal address for a regex like \S+@\S+ to match, and a display:none
+  decoy breaks naive extraction from rendered DOM text.
+
+  Deliberately NOT JavaScript-assembled: § 5 DDG wants the contact route permanently
+  available, and browsers decode entities natively, so this still works with
+  JavaScript disabled, is read correctly by screen readers, and copy-pastes cleanly
+  (display:none content is excluded from selections).
+
+  This stops bulk harvesters, not a targeted human. That is the intended bar.
+
+  Params:
+    include.address — address to render (defaults to site.email; on this site pass
+                      site.legal.email explicitly, there is no site-wide site.email)
+    include.class   — optional class for the <a>
+    include.text    — optional link text; defaults to the address itself
+    include.aria    — optional aria-label
+{%- endcomment -%}
+{%- assign mail = include.address | default: site.email -%}
+{%- assign parts = mail | split: '@' -%}
+{%- assign user = parts[0] -%}
+{%- assign domain = parts[1] | replace: '.', '&#46;' -%}
+{%- capture safe_mail -%}{{ user }}&#64;{{ domain }}{%- endcapture -%}
+<a{% if include.class %} class="{{ include.class }}"{% endif %}{% if include.aria %} aria-label="{{ include.aria }}"{% endif %} href="mailto:{{ safe_mail }}">{% if include.text %}{{ include.text }}{% else %}{{ user }}&#64;<span aria-hidden="true" style="display:none">nospam-</span>{{ domain }}{% endif %}</a>

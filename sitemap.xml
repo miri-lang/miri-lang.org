@@ -1,14 +1,23 @@
 ---
 layout: null
 ---
+{%- comment -%}
+  Pages carrying `noindex_when_incomplete` (the legal pages) stay out of the sitemap
+  until the address in _config.yml `legal:` is filled in — same gate as the noindex
+  meta tag in _layouts/default.html and the footer links.
+{%- endcomment -%}
+{%- assign legal_ready = false -%}
+{%- if site.legal.street != '' and site.legal.city != '' -%}{%- assign legal_ready = true -%}{%- endif -%}
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% for page in site.html_pages %}
   {% unless page.url contains '404' %}
+  {% unless page.noindex_when_incomplete and legal_ready == false %}
   <url>
     <loc>{{ page.url | absolute_url }}</loc>
     <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
   </url>
+  {% endunless %}
   {% endunless %}
   {% endfor %}
 </urlset>

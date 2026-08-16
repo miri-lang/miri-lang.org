@@ -1,3 +1,10 @@
+{%- comment -%}
+  The legal links appear only once a *ladungsfähige Anschrift* is configured — see the
+  `legal:` block in _config.yml. While it is blank the pages are noindex'd, kept out of
+  the sitemap, and unlinked, so an incomplete Impressum is never advertised.
+{%- endcomment -%}
+{%- assign legal_ready = false -%}
+{%- if site.legal.street != '' and site.legal.city != '' -%}{%- assign legal_ready = true -%}{%- endif -%}
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <a class="footer-brand" href="{{ '/' | relative_url }}">
@@ -9,6 +16,10 @@
       <a href="{{ '/docs/getting-started/' | relative_url }}">Documentation</a>
       <a href="{{ '/gpu-demos/' | relative_url }}">GPU Demos</a>
       <a href="{{ site.github_url }}/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0 License</a>
+      {%- if legal_ready %}
+      <a href="{{ '/impressum/' | relative_url }}">Impressum</a>
+      <a href="{{ '/datenschutz/' | relative_url }}">Datenschutz</a>
+      {%- endif %}
     </div>
     <div class="footer-copy">&copy; 2026 {{ site.author }}</div>
   </div>

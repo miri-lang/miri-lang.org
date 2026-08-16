@@ -1,0 +1,30 @@
+{%- comment -%}
+  Postal address, lightly hardened against scraping — same bar and same reasoning as
+  email.html. Hidden separators are inserted between the words of the street and into
+  the middle of the postal code, so the raw source contains no contiguous
+  "Street 1, 12345 City" for a pattern matcher and no bare \d{5} postal code, while
+  the rendered text, screen-reader output and copy-paste are all unchanged
+  (display:none content is excluded from selections).
+
+  Note for future edits: do NOT entity-encode the digits. Chained Liquid `replace`
+  filters re-enter their own output — encoding "1" as &#49; leaves a 4 and a 9 for the
+  next filter to mangle. This approach has no such interaction.
+
+  § 5 DDG requires the address be permanently available and easily recognisable. Nothing
+  here depends on JavaScript. The separators are hidden with an inline `display:none`, so
+  in the pathological case of a client that ignores style attributes entirely the address
+  degrades to "c/o· COCENTER / Koppoldstr.· 1 / 86·551 Aichach" — still unambiguous to a
+  human reader, which is the standard the provision sets.
+{%- endcomment -%}
+{%- assign L = site.legal -%}
+{%- assign street_words = L.street | split: ' ' -%}
+{%- assign care_words = L.care_of | split: ' ' -%}
+{%- assign zip_head = L.postal_code | slice: 0, 2 -%}
+{%- assign zip_rest = L.postal_code | slice: 2, 10 -%}
+{%- capture sep -%}<span aria-hidden="true" style="display:none">·</span>{%- endcapture -%}
+{%- if L.care_of and L.care_of != '' -%}
+{% for w in care_words %}{{ w }}{% unless forloop.last %}{{ sep }} {% endunless %}{% endfor %}<br>
+{%- endif -%}
+{% for w in street_words %}{{ w }}{% unless forloop.last %}{{ sep }} {% endunless %}{% endfor %}<br>
+{{ zip_head }}{{ sep }}{{ zip_rest }} {{ L.city }}<br>
+{{ L.country }}

@@ -1,0 +1,150 @@
+---
+layout: legal
+nav_static: true
+permalink: /impressum/
+title: 'Legal Notice / Impressum — Miri'
+h1: 'Legal Notice <em>/ Impressum</em>'
+description: 'Provider identification under § 5 DDG and § 18 (2) MStV for miri-lang.org.'
+noindex_when_incomplete: true
+---
+
+{% assign L = site.legal %}
+{% assign ready = false %}
+{% if L.street != '' and L.city != '' %}{% assign ready = true %}{% endif %}
+{% assign contact_email = L.email %}
+
+{% unless ready %}
+<blockquote>
+  <strong>Draft — not yet published.</strong> This page is waiting on a
+  <em>ladungsfähige Anschrift</em>. It is excluded from the sitemap, marked
+  <code>noindex</code>, and is not linked from the site footer. Fill in
+  <code>legal.street</code>, <code>legal.postal_code</code> and <code>legal.city</code>
+  in <code>_config.yml</code> and it goes live on the next build.
+</blockquote>
+{% endunless %}
+
+<p>
+  Information required under § 5 of the German Digital Services Act
+  (<em>Digitale-Dienste-Gesetz</em>, DDG) and § 18 (2) of the Interstate Media Treaty
+  (<em>Medienstaatsvertrag</em>, MStV).
+</p>
+
+<h2>Provider / <em>Diensteanbieter</em></h2>
+
+<p>
+  {{ L.legal_name }}<br>
+  {% if ready %}{% include address.html %}
+  {% else %}<em>Address pending — see note above.</em>
+  {% endif %}
+</p>
+
+<p>
+  miri-lang.org is the website of Miri, an open-source programming language. It is a
+  personal, non-commercial project operated by a private individual. It is not a
+  business. There is no company, no VAT identification number, no commercial register
+  entry, no regulated professional activity, and no supervisory authority within the
+  meaning of § 5 (1) nos. 3–6 DDG. Nothing is sold here and no service is offered for
+  payment.
+</p>
+
+<h2>Contact / <em>Kontakt</em></h2>
+
+<p>
+  Email: {% include email.html address=contact_email %}
+</p>
+
+<p>
+  Email is the fastest way to reach me and I read everything. There is no telephone
+  number: § 5 (1) no. 2 DDG requires a means of rapid electronic contact and direct
+  communication, which a monitored email address satisfies.
+</p>
+
+<p>
+  Bug reports, feature requests and questions about the language itself are best raised
+  on the project's
+  <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub repository</a>,
+  where they are public and get answered once for everyone.
+</p>
+
+<h2>Responsible for editorial content / <em>Verantwortlich für den Inhalt</em></h2>
+
+<p>
+  Pursuant to § 18 (2) MStV:<br>
+  {{ L.legal_name }}{% if ready %}<br>{% include address.html %}{% endif %}
+</p>
+
+<p>
+  Documentation and articles on this site are published under the name
+  <strong>{{ L.known_as }}</strong>, which is the short form of the legal name given
+  above. Both refer to the same person, who is also the operator of
+  <a href="https://slavikdev.com/" rel="noopener">slavikdev.com</a>.
+</p>
+
+<h2>Consumer dispute resolution / <em>Verbraucherstreitbeilegung</em></h2>
+
+<p>
+  I am neither obliged nor willing to participate in dispute resolution proceedings
+  before a consumer arbitration board (<em>Verbraucherschlichtungsstelle</em>).
+</p>
+
+<p>
+  No link to the European Online Dispute Resolution platform is given here: that
+  platform ceased operations on 20 July 2025 and the underlying obligation no longer
+  applies. Templates that still reference it are out of date.
+</p>
+
+<h2>Liability for content / <em>Haftung für Inhalte</em></h2>
+
+<p>
+  The content of these pages was created with care, but I cannot guarantee that it is
+  accurate, complete or current. Under § 7 (1) DDG I am responsible for my own content
+  on these pages according to general law. Under §§ 8 to 10 DDG I am not obliged to
+  monitor transmitted or stored third-party information, or to investigate
+  circumstances that indicate unlawful activity. Obligations to remove or block the
+  use of information under general law remain unaffected; liability in that respect
+  begins only from the point at which a concrete infringement becomes known. Should I
+  become aware of any such infringement, I will remove the content promptly.
+</p>
+
+<h2>Liability for links / <em>Haftung für Links</em></h2>
+
+<p>
+  This site links to external websites over whose content I have no control. I cannot
+  accept liability for that third-party content — the respective provider or operator
+  of those pages is always responsible for them. Linked pages were checked for
+  possible legal violations at the time of linking, and no unlawful content was
+  apparent. Permanent monitoring of linked pages is not reasonable without concrete
+  evidence of an infringement. Should I become aware of any such infringement, I will
+  remove the link promptly.
+</p>
+
+<h2>Copyright and software licence / <em>Urheberrecht</em></h2>
+
+<p>
+  The Miri compiler and the language's source code are published separately on GitHub
+  under the
+  <a href="{{ site.github_url }}/blob/main/LICENSE" target="_blank" rel="noopener">Apache License 2.0</a>,
+  and that licence — not this notice — governs their use. Code samples shown on this
+  site may be used freely.
+</p>
+
+<p>
+  The remaining content of this website — text, documentation, design, logo and
+  images — is subject to German copyright law. Reproduction, adaptation, distribution
+  and any kind of exploitation beyond the limits of copyright require my written
+  consent. Downloads and copies of this page are permitted for private,
+  non-commercial use. Where content here was not created by me, third-party copyrights
+  are respected and such content is marked as third-party. If you notice a copyright
+  infringement, please tell me and I will remove the content promptly.
+</p>
+
+<hr>
+
+<p>
+  <small>
+    This notice is written in English because this site is published in English. The
+    German statutory terms are given alongside so the document remains findable and
+    verifiable for German readers and authorities. See also the
+    <a href="{{ '/datenschutz/' | relative_url }}">Privacy Policy / Datenschutzerklärung</a>.
+  </small>
+</p>

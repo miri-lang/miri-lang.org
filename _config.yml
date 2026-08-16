@@ -8,6 +8,34 @@ baseurl: ""
 github_url: "https://github.com/miri-lang/miri"
 author: "Viacheslav Shynkarenko"
 
+# ---------------------------------------------------------------------------
+# Legal pages — /impressum/ and /datenschutz/
+#
+# §5 DDG requires a *ladungsfähige Anschrift* — a real street address where legal
+# service can be effected. A Postfach does NOT satisfy this. A c/o address from an
+# Impressum service does. Same details as slavikdev.com, which is operated by the
+# same person; the two sites deliberately share one verified address.
+# ---------------------------------------------------------------------------
+legal:
+  legal_name: 'Viacheslav Shynkarenko'   # Klarname — the Impressum service requires the
+                                         # real name, not the byline or a pseudonym
+  known_as: 'Slavik Shynkarenko'         # name used publicly
+  # Impressum-service address (Anschrift.net / COCENTER), set up 2026-08-15. The service
+  # instructs that ONLY this address be published — do not add a home city or region.
+  care_of: 'c/o COCENTER'                # rendered on its own line, per their Muster
+  street: 'Koppoldstr. 1'
+  postal_code: '86551'
+  city: 'Aichach'
+  country: 'Germany'
+  email: 'slavik@slavikdev.com'          # rendered scrape-hardened via _includes/email.html
+  # Supervisory authority for data-protection complaints. Aichach is in Bavaria, and so
+  # is Munich, so BayLDA is competent whether jurisdiction follows the service address or
+  # the actual establishment.
+  supervisory_authority: 'Bayerisches Landesamt für Datenschutzaufsicht (BayLDA), Promenade 18, 91522 Ansbach'
+  supervisory_authority_url: 'https://www.lda.bayern.de/'
+  # Flip to true only if the Cloudflare Web Analytics snippet is actually enabled.
+  cloudflare_web_analytics: false
+
 markdown: kramdown
 kramdown:
   input: GFM
@@ -16,3 +44,4 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - tools

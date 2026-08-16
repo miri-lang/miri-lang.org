@@ -1,0 +1,234 @@
+---
+layout: legal
+nav_static: true
+permalink: /datenschutz/
+title: 'Privacy Policy / Datenschutzerklärung — Miri'
+h1: 'Privacy Policy <em>/ Datenschutzerklärung</em>'
+description: 'How miri-lang.org handles personal data under the GDPR: no cookies, no tracking scripts, no third-party requests.'
+noindex_when_incomplete: true
+---
+
+{% assign L = site.legal %}
+{% assign ready = false %}
+{% if L.street != '' and L.city != '' %}{% assign ready = true %}{% endif %}
+{% assign contact_email = L.email %}
+
+{% unless ready %}
+<blockquote>
+  <strong>Draft — not yet published.</strong> Waiting on the same address as the
+  <a href="{{ '/impressum/' | relative_url }}">Impressum</a>. Excluded from the
+  sitemap, marked <code>noindex</code>, not linked from the footer. Fill in
+  <code>legal.street</code>, <code>legal.postal_code</code> and <code>legal.city</code>
+  in <code>_config.yml</code> to publish.
+</blockquote>
+{% endunless %}
+
+<h2>The short version</h2>
+
+<p>
+  This site sets <strong>no cookies</strong>, runs <strong>no tracking scripts</strong>,
+  and makes <strong>no requests to third-party servers</strong>. Fonts, styles, scripts,
+  images and the GPU demos are all served from this domain. Nothing is stored on your
+  device and nothing is read from it, so there is no consent banner to click away —
+  there is nothing to consent to.
+</p>
+
+<p>
+  What remains is unavoidable: to send you this page, the server has to receive a
+  request from your device, and that request is logged. The rest of this document
+  explains that in the detail the GDPR requires.
+</p>
+
+<h2>Controller / <em>Verantwortlicher</em></h2>
+
+<p>
+  {{ L.legal_name }}<br>
+  {% if ready %}{% include address.html %}<br>
+  {% else %}<em>Address pending — see note above.</em><br>
+  {% endif %}
+  Email: {% include email.html address=contact_email %}
+</p>
+
+<p>
+  No data protection officer has been appointed. This is a private, non-commercial
+  website processing personal data on a very small scale, so the thresholds in Art. 37
+  GDPR and § 38 BDSG are not met.
+</p>
+
+<h2>Server log data</h2>
+
+<p>
+  This site is hosted on GitHub Pages and delivered through Cloudflare. When you open a
+  page, your browser necessarily transmits technical information which those providers
+  process to deliver the page and keep the service secure:
+</p>
+
+<ul>
+  <li>IP address</li>
+  <li>date and time of the request</li>
+  <li>the page or file requested</li>
+  <li>referring URL, if your browser sends one</li>
+  <li>browser type and version, and operating system</li>
+</ul>
+
+<p>
+  <strong>Purpose:</strong> delivering the website, ensuring stability and security, and
+  defending against attacks and abuse.<br>
+  <strong>Legal basis:</strong> Art. 6 (1) (f) GDPR. The legitimate interest is
+  operating a functioning, secure website.<br>
+  <strong>Retention:</strong> this data is held by the hosting and CDN providers under
+  their own retention policies and is not merged by me with any other data, nor used to
+  identify individual visitors.
+</p>
+
+<h2>Hosting and content delivery</h2>
+
+<p>
+  <strong>GitHub Pages</strong> — GitHub, Inc., 88 Colin P. Kelly Jr. Street, San
+  Francisco, CA 94107, USA. Hosts the static files of this site.
+</p>
+
+<p>
+  <strong>Cloudflare</strong> — Cloudflare, Inc., 101 Townsend St., San Francisco, CA
+  94107, USA. Provides DNS, TLS termination and caching in front of the hosting, and
+  processes requests at an edge location near you.
+</p>
+
+<p>
+  Both are based in the United States, so personal data is transferred to a third
+  country. Both are certified under the EU-U.S. Data Privacy Framework, for which the
+  European Commission adopted an adequacy decision on 10 July 2023, and both
+  additionally offer Standard Contractual Clauses under Art. 46 (2) (c) GDPR. Transfers
+  therefore take place on the basis of Art. 45 (1) GDPR.
+</p>
+
+{% if L.cloudflare_web_analytics %}
+<h2>Website analytics</h2>
+
+<p>
+  This site uses <strong>Cloudflare Web Analytics</strong> to count page views. It is
+  cookieless: it sets no cookies, writes nothing to local storage, and does not create
+  a cross-site identifier or a device fingerprint. It records the page requested, the
+  referring page, and coarse technical characteristics such as screen size, and
+  aggregates them into visit statistics.
+</p>
+
+<p>
+  <strong>Purpose:</strong> understanding which pages are read, so I can write more
+  useful documentation.<br>
+  <strong>Legal basis:</strong> Art. 6 (1) (f) GDPR — a legitimate interest in
+  understanding the reach of my own writing, weighed against the very limited nature of
+  the data, which does not identify you and is not used to build a profile.
+</p>
+{% endif %}
+
+<h2>Fonts</h2>
+
+<p>
+  All typefaces are <strong>served from this domain</strong>. They are not loaded from
+  Google Fonts or any other external service, so opening a page transmits nothing to
+  Google and creates no connection to a third-party font provider.
+</p>
+
+<h2>GPU demos and code examples</h2>
+
+<p>
+  The demos on the home page and under <a href="{{ '/gpu-demos/' | relative_url }}">/gpu-demos/</a>
+  are Miri programs compiled ahead of time and shipped as static files from this domain.
+  They render locally in your browser through WebGL/WebGPU, on your own graphics
+  hardware. They send nothing anywhere: no result, no telemetry, no timing data and no
+  information about your device leaves your browser, and nothing you type or click in a
+  demo is transmitted or stored.
+</p>
+
+<h2>Cookies and local storage</h2>
+
+<p>
+  None. This site sets no cookies of any kind — not for analytics, not for
+  preferences, not for sessions — and stores nothing in local storage or session
+  storage. Accordingly, no consent under § 25 TDDDG is required, and there is no
+  consent banner.
+</p>
+
+<h2>Links to GitHub</h2>
+
+<p>
+  Pages here link to the Miri repository on GitHub. Those are ordinary links: nothing is
+  requested from GitHub until you click one, and no GitHub script, button or widget is
+  embedded on this site. Once you follow such a link, GitHub's own privacy policy
+  applies to what happens there.
+</p>
+
+<h2>Contacting me by email</h2>
+
+<p>
+  If you email me, your address and the content of your message are processed solely to
+  handle your enquiry.
+</p>
+
+<p>
+  <strong>Legal basis:</strong> Art. 6 (1) (f) GDPR, and Art. 6 (1) (b) GDPR where your
+  message concerns a prospective or existing agreement.<br>
+  <strong>Retention:</strong> until your enquiry is settled, unless statutory retention
+  periods apply. You can ask me to delete the correspondence at any time.
+</p>
+
+<h2>Comments</h2>
+
+<p>
+  This site has no comment function and no comment service is loaded. If that changes,
+  this policy will be updated before the feature goes live.
+</p>
+
+<h2>Your rights</h2>
+
+<p>Under the GDPR you have the right to:</p>
+
+<ul>
+  <li><strong>Access</strong> — confirmation of whether I process data about you, and a copy of it (Art. 15)</li>
+  <li><strong>Rectification</strong> — correction of inaccurate data (Art. 16)</li>
+  <li><strong>Erasure</strong> — deletion of your data (Art. 17)</li>
+  <li><strong>Restriction</strong> — limitation of processing (Art. 18)</li>
+  <li><strong>Data portability</strong> — your data in a structured, machine-readable format (Art. 20)</li>
+  <li><strong>Objection</strong> — to processing based on legitimate interests, on grounds relating to your particular situation (Art. 21)</li>
+</ul>
+
+<p>
+  To exercise any of these, email {% include email.html address=contact_email %}.
+  Where processing is ever based on consent, you may withdraw it at any time with
+  effect for the future, without affecting the lawfulness of processing carried out
+  beforehand.
+</p>
+
+<h2>Right to lodge a complaint</h2>
+
+<p>
+  You have the right to complain to a data protection supervisory authority under
+  Art. 77 GDPR — in the EU member state of your residence, your place of work, or the
+  place of the alleged infringement.
+</p>
+
+{% if L.supervisory_authority != '' %}
+<p>
+  The authority responsible for me is
+  {% if L.supervisory_authority_url != '' %}<a href="{{ L.supervisory_authority_url }}" rel="nofollow">{{ L.supervisory_authority }}</a>{% else %}{{ L.supervisory_authority }}{% endif %}.
+</p>
+{% endif %}
+
+<h2>Changes to this policy</h2>
+
+<p>
+  This policy is updated when the site changes in a way that affects it — for example
+  if analytics or comments are ever enabled. The current version always applies.
+</p>
+
+<hr>
+
+<p>
+  <small>
+    Last updated: {{ site.time | date: '%-d %B %Y' }}.
+    Written in English because this site is published in English, with the German
+    statutory terms given alongside. See also the
+    <a href="{{ '/impressum/' | relative_url }}">Legal Notice / Impressum</a>.
+  </small>
+</p>
