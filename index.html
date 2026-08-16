@@ -34,10 +34,67 @@ title: "Miri: GPU-first programming language"
 </section>
 
 
+<!-- ================= WHAT IS MIRI (answer-first block) ================= -->
+{%- comment -%}
+  P0-3. Answer engines extract a definitional paragraph and re-emit it, so the
+  page needs one: plain prose, no bullets, readable with zero surrounding
+  context. The lead paragraph is deliberately the same text as
+  `entity.description` in _config.yml (which feeds the SoftwareApplication
+  JSON-LD) minus the <code> markup — if you edit one, edit the other, so that
+  what a crawler reads in the markup and what a human reads on the page agree.
+  The three sub-headings are phrased as questions because that is how these
+  things are asked of an LLM.
+{%- endcomment -%}
+<section class="section-pad answer" id="what-is-miri">
+  <div class="wrap">
+    <div class="kicker reveal">01 / OVERVIEW</div>
+    <h2 class="section-title reveal">What is Miri?</h2>
+    <p class="answer-lead reveal">Miri is a statically typed, natively compiled programming language with first-class
+      GPU programming built into the language rather than bolted on through a library. You mark data <code>gpu</code>
+      to make it device-resident and launch a kernel with <code>forall</code>; the compiler infers every upload, launch
+      and readback. Kernels compile to WGSL and run on Metal, Vulkan, DX12 and WebGPU; host code compiles to native
+      machine code through Cranelift. There are no shader files, no FFI layer and no CUDA toolchain.</p>
+
+    <div class="qa-grid">
+      <div class="qa reveal">
+        <h3>Who is Miri for?</h3>
+        <p>Three groups. Graphics and GPU-compute programmers who want kernels, host code and data layout in one
+          language and one type system. Compiler and language engineers, for whom the whole pipeline — lexer, parser,
+          type checker, MIR, Cranelift and WGSL backends, standard library — sits readable in a single repository. And
+          ML engineers writing custom kernels, who would rather express them as ordinary typed loops than as shader
+          source handed to a runtime as a string.</p>
+      </div>
+      <div class="qa reveal">
+        <h3>How is Miri different from writing WGSL or CUDA by hand?</h3>
+        <p>Hand-written GPU code lives in a second language and a second build: shader or kernel sources, a host
+          program that allocates buffers, copies data in, dispatches, and copies results back — with no type checking
+          across that boundary. In Miri the kernel is ordinary code in the same file, checked by the same type checker
+          against the same struct definitions. Residency is a property of a binding (<code>gpu let</code>), not a
+          manual allocation, and a transfer happens exactly where a value crosses residency, visible in the source as
+          an assignment. The WGSL is compiler output, not something you maintain.</p>
+      </div>
+      <div class="qa reveal">
+        <h3>What is Miri's status?</h3>
+        <p>Miri is pre-1.0 and not production ready. The current release is v0.5.0-beta.3, and there are no prebuilt
+          binaries yet — you install it by cloning the repository and building the compiler from source. Working
+          today: the CPU language (static typing with inference, value semantics with automatic reference counting,
+          classes, traits, generics, closures, pattern matching, <code>Option</code>/<code>Result</code>, modules, a
+          standard library and a test runner) and the GPU preview (<code>gpu</code> residency, 1–3D <code>forall</code>,
+          <code>gpu fn</code> kernels with shared memory and atomics, vector types, and
+          <code>miri build --target web-gpu</code>). Not there yet: async and parallelism are unimplemented, WGSL/WebGPU
+          is the only GPU backend (a native SPIR-V/Vulkan path is planned), and Cranelift is the only CPU backend (LLVM
+          is planned). Every <a href="{{ site.github_url }}/releases" target="_blank" rel="noopener">release</a> records
+          what changed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- ================= EXAMPLES ================= -->
 <section class="section-pad" id="examples">
   <div class="wrap">
-    <div class="kicker reveal">01 / THE LANGUAGE</div>
+    <div class="kicker reveal">02 / THE LANGUAGE</div>
     <h2 class="section-title reveal">See Miri in action</h2>
     <p class="section-sub reveal">Clean syntax, powerful features, zero boilerplate. Pick a topic — every sample is real, runnable Miri.</p>
 
@@ -282,7 +339,7 @@ fn main()
 <!-- ================= FEATURES ================= -->
 <section class="section-pad" id="features">
   <div class="wrap">
-    <div class="kicker reveal">02 / FEATURES</div>
+    <div class="kicker reveal">03 / FEATURES</div>
     <h2 class="section-title reveal">Built for the future</h2>
     <p class="section-sub reveal">A modern language designed from the ground up.</p>
 
@@ -355,7 +412,7 @@ fn main()
 <!-- ================= GPU DEMOS ================= -->
 <section class="section-pad demos-section" id="gpu-demos">
   <div class="wrap">
-    <div class="kicker reveal">03 / GPU PLAYGROUND</div>
+    <div class="kicker reveal">04 / GPU PLAYGROUND</div>
     <h2 class="section-title reveal">Running on your GPU. <span style="color: var(--yellow);">Right now.</span></h2>
     <p class="section-sub reveal">These aren't videos. Every tile below is computed live on your graphics card, and each one is a real, CI-tested Miri program that compiles to WebGPU. Click any demo to play with it and read its source.</p>
 

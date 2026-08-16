@@ -271,6 +271,61 @@ section { position: relative; }
   text-wrap: pretty;
 }
 
+/* ---------- "what is Miri" answer block (P0-3) ---------- */
+/* Prose, not cards: this section exists to be read straight through and quoted,
+   so it keeps a single measure (~68ch) rather than the grid used elsewhere. */
+.answer { padding-top: 96px; padding-bottom: 40px; }
+.answer-lead {
+  margin-top: 22px;
+  max-width: 68ch;
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.65;
+  color: var(--text);
+  text-wrap: pretty;
+}
+.answer-lead code,
+.qa p code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--yellow);
+}
+.qa-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 34px;
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+}
+.qa h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: var(--text);
+  text-wrap: pretty;
+}
+.qa h3::before {
+  content: "?";
+  display: inline-block;
+  margin-right: 9px;
+  font-family: var(--font-mono);
+  color: var(--blue);
+}
+.qa p {
+  margin-top: 12px;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.qa a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.qa a:hover { color: var(--yellow); }
+
+@media (max-width: 900px) {
+  .qa-grid { grid-template-columns: 1fr; gap: 30px; }
+}
+
 /* ---------- code window ---------- */
 .code-window {
   background: var(--code-bg);

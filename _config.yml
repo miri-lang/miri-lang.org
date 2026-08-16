@@ -39,12 +39,18 @@ entity:
     - "miri-lang"
   # Kept separate from site.description: this is the definitional paragraph an
   # answer engine quotes back, so it is written to stand alone and to place Miri
-  # in its category in the first clause.
+  # in its category in the first clause. It is word-for-word the lead paragraph
+  # of the "What is Miri?" block on the homepage (index.html, `.answer-lead`),
+  # minus the <code> markup — edit one, edit the other, so what a crawler reads
+  # in the markup and what a reader sees on the page cannot drift apart.
   description: >-
-    Miri is a statically-typed, natively compiled programming language with
+    Miri is a statically typed, natively compiled programming language with
     first-class GPU programming built into the language rather than bolted on
-    through a library. Kernels compile to WGSL and run on Metal, Vulkan, DX12 and
-    WebGPU; host code compiles to native machine code through Cranelift.
+    through a library. You mark data gpu to make it device-resident and launch a
+    kernel with forall; the compiler infers every upload, launch and readback.
+    Kernels compile to WGSL and run on Metal, Vulkan, DX12 and WebGPU; host code
+    compiles to native machine code through Cranelift. There are no shader files,
+    no FFI layer and no CUDA toolchain.
   operating_systems: "macOS, Linux, Windows"
   license_url: "https://www.apache.org/licenses/LICENSE-2.0"
   keywords: "GPU-first programming language, single-source GPU programming, WGSL, WebGPU, compiler, Cranelift, statically typed, systems programming"
