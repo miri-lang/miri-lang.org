@@ -18,11 +18,13 @@ author: "Viacheslav Shynkarenko"
 # Entity identity — the single source of truth for the JSON-LD emitted by
 # _includes/schema.html.
 #
-# "Miri" is a colliding one-word name: rust-lang/miri (the Rust MIR interpreter)
-# owns the developer SERP, and there is a city and a given name behind it too.
-# Everything here targets the *compound* entity ("Miri programming language",
-# "Miri lang", "miri-lang") and states the disambiguation explicitly, because an
-# AI answer engine will re-emit whatever definitional sentence it finds.
+# "Miri" is a short, widely-used name — a city, a given name, and unrelated
+# software all share it — so the bare word is not winnable and is not the target.
+# Everything here aims at the *compound* entity ("Miri programming language",
+# "Miri lang", "miri-lang") and defines Miri positively, by category. We do not
+# name other projects: that would frame Miri against them and put their names in
+# front of readers who never had the association. Disambiguation is carried by
+# the entity markup, the alternate names, `sameAs`, and later a Wikidata item.
 #
 # `positioning` must stay character-for-character identical to the GitHub repo
 # About line and the README H1 — entity consistency across the two properties
@@ -36,12 +38,13 @@ entity:
     - "Miri programming language"
     - "miri-lang"
   # Kept separate from site.description: this is the definitional paragraph an
-  # answer engine quotes, so it names the category and the collision in one go.
+  # answer engine quotes back, so it is written to stand alone and to place Miri
+  # in its category in the first clause.
   description: >-
     Miri is a statically-typed, natively compiled programming language with
     first-class GPU programming built into the language rather than bolted on
-    through a library. It is a standalone language and compiler, unrelated to
-    miri, the interpreter for Rust's MIR.
+    through a library. Kernels compile to WGSL and run on Metal, Vulkan, DX12 and
+    WebGPU; host code compiles to native machine code through Cranelift.
   operating_systems: "macOS, Linux, Windows"
   license_url: "https://www.apache.org/licenses/LICENSE-2.0"
   keywords: "GPU-first programming language, single-source GPU programming, WGSL, WebGPU, compiler, Cranelift, statically typed, systems programming"

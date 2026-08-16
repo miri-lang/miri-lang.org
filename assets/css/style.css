@@ -271,28 +271,6 @@ section { position: relative; }
   text-wrap: pretty;
 }
 
-/* ---------- name-collision disambiguation strip ----------
-   A quiet one-liner under the hero. Deliberately low-contrast: it is there for
-   crawlers and for the one visitor who arrived looking for the Rust MIR
-   interpreter, and it must not compete with the hero. */
-.disambig {
-  border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(7, 13, 29, 0.6), transparent);
-}
-.disambig p {
-  padding: 18px 0;
-  color: var(--dim);
-  font-size: 14.5px;
-  line-height: 1.6;
-  text-wrap: pretty;
-}
-.disambig b { color: var(--muted); font-weight: 600; }
-.disambig code {
-  font-family: var(--font-mono);
-  font-size: 0.9em;
-  color: var(--muted);
-}
-
 /* ---------- code window ---------- */
 .code-window {
   background: var(--code-bg);
@@ -1255,19 +1233,6 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   max-width: 680px;
   line-height: 1.6;
   text-wrap: pretty;
-}
-.docs-home-disambig {
-  margin-top: 14px;
-  max-width: 680px;
-  color: var(--dim);
-  font-size: 14.5px;
-  line-height: 1.6;
-  text-wrap: pretty;
-}
-.docs-home-disambig code {
-  font-family: var(--font-mono);
-  font-size: 0.9em;
-  color: var(--muted);
 }
 
 /* learning-path cards */
