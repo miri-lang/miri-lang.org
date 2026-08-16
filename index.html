@@ -23,6 +23,19 @@ description: "Miri is a modern, GPU-first, statically-typed, compiled programmin
   <div class="hero-scroll">SCROLL ▾</div>
 </section>
 
+{%- comment -%}
+  Name-collision disambiguation (P0-1). "Miri" is also rust-lang/miri, the Rust MIR
+  interpreter — same audience, far more authority. This sentence exists so that
+  search engines and AI answer engines have something explicit to quote instead of
+  conflating the two; it must stay rendered HTML, not a comment.
+{%- endcomment -%}
+<section class="disambig">
+  <div class="wrap">
+    <p><b>Miri</b> is a standalone programming language and compiler. It is unrelated to <code>miri</code>, the Rust
+      MIR interpreter shipped as <code>rust-lang/miri</code>.</p>
+  </div>
+</section>
+
 <!-- ================= EXAMPLES ================= -->
 <section class="section-pad" id="examples">
   <div class="wrap">

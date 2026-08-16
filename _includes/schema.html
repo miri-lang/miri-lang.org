@@ -1,0 +1,99 @@
+{%- comment -%}
+  Sitewide schema.org JSON-LD (P0-1 — entity disambiguation).
+
+  One `@graph` with stable `@id`s so every page reinforces the *same* entity
+  instead of declaring a new one per URL:
+
+    #miri     — the language itself (SoftwareApplication)
+    #source   — the compiler repository (SoftwareSourceCode)
+    #website  — miri-lang.org
+    #author   — the person
+
+  Everything quoted here comes from `entity:` in _config.yml; nothing is
+  hard-coded, so the site, the JSON-LD and the GitHub repo can be kept in sync
+  from one place.
+
+  All string interpolation goes through `| jsonify` — it emits the surrounding
+  quotes and escapes anything inside them, which is what keeps an apostrophe in
+  the description ("Rust's MIR") from breaking the document.
+{%- endcomment -%}
+{%- assign entity_id  = site.url | append: '/#miri'    -%}
+{%- assign source_id  = site.url | append: '/#source'  -%}
+{%- assign website_id = site.url | append: '/#website' -%}
+{%- assign author_id  = site.url | append: '/#author'  -%}
+{%- assign entity_description = site.entity.description | strip -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": {{ author_id | jsonify }},
+      "name": {{ site.author | jsonify }},
+      "url": {{ site.url | jsonify }}
+    },
+    {
+      "@type": "WebSite",
+      "@id": {{ website_id | jsonify }},
+      "url": {{ site.url | append: '/' | jsonify }},
+      "name": {{ site.title | jsonify }},
+      "alternateName": [{% for alt in site.entity.alternate_names %}{{ alt | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %}],
+      "description": {{ site.description | strip | jsonify }},
+      "inLanguage": "en",
+      "publisher": { "@id": {{ author_id | jsonify }} },
+      "about": { "@id": {{ entity_id | jsonify }} }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": {{ entity_id | jsonify }},
+      "name": {{ site.entity.name | jsonify }},
+      "alternateName": [{% for alt in site.entity.alternate_names %}{{ alt | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %}],
+      "description": {{ entity_description | jsonify }},
+      "disambiguatingDescription": "Miri is a standalone programming language and compiler. It is unrelated to miri, the interpreter for Rust's MIR (rust-lang/miri).",
+      "applicationCategory": "DeveloperApplication",
+      "applicationSubCategory": "Programming Language",
+      "operatingSystem": {{ site.entity.operating_systems | jsonify }},
+      "url": {{ site.url | append: '/' | jsonify }},
+      {%- comment -%}
+        `codeRepository` and `programmingLanguage` are NOT defined on
+        SoftwareApplication — schema.org puts both on SoftwareSourceCode, and the
+        validator warns if they appear here. They live on the #source node below,
+        which this node links to via hasPart.
+      {%- endcomment %}
+      "downloadUrl": {{ site.github_url | jsonify }},
+      "softwareHelp": {
+        "@type": "WebPage",
+        "name": "Miri documentation",
+        "url": {{ site.url | append: '/docs/' | jsonify }}
+      },
+      "license": {{ site.entity.license_url | jsonify }},
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "keywords": {{ site.entity.keywords | jsonify }},
+      "author": { "@id": {{ author_id | jsonify }} },
+      "maintainer": { "@id": {{ author_id | jsonify }} },
+      "hasPart": { "@id": {{ source_id | jsonify }} },
+      "sameAs": [{% for url in site.entity.same_as %}{{ url | jsonify }}{% unless forloop.last %}, {% endunless %}{% endfor %}]
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "@id": {{ source_id | jsonify }},
+      "name": {{ site.entity.positioning | jsonify }},
+      "description": {{ entity_description | jsonify }},
+      "codeRepository": {{ site.github_url | jsonify }},
+      "programmingLanguage": [
+        { "@type": "ComputerLanguage", "name": "Rust" },
+        { "@type": "ComputerLanguage", "name": "Miri" }
+      ],
+      "runtimePlatform": "Cranelift (native), WGSL / WebGPU (GPU)",
+      "license": {{ site.entity.license_url | jsonify }},
+      "author": { "@id": {{ author_id | jsonify }} },
+      "isPartOf": { "@id": {{ entity_id | jsonify }} }
+    }
+  ]
+}
+</script>

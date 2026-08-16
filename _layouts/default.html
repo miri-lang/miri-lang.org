@@ -42,6 +42,13 @@
     makes no third-party requests.
   {%- endcomment -%}
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+  {%- comment -%}
+    schema.org entity graph — see _includes/schema.html. Emitted on every page so
+    that every URL points at the same `@id`s. Layouts may append further blocks
+    (docs.html adds a BreadcrumbList).
+  {%- endcomment -%}
+  {% include schema.html %}
 </head>
 
 <body>

@@ -2,6 +2,41 @@
 layout: default
 ---
 
+{%- comment -%}
+  BreadcrumbList (P0-1), driven by the same `breadcrumb` front matter that renders
+  the visible trail below — one source, so the markup can never disagree with the
+  page. JSON-LD in <body> is valid and is read by Google exactly like a <head>
+  block; keeping it here means the docs layout owns it without a head hook.
+{%- endcomment -%}
+{%- if page.breadcrumb %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Miri",
+      "item": {{ site.url | append: '/' | jsonify }}
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Documentation",
+      "item": {{ site.url | append: '/docs/' | jsonify }}
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": {{ page.breadcrumb_title | default: page.breadcrumb | jsonify }},
+      "item": {{ page.url | absolute_url | jsonify }}
+    }
+  ]
+}
+</script>
+{%- endif %}
+
 <div class="docs-shell">
   <aside class="docs-side">
     <nav aria-label="Docs sections">

@@ -9,6 +9,48 @@ github_url: "https://github.com/miri-lang/miri"
 author: "Viacheslav Shynkarenko"
 
 # ---------------------------------------------------------------------------
+# Entity identity — the single source of truth for the JSON-LD emitted by
+# _includes/schema.html.
+#
+# "Miri" is a colliding one-word name: rust-lang/miri (the Rust MIR interpreter)
+# owns the developer SERP, and there is a city and a given name behind it too.
+# Everything here targets the *compound* entity ("Miri programming language",
+# "Miri lang", "miri-lang") and states the disambiguation explicitly, because an
+# AI answer engine will re-emit whatever definitional sentence it finds.
+#
+# `positioning` must stay character-for-character identical to the GitHub repo
+# About line and the README H1 — entity consistency across the two properties
+# Google actually trusts.
+# ---------------------------------------------------------------------------
+entity:
+  positioning: "Miri — a GPU-first programming language"
+  name: "Miri"
+  alternate_names:
+    - "Miri Lang"
+    - "Miri programming language"
+    - "miri-lang"
+  # Kept separate from site.description: this is the definitional paragraph an
+  # answer engine quotes, so it names the category and the collision in one go.
+  description: >-
+    Miri is a statically-typed, natively compiled programming language with
+    first-class GPU programming built into the language rather than bolted on
+    through a library. It is a standalone language and compiler, unrelated to
+    miri, the interpreter for Rust's MIR.
+  operating_systems: "macOS, Linux, Windows"
+  license_url: "https://www.apache.org/licenses/LICENSE-2.0"
+  keywords: "GPU-first programming language, single-source GPU programming, WGSL, WebGPU, compiler, Cranelift, statically typed, systems programming"
+  # sameAs — the properties Google can use to fuse them into one entity. Only
+  # URLs that actually resolve belong here; a 404 in sameAs is a negative signal,
+  # so the not-yet-created ones stay commented until they exist (see P3-3).
+  same_as:
+    - "https://github.com/miri-lang"
+    - "https://github.com/miri-lang/miri"
+  # - "https://www.wikidata.org/wiki/Q000000"  # P3-3 — create the Wikidata item
+  # - "https://x.com/..."                      # P3-3 — once the account exists
+  # - "https://discord.gg/..."                 # P3-3 — once the server exists
+  # - "https://pldb.io/concepts/miri.html"     # P3-3 — once the PLDB entry is live
+
+# ---------------------------------------------------------------------------
 # Legal pages — /impressum/ and /datenschutz/
 #
 # §5 DDG requires a *ladungsfähige Anschrift* — a real street address where legal
@@ -45,3 +87,4 @@ exclude:
   - Gemfile.lock
   - README.md
   - tools
+  - notes

@@ -12,6 +12,14 @@ description: "Learn Miri: a 5-minute quickstart, the full language guide, and th
     <p class="docs-home-sub reveal">Start with a five-minute quickstart, take the full tour of the language, then
       move to first-class GPU programming — all in one language, no shader files, no FFI.</p>
 
+    {%- comment -%}
+      Same disambiguation sentence as the homepage (P0-1) — /docs/ is the page an
+      AI answer engine is most likely to read when asked "what is Miri", and it is
+      the page most likely to be confused with the Rust MIR interpreter's docs.
+    {%- endcomment -%}
+    <p class="docs-home-disambig reveal">Miri is a standalone programming language and compiler. It is unrelated to
+      <code>miri</code>, the Rust MIR interpreter shipped as <code>rust-lang/miri</code>.</p>
+
     <!-- Learning paths -->
     <div class="path-grid">
       <a class="path-card reveal" href="{{ '/docs/getting-started/#installation' | relative_url }}">
