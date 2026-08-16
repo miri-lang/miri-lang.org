@@ -273,8 +273,9 @@ section { position: relative; }
 
 /* ---------- "what is Miri" answer block (P0-3) ---------- */
 /* Prose, not cards: this section exists to be read straight through and quoted,
-   so it keeps a single measure (~68ch) rather than the grid used elsewhere. */
-.answer { padding-top: 96px; padding-bottom: 40px; }
+   so it keeps a single measure (~68ch) rather than the grid used elsewhere.
+   One paragraph and a link row — the long-form Q&A lives on /faq/. */
+.answer { padding-bottom: 40px; }
 .answer-lead {
   margin-top: 22px;
   max-width: 68ch;
@@ -284,46 +285,145 @@ section { position: relative; }
   text-wrap: pretty;
 }
 .answer-lead code,
-.qa p code {
+.faq-a code {
   font-family: var(--font-mono);
   font-size: 0.9em;
   color: var(--yellow);
 }
-.qa-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 34px;
-  margin-top: 56px;
-  padding-top: 40px;
+.answer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin-top: 34px;
+  padding-top: 30px;
   border-top: 1px solid var(--line);
 }
-.qa h3 {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-  color: var(--text);
-  text-wrap: pretty;
+.answer-links a {
+  padding: 9px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
 }
-.qa h3::before {
+.answer-links a::before {
   content: "?";
-  display: inline-block;
-  margin-right: 9px;
+  margin-right: 8px;
   font-family: var(--font-mono);
   color: var(--blue);
 }
-.qa p {
-  margin-top: 12px;
-  font-size: 14.5px;
-  line-height: 1.7;
+.answer-links a:hover {
+  color: var(--text);
+  border-color: var(--blue);
+  background: var(--panel);
+}
+.answer-links-all { color: var(--blue-bright) !important; }
+.answer-links-all::before { content: none !important; }
+
+/* ---------- FAQ page (P3-2) ---------- */
+/* One column at a reading measure, with the questions set far enough apart that
+   the page scans as a list of answers rather than as a slab of prose. */
+.faq-page { padding: 150px 0 110px; }
+.faq-title {
+  margin-top: 16px;
+  font-size: clamp(38px, 5.5vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+}
+.faq-sub {
+  margin-top: 18px;
+  max-width: 64ch;
+  font-size: 17px;
+  line-height: 1.65;
   color: var(--muted);
   text-wrap: pretty;
 }
-.qa a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
-.qa a:hover { color: var(--yellow); }
+.faq-sub a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.faq-index {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 34px;
+  margin-top: 52px;
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.faq-index a {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--muted);
+  transition: color 0.18s;
+}
+.faq-index a::before {
+  content: "→";
+  margin-right: 10px;
+  font-family: var(--font-mono);
+  color: var(--dim);
+}
+.faq-index a:hover { color: var(--yellow); }
+.faq-index a:hover::before { color: var(--yellow); }
+
+.faq-list { margin-top: 20px; }
+.faq-item {
+  max-width: 74ch;
+  padding: 52px 0;
+  border-bottom: 1px solid var(--line);
+  /* The anchored question must clear the fixed nav when jumped to. */
+  scroll-margin-top: 100px;
+}
+.faq-item:last-child { border-bottom: 0; }
+.faq-q {
+  position: relative;
+  font-size: clamp(21px, 2.4vw, 26px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text);
+  text-wrap: pretty;
+}
+.faq-anchor {
+  position: absolute;
+  left: -28px;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--blue);
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.faq-item:hover .faq-anchor,
+.faq-anchor:focus-visible { opacity: 1; }
+.faq-a p {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.faq-a a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.faq-a a:hover { color: var(--yellow); }
+
+.faq-cta {
+  margin-top: 64px;
+  padding-top: 44px;
+  border-top: 1px solid var(--line);
+}
+.faq-cta p {
+  max-width: 60ch;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.faq-cta a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.faq-cta .btn-row { margin-top: 26px; }
+.faq-cta .btn { text-decoration: none; }
 
 @media (max-width: 900px) {
-  .qa-grid { grid-template-columns: 1fr; gap: 30px; }
+  .faq-page { padding: 120px 0 80px; }
+  .faq-index { grid-template-columns: 1fr; }
+  .faq-item { padding: 40px 0; }
+  /* No gutter to hang the "#" in on narrow screens. */
+  .faq-anchor { display: none; }
 }
 
 /* ---------- code window ---------- */
@@ -1381,6 +1481,18 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   transition: color 0.15s, padding-left 0.15s;
 }
 .topic-col a:hover { color: var(--yellow); padding-left: 5px; }
+.docs-faq-line {
+  margin-top: 46px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  max-width: 70ch;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.docs-faq-line a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.docs-faq-line a:hover { color: var(--yellow); }
 
 @media (max-width: 760px) {
   .docs-home { padding: 110px 0 80px; }

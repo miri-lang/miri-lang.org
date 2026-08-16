@@ -1,0 +1,138 @@
+# ---------------------------------------------------------------------------
+# FAQ content (P3-2) — the single source for /faq/.
+#
+# faq.html renders these twice: once as readable HTML, once as `FAQPage`
+# JSON-LD. Nothing is written twice by hand, so the markup a crawler reads and
+# the text a human reads cannot drift apart.
+#
+# Rules for editing:
+#   * `q` is phrased the way the question is actually asked of a search engine
+#     or an LLM — a full question, not a topic label.
+#   * `a` is 40-100 words and self-contained: it must answer correctly when
+#     quoted with none of the surrounding page. No "as mentioned above", no
+#     pronoun whose referent is another entry.
+#   * `a` is HTML (`<p>`, `<code>`, `<a>`). The JSON-LD strips the tags, so
+#     never let markup carry meaning that the plain text loses.
+#   * Every claim must be true of the shipped compiler and match the docs. If a
+#     feature is planned, the answer says planned.
+#   * No entry names another project in order to contrast Miri with it — see the
+#     disambiguation policy in notes/seo-aeo-audit.md. `standalone-language`
+#     below does the disambiguation positively, by category.
+#
+# The first entry carries `source: entity_description` instead of its own text:
+# its answer is `entity.description` from _config.yml, the same string the
+# SoftwareApplication JSON-LD emits and the homepage prints. One definition of
+# Miri exists on this site, and this is it.
+# ---------------------------------------------------------------------------
+
+- id: what-is-miri
+  q: "What is Miri?"
+  source: entity_description
+
+- id: who-is-miri-for
+  q: "Who is Miri for?"
+  a: >-
+    <p>Three groups. Graphics and GPU-compute programmers who want kernels, host code and data layout in one
+    language and one type system. Compiler and language engineers, for whom the whole pipeline — lexer, parser,
+    type checker, MIR, Cranelift and WGSL backends, standard library — sits readable in a single repository. And
+    ML engineers writing custom kernels, who would rather express them as ordinary typed loops than as shader
+    source handed to a runtime as a string.</p>
+
+- id: production-ready
+  q: "Is Miri production ready?"
+  a: >-
+    <p>No. Miri is in beta and not production ready. The current release is v0.5.0-beta.3, and there are no
+    prebuilt binaries yet — you install it by cloning the repository and building the compiler from source.
+    Async and parallelism are unimplemented, WGSL/WebGPU is the only GPU backend, and Cranelift is the only CPU
+    backend. Use it to explore the language, write kernels and file issues; do not put it under a production
+    workload yet.</p>
+
+- id: what-works-today
+  q: "What works in Miri today, and what does not?"
+  a: >-
+    <p>Working today: the CPU language — static typing with inference, value semantics with automatic reference
+    counting, classes, traits, generics, closures, pattern matching, <code>Option</code>/<code>Result</code>,
+    modules, a standard library and a test runner — plus the GPU preview: <code>gpu</code> residency, 1–3D
+    <code>forall</code>, <code>gpu fn</code> kernels with shared memory, atomics and warp operations, vector
+    types, and <code>miri build --target web-gpu</code>. Not there yet: async and parallelism, trait objects,
+    capture-by-reference closures, native SPIR-V/PTX/Metal backends and an LLVM CPU backend.</p>
+
+- id: different-from-wgsl-cuda
+  q: "How is Miri different from writing GPU kernels by hand?"
+  a: >-
+    <p>Hand-written GPU code lives in a second language and a second build: shader or kernel sources, plus a host
+    program that allocates buffers, copies data in, dispatches, and copies results back — with no type checking
+    across that boundary. In Miri the kernel is ordinary code in the same file, checked by the same type checker
+    against the same struct definitions. Residency is a property of a binding (<code>gpu let</code>), not a
+    manual allocation, and the emitted WGSL is compiler output, not something you maintain.</p>
+
+- id: write-a-kernel
+  q: "How do I write a GPU kernel in Miri?"
+  a: >-
+    <p>Mark the data <code>gpu</code> so it becomes device-resident, then launch a loop over it with
+    <code>forall</code>; the body of that loop is the kernel. A kernel you want to name, reuse or give shared
+    memory and atomics to becomes a <code>gpu fn</code>. You never write an upload, a dispatch or a readback —
+    the compiler infers each one from where values cross residency. The
+    <a href="/docs/gpu/">GPU programming guide</a> starts from a first kernel and assumes no GPU background.</p>
+
+- id: gpu-support
+  q: "What GPUs and platforms does Miri support?"
+  a: >-
+    <p>The compiler runs on macOS, Linux and Windows. Kernels compile to WGSL and execute through WebGPU, so any
+    adapter reachable that way runs them — Metal on Apple hardware, Vulkan on Linux and Windows, DirectX 12 on
+    Windows. No vendor SDK and no CUDA toolchain is involved, so the same kernel runs on AMD, Intel, Apple and
+    NVIDIA hardware. Native SPIR-V, PTX and Metal backends are planned but not shipped.</p>
+
+- id: browser
+  q: "Can Miri programs run in a browser?"
+  a: >-
+    <p>Yes. <code>miri build --target web-gpu</code> compiles a Miri program into a self-contained WebGPU bundle
+    that runs in any WebGPU-capable browser, with <code>gpu frame</code> inputs wired to real pointer events. It
+    is the same source that runs natively — no separate web port. Every demo in the
+    <a href="/gpu-demos/">GPU Playground</a> is such a bundle, compiled from the program shown next to it.
+    64-bit scalar types are unavailable in browser bundles.</p>
+
+- id: garbage-collector
+  q: "Does Miri have a garbage collector?"
+  a: >-
+    <p>No. Memory is managed at compile time and you never write a memory annotation. Primitives and small
+    all-primitive structs are copied bitwise. Strings and collections are reference counted, with the IncRef and
+    DecRef calls emitted by the compiler and elided entirely on linear flows; assignment shares the buffer and
+    the first mutation forks it, so you get value semantics at reference-passing cost. Types with a
+    <code>drop</code> method are single-owner, and use-after-move is a compile error.</p>
+
+- id: machine-learning
+  q: "Can I use Miri for machine learning?"
+  a: >-
+    <p>For writing custom kernels, yes — that is one of the three audiences the language targets, and
+    <code>Tensor&lt;T, Rank&gt;</code> in the standard library is the intended carrier for ML data reaching the
+    device. It is not a training framework: there is no automatic differentiation, no optimizer library and no
+    pretrained-model ecosystem, and cooperative-matrix (tensor core) instructions are unavailable until the
+    native backends land. <code>f16</code> is the smallest float today.</p>
+
+- id: standalone-language
+  q: "Is Miri a standalone language or a library for another language?"
+  a: >-
+    <p>Miri is a standalone programming language with its own syntax, type system, standard library and compiler.
+    It is not a library, a framework, an embedded DSL or a preprocessor hosted inside another language, and GPU
+    kernels are not strings handed to a runtime — they are ordinary Miri code, type checked against the same
+    definitions as the host code, that the compiler lowers to WGSL. Host code is lowered to native machine code
+    through Cranelift.</p>
+
+- id: install
+  q: "How do I install Miri?"
+  a: >-
+    <p>There are no prebuilt binaries yet, so you build the compiler from source. Install the Rust toolchain,
+    which the build needs, then <code>git clone https://github.com/miri-lang/miri.git</code>, <code>cd miri</code>
+    and <code>make build</code> — the binary lands at <code>target/debug/miri</code>, or
+    <code>target/release/miri</code> after <code>make release</code>. Add it to your PATH and run
+    <code>miri run hello.mi</code>. The <a href="/docs/getting-started/#installation">install guide</a> has the
+    full sequence.</p>
+
+- id: open-source
+  q: "Is Miri open source?"
+  a: >-
+    <p>Yes. Miri is released under the Apache License 2.0 and developed in the open at
+    <a href="https://github.com/miri-lang/miri">github.com/miri-lang/miri</a> — compiler, standard library, test
+    suite and the examples behind every demo on this site are all in that one repository. The issue tracker is
+    where the roadmap is discussed, and each release records what changed.</p>

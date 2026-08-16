@@ -1,0 +1,113 @@
+---
+layout: default
+permalink: /faq/
+nav_static: true
+og_image: /assets/og/faq.png
+og_image_alt: "Frequently asked questions about the Miri programming language"
+title: "FAQ — Miri Programming Language"
+description: "Answers about Miri: what it is, who it is for, whether it is production ready, which GPUs and platforms it runs on, how kernels are written, how memory is managed, and how to install it."
+---
+
+{%- comment -%}
+  P3-2. Every question and answer comes from _data/faq.yml — rendered here as
+  readable HTML and, at the bottom of this file, as `FAQPage` JSON-LD. One
+  source, two renderings, so the two cannot drift.
+
+  This page exists because the homepage should not carry the long-form answers:
+  a definitional paragraph belongs on the homepage (it is what an answer engine
+  quotes for "what is Miri"), but eight more paragraphs of Q&A ahead of the code
+  and the demos is a wall of text for a human who came to look at the language.
+  A question is also a better match for a page that is *about* that question:
+  "is Miri production ready" wants a URL of its own, and each entry here has an
+  anchor so it can be linked and cited directly.
+{%- endcomment -%}
+
+<section class="faq-page">
+  <div class="wrap">
+    <div class="kicker reveal">FAQ</div>
+    <h1 class="faq-title reveal">Questions about Miri</h1>
+    <p class="faq-sub reveal">Short, honest answers — including the ones about what does not work yet. Every
+      answer matches the <a href="{{ '/docs/' | relative_url }}">documentation</a>; where the two would disagree,
+      the documentation is right and this page is a bug.</p>
+
+    {%- comment -%}
+      The index is a plain list of links to the anchors below. It gives a reader
+      arriving from a search result a way to reach their own question in one
+      click, and it gives every answer an internal link.
+    {%- endcomment -%}
+    <nav class="faq-index reveal" aria-label="Questions">
+      {%- for item in site.data.faq %}
+      <a href="#{{ item.id }}">{{ item.q }}</a>
+      {%- endfor %}
+    </nav>
+
+    <div class="faq-list">
+      {%- for item in site.data.faq %}
+      <article class="faq-item reveal" id="{{ item.id }}">
+        <h2 class="faq-q"><a class="faq-anchor" href="#{{ item.id }}" aria-label="Link to this question">#</a>{{ item.q }}</h2>
+        <div class="faq-a">
+          {%- if item.source == 'entity_description' -%}
+          <p>{{ site.entity.description | strip }}</p>
+          {%- else -%}
+          {{ item.a }}
+          {%- endif -%}
+        </div>
+      </article>
+      {%- endfor %}
+    </div>
+
+    <div class="faq-cta reveal">
+      <p>Question not answered here? The <a href="{{ '/docs/' | relative_url }}">guides</a> go deeper, and
+        anything still missing is worth an
+        <a href="{{ site.github_url }}/issues" target="_blank" rel="noopener">issue on GitHub</a>.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="{{ '/docs/getting-started/' | relative_url }}">Get Started</a>
+        <a class="btn btn-ghost" href="{{ '/gpu-demos/' | relative_url }}">▶ Live GPU Demos</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- comment -%}
+  `FAQPage` JSON-LD. Google restricts FAQ *rich results* to government and health
+  sites, so this buys no stars in the SERP — it is here because answer engines
+  read the graph, and this states unambiguously which text answers which
+  question. Only this page carries it: the same Q&A marked up on two URLs is the
+  duplicate-markup problem the guidelines warn about.
+
+  `strip_html` is deliberate. The answers use <code> and <a>, and `acceptedAnswer.text`
+  permits only a small tag whitelist that does not include <code> — so the graph
+  gets the plain-text rendering, and no answer is allowed to carry meaning in
+  markup that the plain text would lose.
+{%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": {{ page.url | absolute_url | append: '#faq' | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "name": "Frequently asked questions about the Miri programming language",
+  "inLanguage": "en",
+  "isPartOf": { "@id": {{ site.url | append: '/#website' | jsonify }} },
+  "about": { "@id": {{ site.url | append: '/#miri' | jsonify }} },
+  "mainEntity": [
+    {%- for item in site.data.faq %}
+    {%- if item.source == 'entity_description' -%}
+    {%- assign answer_text = site.entity.description -%}
+    {%- else -%}
+    {%- assign answer_text = item.a -%}
+    {%- endif -%}
+    {
+      "@type": "Question",
+      "@id": {{ page.url | absolute_url | append: '#' | append: item.id | jsonify }},
+      "name": {{ item.q | jsonify }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ answer_text | strip_html | normalize_whitespace | strip | jsonify }},
+        "url": {{ page.url | absolute_url | append: '#' | append: item.id | jsonify }}
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>

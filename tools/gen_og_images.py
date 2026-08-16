@@ -132,6 +132,12 @@ CARDS = {
         sub="Install the compiler, tour the language, then write GPU kernels: residency, "
             "<code>forall</code>, shared memory, atomics and interactive frame loops.",
     ),
+    "faq.png": card(
+        kicker="faq",
+        headline='Questions about <span class="hl">Miri</span>',
+        sub="What it is, who it is for, whether it is production ready, which GPUs it "
+            "runs on, and what does not work yet — answered short and straight.",
+    ),
     # The demos card sits on the real poster frames — those are the compiler's
     # own WGSL output, which is the whole claim the page makes.
     "gpu-demos.jpg": card(
