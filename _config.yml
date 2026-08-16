@@ -1,7 +1,13 @@
 title: Miri Programming Language
+# The positioning sentence, and the only copy of it: the homepage inherits this as
+# its meta description, and _includes/schema.html emits it as the WebSite
+# description. 154 chars — inside the 140–160 window Google renders without
+# truncating. It names a concrete capability instead of asserting adjectives, and
+# deliberately drops the old "in the age of Generative AI" line, which has no
+# search volume and dates the copy.
 description: >-
-  Miri is a modern, GPU-first, statically-typed, compiled programming language
-  designed for balancing high performance and safety in the age of Generative AI.
+  Miri is a statically typed, natively compiled programming language with
+  first-class GPU programming: mark data gpu, launch with forall, no CUDA toolchain.
 url: "https://miri-lang.org"
 baseurl: ""
 
@@ -23,7 +29,7 @@ author: "Viacheslav Shynkarenko"
 # Google actually trusts.
 # ---------------------------------------------------------------------------
 entity:
-  positioning: "Miri — a GPU-first programming language"
+  positioning: "Miri: GPU-first programming language"
   name: "Miri"
   alternate_names:
     - "Miri Lang"

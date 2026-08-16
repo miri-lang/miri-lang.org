@@ -3,8 +3,10 @@ layout: default
 hero: true
 examples: true
 demos: true
-title: "Miri Programming Language — GPU-First. Safe. Fast."
-description: "Miri is a modern, GPU-first, statically-typed, compiled programming language designed for balancing high performance and safety in the age of Generative AI."
+title: "Miri: GPU-first programming language"
+# No `description:` here on purpose — the homepage inherits site.description from
+# _config.yml, which is the single source of truth for the positioning sentence
+# (it also feeds the JSON-LD). Overriding it here is how the two drift apart.
 ---
 
 <!-- ================= HERO ================= -->
@@ -12,8 +14,16 @@ description: "Miri is a modern, GPU-first, statically-typed, compiled programmin
   <canvas id="hero-gl"></canvas>
   <div class="wrap hero-content">
     <div class="hero-kicker">$ statically-typed · compiled · <b>gpu-first</b></div>
-    <h1><span class="hl">GPU-First.</span><br>Safe. Fast.</h1>
-    <p class="hero-sub">A statically-typed language compiled to native code with clean syntax, null safety, invisible ownership with copy-on-write collections, and first-class GPU programming.</p>
+    {%- comment -%}
+      The H1 leads with the entity and the category noun (P0-2). The old
+      "GPU-First. Safe. Fast." was three adjectives and no subject: the strongest
+      on-page signal on the strongest page named neither the product nor what it
+      is. The two-line, highlighted-fragment treatment survives the rewrite.
+    {%- endcomment -%}
+    <h1>Miri: <span class="hl">GPU-first</span><br>programming language</h1>
+    <p class="hero-sub">Write GPU kernels in the same statically typed language as your CPU code. Mark a binding
+      <code>gpu</code>, launch it with <code>forall</code>, and the compiler infers every upload, launch and readback.
+      Host code compiles to native machine code; kernels compile to WGSL for Metal, Vulkan, DX12 and WebGPU.</p>
     <div class="btn-row">
       <a class="btn btn-primary" href="{{ '/docs/getting-started/' | relative_url }}">Get Started</a>
       <a class="btn btn-ghost" href="{{ '/gpu-demos/' | relative_url }}">▶ Live GPU Demos</a>

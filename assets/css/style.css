@@ -561,7 +561,11 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
 }
 .hero-kicker b { color: var(--yellow); font-weight: 600; }
 .hero h1 {
-  font-size: clamp(54px, 9vw, 124px);
+  /* Sized so "programming language" stays on one line inside the 1144px content
+     column: at ~0.54em per character that word pair needs the cap to stay at or
+     below ~106px. The old 124px/9vw was tuned for "Safe. Fast." and broke the
+     new headline onto three lines. */
+  font-size: clamp(44px, 8vw, 100px);
   font-weight: 700;
   line-height: 0.98;
   letter-spacing: -0.045em;
