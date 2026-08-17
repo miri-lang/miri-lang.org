@@ -36,4 +36,14 @@ layout: null
     <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
   </url>
   {% endfor %}
+  {%- comment -%}
+    P1-2's per-demo pages (_gpu_demos/) are collection documents too, so they
+    don't show up in site.html_pages either.
+  {%- endcomment -%}
+  {% for doc in site.gpu_demos %}
+  <url>
+    <loc>{{ doc.url | absolute_url }}</loc>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </url>
+  {% endfor %}
 </urlset>

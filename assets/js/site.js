@@ -204,6 +204,27 @@
     }, 700);
   }
 
+  // ---------- copy-to-clipboard on demo code windows ----------
+  // Delegated on document, not per code-window: the GPU playground gallery
+  // (P1-2) split into one page per demo, so this needs to work on all nine
+  // pages (the eight demo pages plus any future code window) without each
+  // one shipping its own inline copy of this handler.
+  function initCodeCopy() {
+    document.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-copy]");
+      if (!btn) return;
+      var win = btn.closest(".code-window");
+      var pre = win && win.querySelector("pre.lang-miri");
+      if (!pre) return;
+      navigator.clipboard.writeText(pre.textContent.replace(/^\n+/, "").replace(/\s+$/, "") + "\n").then(function () {
+        var old = btn.textContent;
+        btn.textContent = "copied ✓";
+        btn.classList.add("ok");
+        setTimeout(function () { btn.textContent = old; btn.classList.remove("ok"); }, 1400);
+      });
+    });
+  }
+
   window.MiriSite = { highlightMiri: highlightMiri, highlightAll: highlightAll };
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -214,5 +235,6 @@
     initReveal();
     initDocsSpy();
     initAnimProbe();
+    initCodeCopy();
   });
 })();

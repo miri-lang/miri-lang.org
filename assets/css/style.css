@@ -859,7 +859,7 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   gap: 6px;
   padding: 16px 18px 18px;
 }
-.demo-meta h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.01em; }
+.demo-meta h2, .demo-meta h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -0.01em; }
 .demo-meta .demo-tech {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -931,6 +931,9 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
 
 .pg-demo { padding: 70px 0; }
 .pg-demo + .pg-demo { border-top: 1px solid var(--line); }
+/* P1-2 — a per-demo page's own section: no shared-page border, and the
+   breadcrumb above it already carries the top spacing. */
+.pg-demo.standalone { padding: 40px 0 70px; }
 .pg-demo-head {
   display: flex;
   align-items: baseline;
@@ -943,7 +946,7 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   font-size: 14px;
   color: var(--yellow);
 }
-.pg-demo h2 {
+.pg-demo h1, .pg-demo h2 {
   font-size: clamp(26px, 3.2vw, 36px);
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -954,6 +957,15 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   margin-bottom: 30px;
   text-wrap: pretty;
 }
+.pg-demo-links {
+  color: var(--dim);
+  max-width: 700px;
+  margin: -14px 0 30px;
+  font-size: 14px;
+  text-wrap: pretty;
+}
+.pg-demo-links a { color: var(--blue-bright); }
+.pg-demo-links a:hover { color: var(--blue); }
 .pg-layout {
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
@@ -1021,6 +1033,11 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   padding-left: 14px;
   text-wrap: pretty;
 }
+
+/* ---------- P1-2: gallery of preview cards, each linking to its own /gpu-demos/<slug>/ ---------- */
+.pg-gallery { padding: 10px 0 70px; }
+.pg-gallery .demos-grid { margin-top: 0; }
+.pg-gallery-foot { color: var(--dim); font-size: 14px; margin-top: 26px; text-wrap: pretty; }
 
 /* ---------- concept legend ---------- */
 .pg-legend { padding: 8px 0 40px; }
@@ -1155,6 +1172,9 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   margin: 8px 0;
   overflow-x: auto;
 }
+/* P1-2 — prev/next between demo pages */
+.pg-demo-pager { padding: 0 0 70px; }
+.pg-demo-pager .docs-pager { margin-top: 0; }
 .pg-howto-foot {
   color: var(--muted);
   max-width: 820px;

@@ -12,6 +12,7 @@ Emits:
     assets/og/default.png     every page that does not override it
     assets/og/docs.png        /docs/ and the guides
     assets/og/gpu-demos.jpg   /gpu-demos/, built over the real demo posters
+    assets/og/gpu-demos-<slug>.jpg   each /gpu-demos/<slug>/ page (P1-2), one poster each
 
 A page opts into a card other than the default with `og_image:` in its front
 matter (see _layouts/default.html).
@@ -162,6 +163,76 @@ CARDS = {
   </div><div class="veil"></div>""",
     ),
 }
+
+
+def demo_card(poster, kicker, headline, sub, foot_right):
+    """A per-demo card (P1-2): the demo's own poster, full-bleed, under the
+    same veil gradient as the gallery collage — so a share of one demo shows
+    that demo, not a generic card or the eight-tile collage."""
+    return card(
+        kicker=kicker,
+        headline=headline,
+        sub=sub,
+        foot_right=foot_right,
+        extra="""
+  .poster1 { position: absolute; inset: 0; }
+  .poster1 img { width: 100%; height: 100%; object-fit: cover; opacity: 0.95; }
+  .veil { position: absolute; inset: 0;
+          background: linear-gradient(100deg, #04070f 30%, rgba(4, 7, 15, 0.94) 55%,
+                                      rgba(4, 7, 15, 0.4) 100%); }
+""",
+        body_top=f'<div class="poster1"><img src="/assets/demos/posters/{poster}"></div><div class="veil"></div>',
+    )
+
+
+DEMO_CARDS = [
+    dict(slug="mandelbrot", poster="mandelbrot.jpg",
+         headline='Mandelbrot, <span class="hl">live</span> on the GPU',
+         sub="Two passes a frame, ping-ponged view state, zooming forever — a real Miri "
+             "program compiled straight to WebGPU.",
+         foot_right="fragment kernel · ∞ zoom"),
+    dict(slug="life", poster="game_of_life.jpg",
+         headline="Conway's Life, <span class=\"hl\">on the device</span>",
+         sub="One gpu frame chains five passes over ping-ponged grids — a real Miri "
+             "program compiled straight to WebGPU.",
+         foot_right="cellular automaton"),
+    dict(slug="particles", poster="particles.jpg",
+         headline='147,456 particles, <span class="hl">one kernel</span>',
+         sub="Curl noise and GPU atomics, all state resident on the device — a real "
+             "Miri program compiled straight to WebGPU.",
+         foot_right="147,456 particles"),
+    dict(slug="fluid", poster="fluid.jpg",
+         headline='A fluid solver, <span class="hl">30 passes</span> a frame',
+         sub="Stam-style stable fluids with an 18-pass Jacobi pressure solve — a real "
+             "Miri program compiled straight to WebGPU.",
+         foot_right="30 passes · pressure solve"),
+    dict(slug="raymarch", poster="raymarch.jpg",
+         headline='Ray marching, <span class="hl">no triangles</span>',
+         sub="Signed-distance fields, soft shadows, a Fresnel rim — a real Miri "
+             "program compiled straight to WebGPU.",
+         foot_right="SDF · soft shadows"),
+    dict(slug="neural", poster="neural.jpg",
+         headline='A neural net, <span class="hl">training live</span>',
+         sub="205 parameters, one training step per frame, no CPU round trip — a real "
+             "Miri program compiled straight to WebGPU.",
+         foot_right="2-12-12-1 MLP · live gradient descent"),
+    dict(slug="blackhole", poster="blackhole.jpg",
+         headline='A black hole, <span class="hl">lensing light</span>',
+         sub="Every pixel integrates a photon's geodesic through curved spacetime — a "
+             "real Miri program compiled straight to WebGPU.",
+         foot_right="photon geodesics · accretion disk"),
+    dict(slug="wormhole", poster="wormhole.jpg",
+         headline='A wormhole, <span class="hl">two universes</span>',
+         sub="Rays traced through a Morris–Thorne throat into a second sky — a real "
+             "Miri program compiled straight to WebGPU.",
+         foot_right="Morris–Thorne throat"),
+]
+
+for d in DEMO_CARDS:
+    CARDS[f"gpu-demos-{d['slug']}.jpg"] = demo_card(
+        poster=d["poster"], kicker="gpu demo", headline=d["headline"],
+        sub=d["sub"], foot_right=d["foot_right"],
+    )
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):

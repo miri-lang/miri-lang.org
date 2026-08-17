@@ -18,6 +18,21 @@ const RUNTIME = new URL("./miri-gpu.js", import.meta.url);
 // file. They agree everywhere except Game of Life.
 const COMPILED_NAME = { life: "game_of_life" };
 
+// Descriptive alt text for each demo's still-frame poster — shown in the
+// no-WebGPU fallback, and the same posters Google Images can index. Empty alt
+// text here would ship on every page that mounts a demo (the playground, its
+// per-demo URLs, and the homepage's preview grid), so it lives once, by slug.
+const POSTER_ALT = {
+    mandelbrot: "A zoomed Mandelbrot fractal rendered on the GPU by a Miri program.",
+    life: "Conway's Game of Life running on the GPU by a Miri program.",
+    particles: "A curl-noise particle flow field of 147,456 particles rendered on the GPU by a Miri program.",
+    fluid: "A stable-fluids simulation with a Jacobi pressure solve, rendered on the GPU by a Miri program.",
+    raymarch: "A ray-marched signed-distance-field scene rendered on the GPU by a Miri program.",
+    neural: "A small neural network training live on the GPU, painted as a decision field by a Miri program.",
+    blackhole: "Gravitationally lensed black hole with accretion disk, rendered on the GPU by a Miri program.",
+    wormhole: "A traversable Morris–Thorne wormhole rendered on the GPU by a Miri program.",
+};
+
 // How many demos keep their device buffers while the reader scrolls. Scrolling
 // the page eventually brings every demo into view, and their combined storage
 // runs to a few hundred megabytes, so residency is capped rather than merely
@@ -68,7 +83,7 @@ function showFallback(frame, slug) {
         box.textContent = "";
         const poster = new Image();
         poster.src = new URL(`${compiledName(slug)}.jpg`, POSTERS).href;
-        poster.alt = "";
+        poster.alt = POSTER_ALT[slug] || "";
         // A demo with no still frame yet must not leave a broken-image icon
         // sitting over the notice.
         poster.addEventListener("error", () => poster.remove());

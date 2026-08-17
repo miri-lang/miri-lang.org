@@ -30,8 +30,8 @@ group: Interactive &amp; Web
   (<code>gpu var</code>) — reading and writing the same buffer in one pass is a compile-time data-race error.
   Multi-pass frame graphs nest ordered <code>gpu forall</code> passes inside a <code>gpu frame</code> block.
   Each pass's read/write sets must be disjoint, and the compiler checks that per pass. The
-  <a href="{{ '/gpu-demos/#life' | relative_url }}">Game of Life</a> (5 passes) and
-  <a href="{{ '/gpu-demos/#fluid' | relative_url }}">Fluid</a> (pressure-solve chain) demos are the reference
+  <a href="{{ '/gpu-demos/life/' | relative_url }}">Game of Life</a> (5 passes) and
+  <a href="{{ '/gpu-demos/fluid/' | relative_url }}">Fluid</a> (pressure-solve chain) demos are the reference
   frame graphs.</p>
 
 <p>Inside a frame body, the <code>frame</code> context carries per-frame inputs, delivered as one uniform

@@ -109,6 +109,13 @@ collections:
     output: true
   docs_gpu:
     output: true
+  # P1-2 — one page per GPU demo, split out of gpu-demos.html so each demo has
+  # its own title/description/OG image/source instead of sharing the gallery's.
+  # gpu-demos.html itself became the slim gallery (grid of preview cards); each
+  # file under _gpu_demos/ is hand-authored, not regenerated — there is no
+  # broader source document these are extracted from anymore.
+  gpu_demos:
+    output: true
 
 exclude:
   - Gemfile

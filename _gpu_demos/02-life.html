@@ -1,0 +1,162 @@
+---
+layout: gpu-demo
+permalink: /gpu-demos/life/
+playground: true
+demo_slug: life
+num: "02"
+order: 2
+mi_filename: game_of_life.mi
+tech: "cellular automaton"
+og_image: /assets/og/gpu-demos-life.jpg
+og_image_alt: "Conway's Game of Life running on the GPU by a Miri program."
+title: "Conway's Game of Life on WebGPU — written in Miri"
+short_title: "Game of Life"
+description: "Conway's Game of Life stepped entirely in device memory: one gpu frame chains five passes over ping-ponged grids — a real Miri program compiled to WebGPU."
+docs_links:
+  - id: gpu-frame
+    text: "the gpu frame that chains five passes in order"
+  - id: forall
+    text: "one forall thread per cell, reading its eight neighbours"
+---
+
+<div class="pg-demo-head"><span class="pg-num">02</span><h1>Game of Life</h1></div>
+    <p class="pg-demo-desc">Conway's B3/S23 automaton, stepped entirely in device memory. One <code>gpu frame</code> chains five passes — the CA step, a decaying trail, a pointer splat, a double-click reseed, and the RGBA paint — over ping-ponged grids. Every cell reads its eight neighbours and decides its fate in parallel.</p>
+    <div class="pg-demo-body">
+      <div class="pg-stage" data-demo="life">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="demo-fallback">This demo needs WebGPU</div>
+        </div>
+        <div class="pg-controls">
+          <span class="hint">click / drag to seed cells · double-click to reset</span>
+          <span class="pg-fps">fps <b>—</b></span>
+        </div>
+      </div>
+      <div class="code-window">
+        <div class="code-titlebar">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-filename">game_of_life.mi</span>
+          <button class="code-copy" type="button" data-copy>copy program</button>
+          <span class="code-tag">MIRI → WEBGPU</span>
+        </div>
+        <div class="code-body">
+<pre class="lang-miri">
+use system.collections.array
+use system.math
+use system.io
+
+// Simulation grid, display canvas, and the cell-to-pixel magnification.
+const GW = 320
+const GH = 180
+const CELLS = GW * GH
+const CW = 1280
+const CH = 720
+const PIXELS = CW * CH
+const SCALE = 4
+
+// Grid state (ping-ponged across frames) and the RGBA paint output.
+gpu var state_a = Array&lt;f32, CELLS&gt;()
+gpu var state_b = Array&lt;f32, CELLS&gt;()
+gpu var paint = Array&lt;f32, PIXELS * 4&gt;()
+
+// Seed the grid: a deterministic ~18%-density soup. The mix is deliberately
+// non-linear — a squaring step between two linear ones — because a purely
+// linear hash of the cell index lays the soup out on a visible lattice, and a
+// Life field that starts patterned keeps looking patterned for many
+// generations. Every intermediate stays well inside 32-bit range.
+fn soup(idx int) f32
+    let a = (idx * 1597 + 51749) % 40000
+    let b = (a * a + a * 37 + 11) % 40009
+    let c = (b * 613 + 7919) % 40009
+    return 1.0 if c % 100 &lt; 18 else 0.0
+
+forall idx in 0..CELLS
+    state_a[idx] = soup(idx)
+
+// Clear the canvas to the background color. This 2-D pass over the exact
+// display extent also tells the web-gpu backend the canvas is 1280×720 (a flat
+// paint buffer otherwise reads as square).
+forall px, py in 0..CW, 0..CH
+    let base = (py * CW + px) * 4
+    paint[base] = 0.012
+    paint[base + 1] = 0.02
+    paint[base + 2] = 0.046
+    paint[base + 3] = 1.0
+
+gpu frame
+    // Pass 1: one Life step. A cell is alive iff its state is exactly 1.0; a
+    // dead cell keeps its trail decaying at 0.94×/frame, which never re-reads as
+    // alive (0.94 &lt; the 0.99 alive threshold).
+    forall idx in 0..CELLS
+        let y = idx / GW
+        let x = idx % GW
+        let ym = (y - 1 + GH) % GH
+        let yp = (y + 1) % GH
+        let xm = (x - 1 + GW) % GW
+        let xp = (x + 1) % GW
+        let n1 = 1 if state_a[ym * GW + xm] &gt; 0.99 else 0
+        let n2 = 1 if state_a[ym * GW + x] &gt; 0.99 else 0
+        let n3 = 1 if state_a[ym * GW + xp] &gt; 0.99 else 0
+        let n4 = 1 if state_a[y * GW + xm] &gt; 0.99 else 0
+        let n5 = 1 if state_a[y * GW + xp] &gt; 0.99 else 0
+        let n6 = 1 if state_a[yp * GW + xm] &gt; 0.99 else 0
+        let n7 = 1 if state_a[yp * GW + x] &gt; 0.99 else 0
+        let n8 = 1 if state_a[yp * GW + xp] &gt; 0.99 else 0
+        let n = n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8
+        let self_alive = state_a[idx] &gt; 0.99
+        var alive_next = false
+        if self_alive
+            alive_next = n == 2 or n == 3
+        else
+            alive_next = n == 3
+        state_b[idx] = 1.0 if alive_next else state_a[idx] * 0.94
+
+    // Pass 2: paint held pointer as live cells (click / drag to seed).
+    forall idx in 0..CELLS
+        if frame.mouse_down
+            let x = idx % GW
+            let y = idx / GW
+            let mx = frame.mouse_x * (GW as f32)
+            let my = frame.mouse_y * (GH as f32)
+            let dx = (x as f32) - mx
+            let dy = (y as f32) - my
+            if dx * dx + dy * dy &lt; 36.0
+                state_b[idx] = 1.0
+
+    // Pass 3: reseed a fresh soup on double-click.
+    forall idx in 0..CELLS
+        if frame.double_clicked
+            state_b[idx] = soup(idx)
+
+    // Pass 4: shade each display pixel. Cells are drawn as rounded dots (an
+    // `inner` factor that falls off toward the cell edge) over a dark-blue
+    // background; live cells glow yellow, fading trails glow blue.
+    forall pidx in 0..PIXELS
+        let ppx = pidx % CW
+        let ppy = pidx / CW
+        let cell = (ppy / SCALE) * GW + (ppx / SCALE)
+
+        // Sub-cell position → distance to the cell edge → dot falloff.
+        let fx = (ppx % SCALE) as f32
+        let fy = (ppy % SCALE) as f32
+        var ex = (fx + 0.5) / (SCALE as f32) - 0.5
+        ex = ex if ex &gt;= 0.0 else 0.0 - ex
+        var ey = (fy + 0.5) / (SCALE as f32) - 0.5
+        ey = ey if ey &gt;= 0.0 else 0.0 - ey
+        let inner = 1.0 - smoothstep(0.32, 0.46, max(ex, ey)) as f32
+
+        let st = state_b[cell]
+        let alive = 1.0 if st &gt; 0.99 else 0.0
+        let trail = st * (1.0 - alive)
+        let blue_w = trail * trail * (0.25 + 0.75 * inner)
+        let yellow_w = alive * (0.22 + 0.95 * inner)
+
+        let base = pidx * 4
+        paint[base] = 0.012 + 0.18 * blue_w + 1.0 * yellow_w
+        paint[base + 1] = 0.02 + 0.32 * blue_w + 0.84 * yellow_w
+        paint[base + 2] = 0.046 + 0.8 * blue_w + 0.24 * yellow_w
+        paint[base + 3] = 1.0
+</pre>
+        </div>
+      </div>
+    </div>

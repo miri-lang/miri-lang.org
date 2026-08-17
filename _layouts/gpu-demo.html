@@ -1,0 +1,158 @@
+---
+layout: default
+---
+
+{%- comment -%}
+  P1-2. One page per GPU demo, extracted from what used to be a single shared
+  /gpu-demos/ page (each demo had no URL of its own — see gpu-demos.html for
+  the gallery this links back to). This layout adds page chrome (breadcrumb,
+  structured data, docs cross-links, run-it-yourself steps) around the demo
+  body a collection doc under _gpu_demos/ supplies.
+{%- endcomment -%}
+
+{%- assign demos = site.gpu_demos | sort: 'order' -%}
+{%- assign demo_count = demos | size -%}
+{%- assign idx = 0 -%}
+{%- for d in demos %}{%- if d.demo_slug == page.demo_slug -%}{%- assign idx = forloop.index0 -%}{%- endif -%}{%- endfor -%}
+{%- assign prev_demo = nil -%}
+{%- assign next_demo = nil -%}
+{%- assign idx_minus = idx | minus: 1 -%}
+{%- if idx > 0 -%}{%- assign prev_demo = demos[idx_minus] -%}{%- endif -%}
+{%- assign idx_plus = idx | plus: 1 -%}
+{%- if idx_plus < demo_count -%}{%- assign next_demo = demos[idx_plus] -%}{%- endif -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Miri", "item": {{ site.url | append: '/' | jsonify }} },
+        { "@type": "ListItem", "position": 2, "name": "GPU Playground", "item": {{ '/gpu-demos/' | absolute_url | jsonify }} },
+        { "@type": "ListItem", "position": 3, "name": {{ page.short_title | jsonify }}, "item": {{ page.url | absolute_url | jsonify }} }
+      ]
+    },
+    {
+      "@type": "TechArticle",
+      "headline": {{ page.title | jsonify }},
+      "description": {{ page.description | jsonify }},
+      "url": {{ page.url | absolute_url | jsonify }},
+      "image": {{ page.og_image | absolute_url | jsonify }},
+      "inLanguage": "en",
+      "author": { "@id": {{ site.url | append: '/#author' | jsonify }} },
+      "publisher": { "@id": {{ site.url | append: '/#author' | jsonify }} },
+      "isPartOf": { "@id": {{ site.url | append: '/#website' | jsonify }} },
+      "about": { "@id": {{ site.url | append: '/#miri' | jsonify }} },
+      "mainEntityOfPage": {{ page.url | absolute_url | jsonify }}
+    },
+    {
+      "@type": "SoftwareSourceCode",
+      "name": {{ page.title | jsonify }},
+      "description": {{ page.description | jsonify }},
+      "programmingLanguage": "Miri",
+      "runtimePlatform": "WebGPU",
+      "codeSampleType": "full solution",
+      "url": {{ page.url | absolute_url | jsonify }},
+      "author": { "@id": {{ site.url | append: '/#author' | jsonify }} },
+      "isPartOf": { "@id": {{ site.url | append: '/#miri' | jsonify }} }
+    }
+  ]
+}
+</script>
+
+<section class="pg-demo standalone">
+  <div class="wrap">
+    <div class="docs-breadcrumb">
+      <a href="{{ '/gpu-demos/' | relative_url }}">gpu playground</a> / <b>{{ page.short_title }}</b>
+    </div>
+
+    {{ content }}
+
+    {%- assign links = page.docs_links -%}
+    {%- if links and links.size > 0 %}
+    <p class="pg-demo-links">
+      Related docs:
+      {%- for l in links -%}
+        {%- assign topic = site.docs_gpu | where: "topic_id", l.id | first -%}
+        {%- if topic %} <a href="{{ topic.url | relative_url }}">{{ l.text }}</a>{% unless forloop.last %} and{% endunless %}{% endif -%}
+      {%- endfor -%}.
+    </p>
+    {%- endif %}
+  </div>
+</section>
+
+<section class="pg-howto" id="run">
+  <div class="wrap">
+    <div class="kicker">RUN IT YOURSELF</div>
+    <h2>From this page to your own GPU</h2>
+    <p class="pg-howto-sub">Four steps. You'll need a
+       <a href="https://caniuse.com/webgpu">WebGPU-capable browser</a> (Chrome or Edge 113+, or Safari 18+).</p>
+    <ol class="pg-steps">
+      <li>
+        <span class="pg-step-n">1</span>
+        <div class="pg-step-body">
+          <h3>Install Miri</h3>
+          <p>Build the compiler from source (full <a href="/docs/getting-started/#installation">install guide</a>):</p>
+          <pre class="pg-shell"><code>git clone https://github.com/miri-lang/miri.git
+cd miri &amp;&amp; cargo build --release</code></pre>
+          <p>The binary lands at <code>target/release/miri</code>.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pg-step-n">2</span>
+        <div class="pg-step-body">
+          <h3>Grab the program</h3>
+          <p>Hit <strong>copy program</strong> above and save it as <code>{{ page.mi_filename }}</code>.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pg-step-n">3</span>
+        <div class="pg-step-body">
+          <h3>Compile it to WebGPU</h3>
+          <pre class="pg-shell"><code>miri build {{ page.mi_filename }} --target web-gpu --out {{ page.demo_slug }}-web</code></pre>
+          <p>Out comes a self-contained <code>index.html</code> — the runtime and every compiled WGSL kernel are inlined.</p>
+        </div>
+      </li>
+      <li>
+        <span class="pg-step-n">4</span>
+        <div class="pg-step-body">
+          <h3>Open it</h3>
+          <p>Double-click <code>{{ page.demo_slug }}-web/index.html</code>. It runs straight from <code>file://</code> — same interaction as the preview above.</p>
+        </div>
+      </li>
+    </ol>
+    <p class="pg-howto-foot">No browser needed to try it: <code>miri run {{ page.mi_filename }}</code> runs the
+      same kernels on your local GPU through Metal, Vulkan or DX12. Same language, same code, three
+      backends and a browser — that's the point.</p>
+  </div>
+</section>
+
+<section class="pg-demo-pager">
+  <div class="wrap">
+    <div class="docs-pager">
+      {% if prev_demo %}
+      <a class="prev" href="{{ prev_demo.url | relative_url }}">
+        <span class="pager-label">← PREV DEMO</span>
+        <span class="pager-title">{{ prev_demo.short_title }}</span>
+      </a>
+      {% else %}
+      <a class="prev" href="{{ '/gpu-demos/' | relative_url }}">
+        <span class="pager-label">← BACK</span>
+        <span class="pager-title">GPU Playground</span>
+      </a>
+      {% endif %}
+      {% if next_demo %}
+      <a class="next" href="{{ next_demo.url | relative_url }}">
+        <span class="pager-label">NEXT DEMO →</span>
+        <span class="pager-title">{{ next_demo.short_title }}</span>
+      </a>
+      {% else %}
+      <a class="next" href="{{ '/gpu-demos/' | relative_url }}">
+        <span class="pager-label">ALL DEMOS →</span>
+        <span class="pager-title">GPU Playground</span>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>

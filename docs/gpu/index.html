@@ -382,7 +382,7 @@ fn main()
   (<code>use system.gpu.atomic</code>). Calling one on a plain buffer, or from host code, is rejected. Reading
   the result is the ordinary readback: <code>let host = hist</code> yields a plain host array.</p>
 
-<p>See the <a href="{{ '/gpu-demos/#particles' | relative_url }}">Particle Flow demo</a> for atomics driving a
+<p>See the <a href="{{ '/gpu-demos/particles/' | relative_url }}">Particle Flow demo</a> for atomics driving a
   real scatter workload.</p>
 
 <!-- Warp -->
@@ -415,9 +415,9 @@ fn main()
   vector components are rejected — WGSL has no portable 64-bit vectors. The type checker enforces dimensions and
   element types: <code>cross</code> is <code>Vec3</code>-only, integer <code>normalize</code> is an error.</p>
 
-<p>The <a href="{{ '/gpu-demos/#raymarch' | relative_url }}">Raymarch</a>,
-  <a href="{{ '/gpu-demos/#blackhole' | relative_url }}">Black Hole</a>, and
-  <a href="{{ '/gpu-demos/#wormhole' | relative_url }}">Wormhole</a> demos are built on <code>Vec3</code> math.</p>
+<p>The <a href="{{ '/gpu-demos/raymarch/' | relative_url }}">Raymarch</a>,
+  <a href="{{ '/gpu-demos/blackhole/' | relative_url }}">Black Hole</a>, and
+  <a href="{{ '/gpu-demos/wormhole/' | relative_url }}">Wormhole</a> demos are built on <code>Vec3</code> math.</p>
 
 <!-- Scalars -->
 <h2 id="scalars">Scalar widths &amp; <code>f16</code></h2>
@@ -469,8 +469,8 @@ println(f"{t.size()}")       // 6</code></pre>
   (<code>gpu var</code>) — reading and writing the same buffer in one pass is a compile-time data-race error.
   Multi-pass frame graphs nest ordered <code>gpu forall</code> passes inside a <code>gpu frame</code> block.
   Each pass's read/write sets must be disjoint, and the compiler checks that per pass. The
-  <a href="{{ '/gpu-demos/#life' | relative_url }}">Game of Life</a> (5 passes) and
-  <a href="{{ '/gpu-demos/#fluid' | relative_url }}">Fluid</a> (pressure-solve chain) demos are the reference
+  <a href="{{ '/gpu-demos/life/' | relative_url }}">Game of Life</a> (5 passes) and
+  <a href="{{ '/gpu-demos/fluid/' | relative_url }}">Fluid</a> (pressure-solve chain) demos are the reference
   frame graphs.</p>
 
 <p>Inside a frame body, the <code>frame</code> context carries per-frame inputs, delivered as one uniform

@@ -1,0 +1,191 @@
+---
+layout: gpu-demo
+permalink: /gpu-demos/mandelbrot/
+playground: true
+demo_slug: mandelbrot
+num: "01"
+order: 1
+mi_filename: mandelbrot.mi
+tech: "fragment kernel · ∞ zoom"
+og_image: /assets/og/gpu-demos-mandelbrot.jpg
+og_image_alt: "A zoomed Mandelbrot fractal rendered on the GPU by a Miri program."
+title: "WebGPU Mandelbrot fractal zoom — written in Miri"
+short_title: "Mandelbrot Zoom"
+description: "A Mandelbrot zoom running live on the GPU: two passes per frame, ping-ponged view state, no CUDA toolchain — a real Miri program compiled to WebGPU."
+docs_links:
+  - id: gpu-frame
+    text: "the gpu frame that drives it every tick"
+  - id: forall
+    text: "launching a forall kernel across all 921,600 pixels"
+---
+
+<div class="pg-demo-head"><span class="pg-num">01</span><h1>Mandelbrot Zoom</h1></div>
+    <p class="pg-demo-desc">The escape-time fractal, live. Each frame runs two GPU passes — one integrates the pan/zoom view from your pointer, the next iterates <code>z² + c</code> for all 921,600 pixels and writes a smooth-shaded RGBA surface. The view state ping-pongs between two device buffers, so no pass ever reads the buffer it is writing.</p>
+    <div class="pg-demo-body">
+      <div class="pg-stage" data-demo="mandelbrot">
+        <div class="demo-canvas-frame">
+          <span class="demo-badge">LIVE · GPU</span>
+          <div class="demo-fallback">This demo needs WebGPU</div>
+        </div>
+        <div class="pg-controls">
+          <span class="hint">drag to pan · scroll to zoom</span>
+          <span class="pg-fps">fps <b>—</b></span>
+        </div>
+      </div>
+      <div class="code-window">
+        <div class="code-titlebar">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-filename">mandelbrot.mi</span>
+          <button class="code-copy" type="button" data-copy>copy program</button>
+          <span class="code-tag">MIRI → WEBGPU</span>
+        </div>
+        <div class="code-body">
+<pre class="lang-miri">
+use system.collections.array
+use system.math
+use system.io
+
+// Canvas: 1280×720 pixels (16:9, matching the frame it is drawn in, so the set
+// is never stretched); RGBA paint output. The wider axis carries the extra span,
+// scaled by the aspect ratio, exactly as a widescreen viewport should.
+const CW = 1280
+const CH = 720
+const PIXELS = CW * CH
+const PAINT = PIXELS * 4
+
+// View state: [center_x, center_y, scale, _pad] — ping-ponged across frames.
+gpu var view_a = Array&lt;f32, 4&gt;()
+gpu var view_b = Array&lt;f32, 4&gt;()
+
+// Paint output (RGBA: 4 floats per pixel).
+gpu var paint = Array&lt;f32, PAINT&gt;()
+
+// Five-stop palette, evaluated per channel. Stops: navy, blue, cyan, yellow,
+// white — matching the reference shader's `palette(t)`.
+fn pal_r(t f32) f32
+    if t &lt; 0.35: return mix(0.016, 0.13, t / 0.35) as f32
+    if t &lt; 0.62: return mix(0.13, 0.35, (t - 0.35) / 0.27) as f32
+    if t &lt; 0.85: return mix(0.35, 1.0, (t - 0.62) / 0.23) as f32
+    return mix(1.0, 1.0, (t - 0.85) / 0.15) as f32
+
+fn pal_g(t f32) f32
+    if t &lt; 0.35: return mix(0.027, 0.27, t / 0.35) as f32
+    if t &lt; 0.62: return mix(0.27, 0.62, (t - 0.35) / 0.27) as f32
+    if t &lt; 0.85: return mix(0.62, 0.85, (t - 0.62) / 0.23) as f32
+    return mix(0.85, 0.97, (t - 0.85) / 0.15) as f32
+
+fn pal_b(t f32) f32
+    if t &lt; 0.35: return mix(0.059, 0.75, t / 0.35) as f32
+    if t &lt; 0.62: return mix(0.75, 1.0, (t - 0.35) / 0.27) as f32
+    if t &lt; 0.85: return mix(1.0, 0.24, (t - 0.62) / 0.23) as f32
+    return mix(0.24, 0.85, (t - 0.85) / 0.15) as f32
+
+// Seed: initial viewport centred near the main cardioid at full extent.
+forall i in 0..4
+    view_a[0] = -0.6
+    view_a[1] = 0.0
+    view_a[2] = 3.0
+    view_a[3] = 0.0
+
+// Clear the canvas to the interior colour. This 2-D pass over the exact display
+// extent also tells the web-gpu backend the canvas is 1280×720; a flat paint
+// buffer carries no shape of its own and would otherwise read as square.
+forall px, py in 0..CW, 0..CH
+    let base = (py * CW + px) * 4
+    paint[base] = 0.008
+    paint[base + 1] = 0.012
+    paint[base + 2] = 0.03
+    paint[base + 3] = 1.0
+
+gpu frame
+    // Pass 1: integrate pan/zoom from pointer state into the next view.
+    forall i in 0..4
+        let cx = view_a[0]
+        let cy = view_a[1]
+        let scale = view_a[2]
+
+        // Drag pans the view under the pointer. The delta arrives in canvas
+        // CSS pixels, so dividing by the canvas height turns it into a fraction
+        // of the vertical span and multiplying by `scale` into plane units.
+        // `drag_dy` points up while the pointer's travel points down, hence both
+        // axes subtract.
+        let pan_x = cx - frame.drag_dx * scale / (CH as f32)
+        let pan_y = cy - frame.drag_dy * scale / (CH as f32)
+
+        // Wheel zooms about the pointer rather than the centre, so the point
+        // under the cursor stays under it. The step is clamped per frame so one
+        // flick of a high-resolution wheel cannot leap the whole depth range.
+        let zoom = clamp(exp(frame.wheel * 0.0014) as f32, 0.6, 1.6) as f32
+        let next_scale = clamp(scale * zoom, 0.00002, 4.0) as f32
+        // Fraction of the distance from the centre to the cursor that the view
+        // must travel to keep the cursor's point fixed. Zero when the scale did
+        // not change, so a frame with no wheel input never shifts the view.
+        let anchor = 1.0 - next_scale / scale
+        let ux = (frame.mouse_x - 0.5) * (CW as f32) / (CH as f32)
+        let uy = 0.5 - frame.mouse_y
+
+        view_b[0] = pan_x + ux * scale * anchor
+        view_b[1] = pan_y + uy * scale * anchor
+        view_b[2] = next_scale
+        view_b[3] = 0.0
+
+    // Pass 2: render the fractal with smooth escape coloring.
+    forall idx in 0..PIXELS
+        let px = idx % CW
+        let py = idx / CW
+        let cx = view_b[0]
+        let cy = view_b[1]
+        let scale = view_b[2]
+
+        // Map pixel to the complex plane around the current center. `scale` is
+        // the vertical span, so the horizontal one is widened by the aspect
+        // ratio. Row 0 is the top of the canvas, so the imaginary axis is
+        // flipped to point up the screen, as the plane is conventionally drawn.
+        let uu = ((px as f32) / (CW as f32) - 0.5) * (CW as f32) / (CH as f32)
+        let vv = 0.5 - (py as f32) / (CH as f32)
+        let cre = cx + uu * scale
+        let cim = cy + vv * scale
+
+        // Dynamic iteration budget grows as the view zooms in (smaller scale).
+        let budget = 120.0 + 60.0 * (log2(3.0 / scale + 1.0) as f32) * 2.2
+        let max_iter = min(budget, 880.0) as int
+
+        var zx = 0.0
+        var zy = 0.0
+        var n = -1
+        var dotz = 0.0
+        var i = 0
+        while i &lt; max_iter
+            let nx = zx * zx - zy * zy + cre
+            let ny = 2.0 * zx * zy + cim
+            zx = nx
+            zy = ny
+            dotz = zx * zx + zy * zy
+            if dotz &gt; 64.0
+                n = i
+                i = max_iter
+            else
+                i = i + 1
+
+        let base = idx * 4
+        if n &lt; 0
+            // Interior of the set: near-black.
+            paint[base] = 0.008
+            paint[base + 1] = 0.012
+            paint[base + 2] = 0.03
+            paint[base + 3] = 1.0
+        else
+            // Smooth iteration count removes the escape-time banding.
+            let sn = (n as f32) - (log2(log2(dotz) as f32) as f32) + 4.0
+            let pt0 = sn * 0.022 + 0.62
+            let t = pt0 - (floor(pt0) as f32)
+            // Darken low escape counts so filaments glow out of the void.
+            let bright = 0.55 + 0.45 * (smoothstep(0.0, 12.0, sn) as f32)
+            paint[base] = pal_r(t) * bright
+            paint[base + 1] = pal_g(t) * bright
+            paint[base + 2] = pal_b(t) * bright
+            paint[base + 3] = 1.0
+</pre>
+        </div>
+      </div>
+    </div>
