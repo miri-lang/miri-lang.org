@@ -23,7 +23,7 @@ title: "Miri: GPU-first programming language"
     <h1>Miri: <span class="hl">GPU-first</span><br>programming language</h1>
     <p class="hero-sub">Write GPU kernels in the same statically typed language as your CPU code. Mark a binding
       <code>gpu</code>, launch it with <code>forall</code>, and the compiler infers every upload, launch and readback.
-      Host code compiles to native machine code; kernels compile to WGSL for Metal, Vulkan, DX12 and WebGPU.</p>
+      Host code compiles to native machine code. Kernels compile to WGSL for Metal, Vulkan, DX12 and WebGPU.</p>
     <div class="btn-row">
       <a class="btn btn-primary" href="{{ '/docs/getting-started/' | relative_url }}">Get Started</a>
       <a class="btn btn-ghost" href="{{ '/gpu-demos/' | relative_url }}">▶ Live GPU Demos</a>
@@ -479,8 +479,8 @@ fn main()
     <h2 class="section-title reveal">What is Miri?</h2>
     <p class="answer-lead reveal">Miri is a statically typed, natively compiled programming language with first-class
       GPU programming built into the language rather than bolted on through a library. You mark data <code>gpu</code>
-      to make it device-resident and launch a kernel with <code>forall</code>; the compiler infers every upload, launch
-      and readback. Kernels compile to WGSL and run on Metal, Vulkan, DX12 and WebGPU; host code compiles to native
+      to make it device-resident and launch a kernel with <code>forall</code>. The compiler infers every upload, launch
+      and readback. Kernels compile to WGSL and run on Metal, Vulkan, DX12 and WebGPU. Host code compiles to native
       machine code through Cranelift. There are no shader files, no FFI layer and no CUDA toolchain.</p>
 
     <div class="answer-links reveal">

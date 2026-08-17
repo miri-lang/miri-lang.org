@@ -265,7 +265,7 @@ make build</code></pre>
 {% capture ex_src %}{% include examples/docs-math.mi %}{% endcapture %}
 <pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
 
-<p>The current surface covers <code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, plus the constants <code>PI</code>, <code>E</code>, and <code>INF</code>. CPU calls lower to <code>libm</code> / Cranelift intrinsics; GPU calls lower to the target backend's built-in equivalents (<code>tanh</code>, <code>atan2</code>, <code>step</code>, <code>clamp</code>, and <code>mix</code> are available in kernels too) — same source, same answer.</p>
+<p>The current surface covers <code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, plus the constants <code>PI</code>, <code>E</code>, and <code>INF</code>. CPU calls lower to <code>libm</code> / Cranelift intrinsics. GPU calls lower to the target backend's built-in equivalents (<code>tanh</code>, <code>atan2</code>, <code>step</code>, <code>clamp</code>, and <code>mix</code> are available in kernels too) — same source, same answer.</p>
 
 <!-- Collection Traits -->
 <h2 id="collection-traits">Collection Traits</h2>
@@ -338,7 +338,7 @@ make build</code></pre>
 <p>The result is the best of both worlds: <strong>value semantics</strong> (mutating <code>b</code> never changes <code>a</code>), but with the <strong>performance of reference passing</strong> when no one mutates. CoW applies to <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>, and <code>String</code>.</p>
 
 <h3>Zero-cost RC elision</h3>
-<p>The Perceus optimization pass analyses every function for linear flows. When the compiler proves that a value is created, used once, and discarded — never aliased, never escaping — it removes all of the IncRef/DecRef calls for that value entirely. You write idiomatic code; the compiler emits straight-line allocation and drop with no atomic counter traffic on the hot path.</p>
+<p>The Perceus optimization pass analyses every function for linear flows. When the compiler proves that a value is created, used once, and discarded — never aliased, never escaping — it removes all of the IncRef/DecRef calls for that value entirely. You write idiomatic code. The compiler emits straight-line allocation and drop with no atomic counter traffic on the hot path.</p>
 
 <h3>Automatic recursive cleanup</h3>
 <p>When a managed value's RC reaches zero, Miri runs a compiler-generated destructor that, in order: (1) calls the user's <code>fn drop(self)</code> if one is defined, (2) recursively decrements every managed field, (3) frees the allocation. You never write <code>.close()</code>, <code>.dispose()</code>, or <code>try/finally</code>.</p>
@@ -380,7 +380,7 @@ make build</code></pre>
 <p>The rule has two layers:</p>
 <ul>
   <li><strong>Resource types</strong> are tracked strictly at every scope. Pass one to a function, store it in a field, or alias it via assignment, and the original binding is marked consumed. Any subsequent use is a compile error with diagnostic <code>E0110</code>.</li>
-  <li><strong>Managed types</strong> are tracked at the top level (script-style code) and inside function bodies via <em>escape analysis</em>. The compiler examines each callee's body to see whether your argument is just being read (a borrow) or genuinely escapes — returned, stored on the heap, or captured into a returned closure. Reads do not consume; escapes do. The diagnostic explains the multi-hop chain that led to the move.</li>
+  <li><strong>Managed types</strong> are tracked at the top level (script-style code) and inside function bodies via <em>escape analysis</em>. The compiler examines each callee's body to see whether your argument is just being read (a borrow) or genuinely escapes — returned, stored on the heap, or captured into a returned closure. Reads do not consume. Escapes do. The diagnostic explains the multi-hop chain that led to the move.</li>
 </ul>
 
 <p>The fix is always the same: <code>.clone()</code> the value before the consuming call. Because escape analysis is precise, you only need to clone at the spots that actually matter — the borrow-checker tax of "clone everywhere just in case" is gone.</p>

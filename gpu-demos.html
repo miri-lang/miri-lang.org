@@ -32,13 +32,13 @@ description: "Eight live GPU demos — Mandelbrot, Game of Life, particle flow, 
     <div class="pg-legend-grid">
       <div class="pg-concept">
         <code class="pg-concept-tok">gpu var</code>
-        <p>A buffer that lives in device memory. You declare it; Miri infers the upload and
+        <p>A buffer that lives in device memory. You declare it. Miri infers the upload and
            readback. No marshalling code, no binding boilerplate.</p>
       </div>
       <div class="pg-concept">
         <code class="pg-concept-tok">forall i in 0..n</code>
         <p>A kernel — one GPU thread per index. A bare <code>forall</code> runs on the GPU when it
-           touches device data; the ordered passes inside a frame are written <code>gpu forall</code>.</p>
+           touches device data. The ordered passes inside a frame are written <code>gpu forall</code>.</p>
       </div>
       <div class="pg-concept">
         <code class="pg-concept-tok">gpu frame</code>
@@ -377,7 +377,7 @@ gpu frame
 <section class="pg-demo" id="particles">
   <div class="wrap">
     <div class="pg-demo-head"><span class="pg-num">03</span><h2>Particle Flow</h2></div>
-    <p class="pg-demo-desc">147,456 particles pushed through a two-octave curl-noise field. They scatter into an intensity surface with additive GPU atomics — <code>Array&lt;Atomic&lt;u32&gt;, N&gt;</code>, so contended cells stay correct — then tone-map to the glow you see. All state lives on the device across frames; the CPU never touches a particle.</p>
+    <p class="pg-demo-desc">147,456 particles pushed through a two-octave curl-noise field. They scatter into an intensity surface with additive GPU atomics — <code>Array&lt;Atomic&lt;u32&gt;, N&gt;</code>, so contended cells stay correct — then tone-map to the glow you see. All state lives on the device across frames. The CPU never touches a particle.</p>
     <div class="pg-demo-body">
       <div class="pg-stage" data-demo="particles">
         <div class="demo-canvas-frame">
@@ -2014,7 +2014,7 @@ gpu frame
 <section class="pg-demo" id="wormhole">
   <div class="wrap">
     <div class="pg-demo-head"><span class="pg-num">08</span><h2>Wormhole — a bridge between universes</h2></div>
-    <p class="pg-demo-desc">A traversable Morris–Thorne wormhole. Each pixel follows a ray through the throat profile <em>r(ℓ) = √(k² + max(0, |ℓ| − a)²)</em>; rays that clear the throat emerge in a second universe, while those that graze it bend back into a lensed view of our own sky.</p>
+    <p class="pg-demo-desc">A traversable Morris–Thorne wormhole. Each pixel follows a ray through the throat profile <em>r(ℓ) = √(k² + max(0, |ℓ| − a)²)</em>. Rays that clear the throat emerge in a second universe, while those that graze it bend back into a lensed view of our own sky.</p>
     <div class="pg-demo-body">
       <div class="pg-stage" data-demo="wormhole">
         <div class="demo-canvas-frame">
