@@ -32,11 +32,11 @@
 - id: who-is-miri-for
   q: "Who is Miri for?"
   a: >-
-    <p>Three groups. Graphics and GPU-compute programmers who want kernels, host code and data layout in one
-    language and one type system. Compiler and language engineers, for whom the whole pipeline — lexer, parser,
-    type checker, MIR, Cranelift and WGSL backends, standard library — sits readable in a single repository. And
-    ML engineers writing custom kernels, who would rather express them as ordinary typed loops than as shader
-    source handed to a runtime as a string.</p>
+    <p>Three groups. AI and ML engineers writing custom kernels, who would rather express them as ordinary typed
+    loops than as shader source handed to a runtime as a string. Graphics and GPU-compute programmers who want
+    kernels, host code and data layout in one language and one type system. And compiler and language engineers,
+    for whom the whole pipeline — lexer, parser, type checker, MIR, Cranelift and WGSL backends, standard
+    library — sits readable in a single repository.</p>
 
 - id: production-ready
   q: "Is Miri production ready?"
@@ -95,11 +95,12 @@
 - id: garbage-collector
   q: "Does Miri have a garbage collector?"
   a: >-
-    <p>No. Memory is managed at compile time and you never write a memory annotation. Primitives and small
-    all-primitive structs are copied bitwise. Strings and collections are reference counted, with the IncRef and
-    DecRef calls emitted by the compiler and elided entirely on linear flows; assignment shares the buffer and
-    the first mutation forks it, so you get value semantics at reference-passing cost. Types with a
-    <code>drop</code> method are single-owner, and use-after-move is a compile error.</p>
+    <p>No, and you never write a memory annotation either. Primitives and small all-primitive structs are copied
+    bitwise; strings and collections are reference counted, with the IncRef and DecRef calls emitted by the
+    compiler. A Perceus pass — precise reference counting, the technique Koka and Lean use — then proves which
+    values are created, used once and discarded, and deletes their counter traffic outright, so idiomatic code
+    compiles to straight-line allocation and drop. Assignment shares a buffer, the first mutation forks it, and
+    use-after-move is a compile error.</p>
 
 - id: machine-learning
   q: "Can I use Miri for machine learning?"

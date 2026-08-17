@@ -306,19 +306,12 @@ section { position: relative; }
   color: var(--muted);
   transition: color 0.18s, border-color 0.18s, background 0.18s;
 }
-.answer-links a::before {
-  content: "?";
-  margin-right: 8px;
-  font-family: var(--font-mono);
-  color: var(--blue);
-}
 .answer-links a:hover {
   color: var(--text);
   border-color: var(--blue);
   background: var(--panel);
 }
-.answer-links-all { color: var(--blue-bright) !important; }
-.answer-links-all::before { content: none !important; }
+.answer-links a.answer-links-all { color: var(--blue-bright); }
 
 /* ---------- FAQ page (P3-2) ---------- */
 /* One column at a reading measure, with the questions set far enough apart that
@@ -414,9 +407,12 @@ section { position: relative; }
   line-height: 1.7;
   color: var(--muted);
 }
-.faq-cta a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+/* Scoped to the paragraph on purpose: a bare `.faq-cta a` also hits the buttons
+   below it, and repainting `.btn-primary`'s label blue on yellow is exactly the
+   bug that produced. */
+.faq-cta p a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.faq-cta p a:hover { color: var(--yellow); }
 .faq-cta .btn-row { margin-top: 26px; }
-.faq-cta .btn { text-decoration: none; }
 
 @media (max-width: 900px) {
   .faq-page { padding: 120px 0 80px; }
