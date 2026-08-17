@@ -931,9 +931,11 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
 
 .pg-demo { padding: 70px 0; }
 .pg-demo + .pg-demo { border-top: 1px solid var(--line); }
-/* P1-2 — a per-demo page's own section: no shared-page border, and the
-   breadcrumb above it already carries the top spacing. */
-.pg-demo.standalone { padding: 40px 0 70px; }
+/* P1-2 — a per-demo page's own section: no shared-page border (breadcrumb
+   above carries the top spacing), and no bottom padding — .pg-howto right
+   below already carries its own 64px top padding + border-top, so stacking
+   both left a ~134px dead gap. */
+.pg-demo.standalone { padding: 40px 0 0; }
 .pg-demo-head {
   display: flex;
   align-items: baseline;
@@ -960,7 +962,7 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
 .pg-demo-links {
   color: var(--dim);
   max-width: 700px;
-  margin: -14px 0 30px;
+  margin: 26px 0 0;
   font-size: 14px;
   text-wrap: pretty;
 }
