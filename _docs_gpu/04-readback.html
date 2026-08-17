@@ -1,0 +1,47 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: readback
+order: 4
+nav_title: Getting Data Back
+title: Getting Data Back — Miri Programming Language
+description: Assigning a device-resident binding to a host binding copies the bytes back to the host.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/readback/
+pager_prev:
+  title: Launching Kernels
+  url: /docs/gpu/forall/
+pager_next:
+  title: The Four Cost Classes
+  url: /docs/gpu/cost-classes/
+---
+
+<h1>Getting data back</h1>
+<p>Assigning a device-resident binding to a host binding copies the bytes back to the host. The transfer is
+  always visible at the assignment line:</p>
+
+{% capture ex_src %}{% include examples/gpu-readback.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output:</p>
+<pre><code>0
+1
+4
+9</code></pre>
+
+<p>There is no <code>.to_host()</code> method and no hidden transfer. The keyword on each side of the assignment
+  marks the host/device boundary. The reverse direction works the same way — <code>gpu let g = host_x</code>
+  uploads <code>host_x</code>, and re-assigning a host array into a <code>gpu var</code> re-uploads it (that is
+  how a training loop pushes updated parameters back to the device).</p>
+
+<p>Three sanctioned partial reads avoid the full copy:</p>
+<ul>
+  <li><code>g.length()</code> — free. The length is known on the host.</li>
+  <li><code>g.slice(a..b)</code> — fences and reads back just <code>[a, b)</code> as a host array.</li>
+  <li><code>g.reduce(init, op)</code> — reduces on the device. See <a href="{{ '/docs/gpu/reduction/' | relative_url }}">On-Device Reduction</a>.</li>
+</ul>
+<p>Every other buffer-touching method on a gpu-resident binding in host code — <code>element_at</code>,
+  <code>contains</code>, <code>set</code>, … — is a compile error with the same fix-it as the
+  <a href="{{ '/docs/gpu/forbidden/' | relative_url }}">forbidden pattern</a>: bulk-copy first.</p>
+
+<!-- Cost classes -->

@@ -1,0 +1,45 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: cost-classes
+order: 5
+nav_title: The Four Cost Classes
+title: The Four Cost Classes — Miri Programming Language
+description: Every operation is one of four cost classes, and the surface form names the class.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/cost-classes/
+pager_prev:
+  title: Getting Data Back
+  url: /docs/gpu/readback/
+pager_next:
+  title: The Forbidden Pattern
+  url: /docs/gpu/forbidden/
+---
+
+<h1>The four cost classes</h1>
+<p>Every operation is one of four cost classes, and the surface form names the class. You can read the cost of a
+  program straight from the source, without running it:</p>
+
+<table>
+  <thead>
+    <tr><th>Cost class</th><th>Surface marker</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pure host op</td><td><code>let</code>, <code>var</code>, <code>for</code>, a call to a non-GPU function</td></tr>
+    <tr><td>Upload to device</td><td><code>gpu let</code>, <code>gpu var</code> (paid lazily at first capture)</td></tr>
+    <tr><td>Kernel launch</td><td><code>forall</code> over device data, a <code>gpu fn</code> launch, <code>.reduce</code></td></tr>
+    <tr><td>Fence + readback</td><td>Cross-residency assignment (<code>let h = g</code>), <code>.slice(a..b)</code></td></tr>
+  </tbody>
+</table>
+
+<p>The runtime exposes counters so you can confirm the cost class of each line. After
+  <code>gpu_reset_telemetry()</code>, the functions <code>gpu_uploads()</code>, <code>gpu_launches()</code>,
+  <code>gpu_readbacks()</code>, and <code>gpu_fences()</code> return the cumulative counts. The
+  <a href="{{ '/docs/gpu/cookbook/' | relative_url }}#cb-buffer-reuse">buffer-reuse recipe</a> below asserts them directly.</p>
+
+<p>Two properties keep repeated launches cheap: a device buffer is <strong>persistent</strong> — uploaded once,
+  reused by every subsequent kernel until the binding leaves scope (it is freed at scope exit) — and a
+  <code>gpu let b = g</code> move transfers the device handle without copying.</p>
+
+<!-- Forbidden pattern -->

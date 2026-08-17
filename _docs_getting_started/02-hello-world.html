@@ -1,0 +1,33 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: hello-world
+order: 2
+nav_title: Hello World
+title: Hello World — Miri Programming Language
+description: 'Create a file called hello.mi:'
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/hello-world/
+pager_prev:
+  title: Installation
+  url: /docs/getting-started/installation/
+pager_next:
+  title: Variables
+  url: /docs/getting-started/variables/
+---
+
+<h1>Hello World</h1>
+<p>Create a file called <code>hello.mi</code>:</p>
+{% capture ex_src %}{% include examples/docs-hello.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Compile and run:</p>
+<pre><code>./target/release/miri run hello.mi</code></pre>
+
+<p>Miri uses indentation for blocks — no braces, no semicolons. The <code>main</code> function is the entry point
+  of every program. If the file doesn't contain a <code>main</code> function, the code will be wrapped in a
+  <code>main</code> function automatically.
+</p>
+
+<!-- Variables -->

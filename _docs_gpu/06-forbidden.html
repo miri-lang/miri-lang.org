@@ -1,0 +1,35 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: forbidden
+order: 6
+nav_title: The Forbidden Pattern
+title: The Forbidden Pattern — Miri Programming Language
+description: Reading a single element of a device-resident binding from host code is a compile error.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/forbidden/
+pager_prev:
+  title: The Four Cost Classes
+  url: /docs/gpu/cost-classes/
+pager_next:
+  title: Named Kernels — gpu fn
+  url: /docs/gpu/gpu-fn/
+---
+
+<h1>The forbidden pattern — element cross-read</h1>
+<p>Reading a single element of a device-resident binding from host code is a <strong>compile error</strong>.
+  It looks harmless, but each read would force its own readback — in a loop, that is N round-trips instead of
+  one bulk copy:</p>
+
+<pre><code class="language-miri">gpu var arr = [0, 0, 0, 0, 0, 0, 0, 0]
+forall i in 0..8
+    arr[i] = i * i
+
+let v = arr[0]     // COMPILE ERROR: a per-element read would require a readback</code></pre>
+
+<p>The fix the compiler points to is to bulk-copy first (<code>let h = arr</code>), then index the host copy —
+  exactly the <a href="{{ '/docs/gpu/readback/' | relative_url }}">readback pattern</a> above. This keeps the readback cost visible at one
+  line.</p>
+
+<!-- gpu fn -->

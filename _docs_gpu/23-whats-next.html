@@ -1,0 +1,40 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: whats-next
+order: 23
+nav_title: What's Next
+title: 'What''s Next: GPU Programming — Miri Programming Language'
+description: 'You can now write the full GPU surface: residency bindings, forall and gpu fn kernels, on-device reduction, shared-memory tiling, atomics, warp shuffles,…'
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/whats-next/
+pager_prev:
+  title: Review Checklist
+  url: /docs/gpu/checklist/
+pager_next:
+  title: GPU Playground
+  url: /gpu-demos/
+---
+
+<h1>What's Next</h1>
+<p>You can now write the full GPU surface: residency bindings, <code>forall</code> and <code>gpu fn</code>
+  kernels, on-device reduction, shared-memory tiling, atomics, warp shuffles, vectors, and interactive
+  <code>gpu frame</code> programs that ship to the browser.</p>
+<p>Coming next on the GPU roadmap:</p>
+<ul>
+  <li><strong>Async GPU</strong> — <code>async gpu</code> blocks and explicit streams, overlapping transfer with
+    compute.</li>
+  <li><strong>Kernel debugging</strong> — a <code>gpu simulate</code> mode: CPU interpretation of kernels with
+    race and divergence detectors, plus in-kernel printing.</li>
+  <li><strong>Zero-copy on unified memory</strong> — opt-in host views over device buffers on UMA hardware.</li>
+  <li><strong>Native backends</strong> — SPIR-V, PTX, and Metal for the features WGSL core can't express:
+    64-bit atomics, cooperative matrix, <code>bf16</code>/<code>fp8</code>.</li>
+  <li><strong>Richer reductions</strong> — multi-workgroup hierarchical reduce, <code>min</code>/<code>max</code>
+    and general closure folds.</li>
+</ul>
+
+<div class="note">
+  <p>Found a rough edge? The GPU surface is evolving fast — open an issue on
+    <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a>.</p>
+</div>

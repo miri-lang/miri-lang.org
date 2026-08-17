@@ -1,0 +1,26 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: type-aliases
+order: 17
+nav_title: Type Aliases
+title: Type Aliases — Miri Programming Language
+description: Type aliases create semantic names for existing types.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/type-aliases/
+pager_prev:
+  title: Testing
+  url: /docs/getting-started/testing/
+pager_next:
+  title: Memory Model
+  url: /docs/getting-started/memory-model/
+---
+
+<h1>Type Aliases</h1>
+<p>Type aliases create semantic names for existing types. They are transparent to the type checker — fully interchangeable with the underlying type.</p>
+
+{% capture ex_src %}{% include examples/docs-type-aliases.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<!-- Memory Model -->

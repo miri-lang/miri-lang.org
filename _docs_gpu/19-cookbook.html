@@ -1,0 +1,74 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: cookbook
+order: 19
+nav_title: Cookbook
+title: Cookbook — Miri Programming Language
+description: Each recipe below is verified by the compiler test suite.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/cookbook/
+pager_prev:
+  title: Building for the Browser
+  url: /docs/gpu/web-target/
+pager_next:
+  title: API Reference
+  url: /docs/gpu/api/
+group: Reference
+---
+
+<h1>Cookbook</h1>
+<p>Each recipe below is verified by the compiler test suite. Copy one into a <code>.mi</code> file and run it
+  with <code>miri run yourfile.mi</code>.</p>
+
+<h3 id="cb-vector-add">Vector add</h3>
+<p>The simplest kernel: two device buffers added element-wise into a third, then read back.</p>
+{% capture ex_src %}{% include examples/gpu-vector-add.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>6.0 8.0 10.0 12.0</code>.</p>
+
+<h3 id="cb-buffer-reuse">Buffer-reuse pipeline</h3>
+<p>Two kernels run over the same <code>gpu var</code> with no readback between them, so the device buffer is
+  uploaded once and reused. The telemetry counters prove the cost model: one upload, two launches, one readback.</p>
+{% capture ex_src %}{% include examples/gpu-buffer-reuse.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>23 1 2 1 1</code> — <code>data[7] = 7 + 8 = 15</code>, then <code>15 + 8 = 23</code>. Then
+  1 upload, 2 launches, 1 readback, 1 fence. No cross-residency assignment sits between the two
+  <code>forall</code> blocks, which is the visible marker that the buffer is shared.</p>
+
+<h3 id="cb-saxpy">SAXPY (fused multiply-add)</h3>
+<p>The coefficient is a host scalar, captured into the kernel as a read-only uniform.</p>
+{% capture ex_src %}{% include examples/gpu-saxpy.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>7.0 10.0 13.0 16.0</code>.</p>
+
+<h3 id="cb-matmul">Matrix multiply (naive)</h3>
+<p>A 2×2 product mapped as one thread per output cell, with the dot product computed by an in-kernel
+  <code>while</code> loop. This is the correctness illustration — every thread reads global memory
+  directly.</p>
+{% capture ex_src %}{% include examples/gpu-matmul.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>19.0 22.0 43.0 50.0</code>. For the optimized counterpart — shared-memory tiles, barriers,
+  explicit workgroup shape — see <a href="{{ '/docs/gpu/shared-memory/' | relative_url }}">Shared Memory &amp; Barriers</a>.</p>
+
+<h3 id="cb-reduction">Parallel reduction</h3>
+<p>On-device tree reduction returning a scalar — one launch, one 4-byte readback.</p>
+{% capture ex_src %}{% include examples/gpu-reduce.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>sum = 36</code>. The result is a gpu-resident scalar. The host <code>let</code> binding is the
+  fence. See <a href="{{ '/docs/gpu/reduction/' | relative_url }}">On-Device Reduction</a> for keeping it on the device.</p>
+
+<h3 id="cb-histogram">Atomic histogram</h3>
+<p>Concurrent scatter writes through <code>Atomic&lt;u32&gt;</code> buckets.</p>
+{% capture ex_src %}{% include examples/gpu-atomics.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>bucket_0=576 bucket_1=576</code>.</p>
+
+<h3 id="cb-warp-reduce">Warp shuffle reduction</h3>
+<p>Register-only tree reduction over one subgroup — no shared memory, no barrier.</p>
+{% capture ex_src %}{% include examples/gpu-warp-reduce.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>528</code>.</p>
+
+<!-- API Reference -->

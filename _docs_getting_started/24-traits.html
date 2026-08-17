@@ -1,0 +1,36 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: traits
+order: 24
+nav_title: Traits
+title: Traits — Miri Programming Language
+description: Traits define shared interfaces — a set of abstract and optionally concrete method signatures that classes can implement.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/traits/
+pager_prev:
+  title: Classes
+  url: /docs/getting-started/classes/
+pager_next:
+  title: Closures
+  url: /docs/getting-started/closures/
+---
+
+<h1>Traits</h1>
+<p>Traits define shared interfaces — a set of abstract and optionally concrete method signatures that classes can implement. Traits support inheritance and default methods.</p>
+
+{% capture ex_src %}{% include examples/docs-traits.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Key concepts</h3>
+<ul>
+  <li><strong><code>implements</code></strong> — Attach one or more traits to a class. The class must provide implementations for all abstract methods.</li>
+  <li><strong>Default methods</strong> — Traits can provide method bodies. Classes inherit the default unless they override it.</li>
+  <li><strong>Trait inheritance</strong> — Traits can extend other traits with <code>extends</code>. Implementing a derived trait requires implementing the entire chain.</li>
+  <li><strong>Multiple traits</strong> — A class can implement multiple traits: <code>class X implements A, B</code>.</li>
+  <li><strong>Combined</strong> — A class can extend a base class and implement traits: <code>class Fish extends Animal implements Swimmer</code>.</li>
+  <li><strong><code>Self</code> type</strong> — Use <code>Self</code> in trait signatures to refer to the implementing class's own type.</li>
+</ul>
+
+<!-- Closures -->

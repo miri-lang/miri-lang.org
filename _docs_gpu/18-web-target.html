@@ -1,0 +1,41 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: web-target
+order: 18
+nav_title: Building for the Browser
+title: Building for the Browser — Miri Programming Language
+description: 'The same program that runs natively compiles to a self-contained WebGPU bundle:'
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/web-target/
+pager_prev:
+  title: Interactive Frames
+  url: /docs/gpu/gpu-frame/
+pager_next:
+  title: Cookbook
+  url: /docs/gpu/cookbook/
+---
+
+<h1>Building for the browser</h1>
+<p>The same program that runs natively compiles to a self-contained WebGPU bundle:</p>
+
+<pre><code>miri build --target web-gpu program.mi -o bundle/</code></pre>
+
+<p>The bundle contains:</p>
+<ul>
+  <li><code>&lt;name&gt;.json</code> — the manifest: compiled WGSL kernels, buffer layouts, frame passes,
+    per-frame input layout, canvas size, and WGSL↔Miri source maps.</li>
+  <li><code>miri-gpu.js</code> — the embeddable runtime. <code>mount(canvas, manifest)</code> boots the program
+    on any WebGPU-capable browser, wiring <code>frame.*</code> inputs to real pointer events and presenting the
+    paint buffer without a CPU round-trip.</li>
+  <li><code>index.html</code> — a thin local-dev harness.</li>
+  <li><code>miri-gpu-headless.js</code> — a Node/Deno headless runner for CI.</li>
+  <li>a native host binary of the same program, for running outside the browser.</li>
+</ul>
+
+<p>Every demo in the <a href="{{ '/gpu-demos/' | relative_url }}">GPU Playground</a> is such a bundle, and the
+  source shown next to each canvas is the verbatim program — a compiler test asserts the displayed code
+  compiles to byte-identical kernels.</p>
+
+<!-- Cookbook -->

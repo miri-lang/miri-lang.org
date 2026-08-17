@@ -1,0 +1,28 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: generics
+order: 26
+nav_title: Generics
+title: Generics — Miri Programming Language
+description: Generic functions and types are monomorphized at compile time — a specialized copy is emitted for each unique set of type arguments.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/generics/
+pager_prev:
+  title: Closures
+  url: /docs/getting-started/closures/
+pager_next:
+  title: Imports & Modules
+  url: /docs/getting-started/imports-modules/
+---
+
+<h1>Generics</h1>
+<p>Generic functions and types are monomorphized at compile time — a specialized copy is emitted for each unique set of type arguments. No runtime cost.</p>
+
+{% capture ex_src %}{% include examples/docs-generics.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Calling <code>identity(42)</code> and <code>identity("hello")</code> produces two separate compiled functions (<code>identity_int</code>, <code>identity_string</code>). Generic structs and classes work the same way — each unique instantiation gets its own compiled type.</p>
+
+<!-- Imports & Modules -->

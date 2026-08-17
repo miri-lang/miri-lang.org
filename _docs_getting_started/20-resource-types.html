@@ -1,0 +1,35 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: resource-types
+order: 20
+nav_title: Resource Types & drop
+title: Resource Types & drop — Miri Programming Language
+description: Some values represent things in the outside world — open files, sockets, GPU buffers, lock guards — and need explicit cleanup.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/resource-types/
+pager_prev:
+  title: Cloneable & .clone()
+  url: /docs/getting-started/cloneable/
+pager_next:
+  title: Use-After-Move
+  url: /docs/getting-started/use-after-move/
+---
+
+<h1>Resource Types &amp; <code>fn drop(self)</code></h1>
+<p>Some values represent things in the outside world — open files, sockets, GPU buffers, lock guards — and need explicit cleanup. Miri's answer is the <code>fn drop(self)</code> method. Defining one on a class or struct turns it into a <em>resource type</em>:</p>
+
+{% capture ex_src %}{% include examples/docs-drop.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<ul>
+  <li>Miri guarantees <code>drop</code> runs <strong>exactly once</strong> when the value's lifetime ends.</li>
+  <li>Resource types are <strong>single-owner</strong> — they cannot be shared via reference counting and they do not participate in Copy-on-Write.</li>
+  <li>Resource types are intentionally not <code>Cloneable</code> — most external resources cannot be meaningfully duplicated.</li>
+  <li>Aliasing a resource (<code>var alias = original</code>) consumes the original, just like passing it to a function.</li>
+</ul>
+
+<p>This is how Miri delivers RAII without manual <code>.close()</code> calls and without exception-handling ceremony.</p>
+
+<!-- Use-After-Move -->

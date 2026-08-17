@@ -1,0 +1,41 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: shared-memory
+order: 11
+nav_title: Shared Memory &amp; Barriers
+title: Shared Memory &amp; Barriers — Miri Programming Language
+description: Threads in one workgroup share a fast on-chip memory.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/shared-memory/
+pager_prev:
+  title: On-Device Reduction
+  url: /docs/gpu/reduction/
+pager_next:
+  title: Atomics
+  url: /docs/gpu/atomics/
+---
+
+<h1>Shared memory &amp; barriers</h1>
+<p>Threads in one workgroup share a fast on-chip memory. Declare a <code>shared</code> array inside a
+  <code>gpu fn</code>, and synchronize the workgroup with <code>kernel.barrier()</code> — every shared write
+  must be followed by a barrier before another thread reads it. The classic use is <em>tiling</em>: stage a
+  block of global memory into shared memory once, then let every thread in the workgroup read it many times.</p>
+
+<p>Here is a complete tiled matrix multiply — the reference pattern for workgroup cooperation. Each 2×2 block
+  cooperatively loads tiles of A and B, synchronizes, accumulates, and moves to the next tile:</p>
+
+{% capture ex_src %}{% include examples/gpu-tiled-matmul.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>B is the identity, so the output is A itself: <code>1.0 2.0 3.0 … 16.0</code>, computed with zero
+  intermediate readbacks. The barrier placement is load → <code>barrier()</code> → accumulate →
+  <code>barrier()</code> → next tile.</p>
+
+<div class="note">
+  <p><strong>Divergent barriers are rejected.</strong> A <code>kernel.barrier()</code> under a thread-dependent
+    branch (<code>if kernel.thread_idx.x &lt; 2: kernel.barrier()</code>) would deadlock the workgroup, so the
+    compiler rejects it. Barriers must be reached by every thread — top-level or under a uniform condition.</p>
+</div>
+
+<!-- Atomics -->

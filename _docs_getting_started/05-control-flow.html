@@ -1,0 +1,37 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: control-flow
+order: 5
+nav_title: Control Flow
+title: Control Flow — Miri Programming Language
+description: 'The inverse of if — runs the block when the condition is false:'
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/control-flow/
+pager_prev:
+  title: Functions
+  url: /docs/getting-started/functions/
+pager_next:
+  title: Pattern Matching
+  url: /docs/getting-started/pattern-matching/
+---
+
+<h1>Control Flow</h1>
+
+<h3>if / else</h3>
+{% capture ex_src %}{% include examples/if-else.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>unless</h3>
+<p>The inverse of <code>if</code> — runs the block when the condition is false:</p>
+{% capture ex_src %}{% include examples/unless.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Loops</h3>
+{% capture ex_src %}{% include examples/loops.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Miri supports <code>while</code>, <code>until</code>, <code>do-while</code>, <code>forever</code>, and <code>for..in</code> loops. All loop types support inline syntax with a colon: <code>for x in 1..10: print(x)</code>.</p>
+
+<!-- Pattern Matching -->

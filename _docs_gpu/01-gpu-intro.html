@@ -1,0 +1,41 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: gpu-intro
+order: 1
+nav_title: Introduction
+title: Introduction — Miri Programming Language
+description: Miri does not have a separate "GPU array" type.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/gpu-intro/
+pager_prev:
+  title: Getting Started
+  url: /docs/getting-started/
+pager_next:
+  title: The Residency Surface
+  url: /docs/gpu/residency/
+group: Foundations
+---
+
+<h1>Introduction: residency is a binding attribute</h1>
+<p>Miri does not have a separate "GPU array" type. An <code>Array&lt;f32, 4&gt;</code> is the same type whether it
+  lives on the host or the device — what differs is the binding's <strong>residency</strong>. Residency is an
+  attribute on the binding, exactly like mutability:</p>
+
+<pre><code class="language-miri">let  x = [1.0, 2.0, 3.0, 4.0]      // host-resident, immutable
+var  y = [1.0, 2.0, 3.0, 4.0]      // host-resident, mutable
+gpu let a = [1.0, 2.0, 3.0, 4.0]   // device-resident, immutable  (uploaded)
+gpu var d = [0.0, 0.0, 0.0, 0.0]   // device-resident, mutable</code></pre>
+
+<p>Two axes — mutability (<code>let</code>/<code>var</code>) and residency (host/<code>gpu</code>) — give four
+  binding forms and <strong>zero new types</strong>. The <code>gpu</code> keyword is the only source of device
+  residency. Reading any file, <code>grep 'gpu let\|gpu var'</code> enumerates every device-resident binding.</p>
+
+<p>Here is a complete GPU program — two arrays added element-wise on the device:</p>
+{% capture ex_src %}{% include examples/gpu-vector-add.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>6.0 8.0 10.0 12.0</code>. Five lines of GPU logic. The CUDA equivalent is roughly forty.
+  Save it as <code>add.mi</code> and run it with <code>miri run add.mi</code> — that's the whole workflow.</p>
+
+<!-- Residency surface -->

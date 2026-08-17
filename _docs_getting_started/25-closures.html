@@ -1,0 +1,28 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: closures
+order: 25
+nav_title: Closures
+title: Closures — Miri Programming Language
+description: Lambdas are first-class values. They can be stored in variables, passed as arguments, and returned from functions.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/closures/
+pager_prev:
+  title: Traits
+  url: /docs/getting-started/traits/
+pager_next:
+  title: Generics
+  url: /docs/getting-started/generics/
+---
+
+<h1>Closures</h1>
+<p>Lambdas are first-class values. They can be stored in variables, passed as arguments, and returned from functions. Closures capture variables from the enclosing scope by value.</p>
+
+{% capture ex_src %}{% include examples/docs-closures.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>At the ABI level, closures are represented as fat pointers <code>(fn_ptr, env_ptr)</code>. Captured variables are copied into an environment struct at the point of closure creation.</p>
+
+<!-- Generics -->

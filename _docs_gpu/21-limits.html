@@ -1,0 +1,43 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: limits
+order: 21
+nav_title: WGSL Backend Limits
+title: WGSL Backend Limits — Miri Programming Language
+description: Miri's first GPU backend targets WebGPU (WGSL) through wgpu, the most portable GPU host driver.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/limits/
+pager_prev:
+  title: API Reference
+  url: /docs/gpu/api/
+pager_next:
+  title: Review Checklist
+  url: /docs/gpu/checklist/
+---
+
+<h1>WGSL backend limits</h1>
+<p>Miri's first GPU backend targets WebGPU (WGSL) through <code>wgpu</code>, the most portable GPU host driver.
+  A few features sit outside WGSL's core. Each is gated explicitly — refused before dispatch with a clear
+  message, never miscomputed:</p>
+
+<table>
+  <thead>
+    <tr><th>Feature</th><th>Behavior today</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Native <code>i64</code> / <code>u64</code> / <code>f64</code></td><td>Run on adapters that support them (checked before dispatch). Refused otherwise. Not available in browser bundles.</td></tr>
+    <tr><td>Warp / subgroup ops</td><td>Run on adapters with subgroup support. Refused otherwise.</td></tr>
+    <tr><td>64-bit atomics</td><td>Unavailable — <code>Atomic&lt;T&gt;</code> is 32-bit only.</td></tr>
+    <tr><td>Cooperative matrix (tensor cores)</td><td>Unavailable until the native backends land.</td></tr>
+    <tr><td><code>bf16</code> / <code>fp8</code> / <code>fp4</code></td><td>Unavailable — <code>f16</code> is the smallest float today.</td></tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <p>WGSL stays the browser and embedded path. The native primaries — SPIR-V, PTX, Metal — target these features
+    directly once the surface stabilizes. WGSL-first is an implementation milestone, not a long-term ranking.</p>
+</div>
+
+<!-- Review checklist -->

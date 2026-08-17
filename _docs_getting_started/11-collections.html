@@ -1,0 +1,41 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: collections
+order: 11
+nav_title: Collections
+title: Collections — Miri Programming Language
+description: Miri has four built-in collection types, each with a full method API and for..in iteration support.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/collections/
+pager_prev:
+  title: Tuples
+  url: /docs/getting-started/tuples/
+pager_next:
+  title: Option Types
+  url: /docs/getting-started/option-types/
+---
+
+<h1>Collections</h1>
+<p>Miri has four built-in collection types, each with a full method API and <code>for..in</code> iteration support.</p>
+
+{% capture ex_src %}{% include examples/docs-collections.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Collection types at a glance</h3>
+<table>
+  <thead>
+    <tr><th>Type</th><th>Syntax</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Array</strong></td><td><code>[T; N]</code></td><td>Fixed-size, stack-friendly</td></tr>
+    <tr><td><strong>List</strong></td><td><code>[T]</code></td><td>Dynamic, growable</td></tr>
+    <tr><td><strong>Map</strong></td><td><code>{K: V}</code></td><td>Key-value pairs</td></tr>
+    <tr><td><strong>Set</strong></td><td><code>{T}</code></td><td>Unique values, supports <code>in</code> operator</td></tr>
+  </tbody>
+</table>
+
+<p>Each collection requires its corresponding import: <code>use system.collections.array</code>, <code>use system.collections.list</code>, <code>use system.collections.map</code>, <code>use system.collections.set</code>.</p>
+
+<!-- Option Types -->

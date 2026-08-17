@@ -1,0 +1,42 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: gpu-fn
+order: 7
+nav_title: Named Kernels — gpu fn
+title: Named Kernels — gpu fn — Miri Programming Language
+description: A forall is an anonymous kernel with inferred launch geometry.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/gpu-fn/
+pager_prev:
+  title: The Forbidden Pattern
+  url: /docs/gpu/forbidden/
+pager_next:
+  title: The kernel Context
+  url: /docs/gpu/kernel-context/
+group: Going Deeper
+---
+
+<h1>Named kernels — <code>gpu fn</code> and <code>.launch</code></h1>
+<p>A <code>forall</code> is an anonymous kernel with inferred launch geometry. When you need a reusable kernel,
+  or explicit control over the grid and block shape (for <a href="{{ '/docs/gpu/shared-memory/' | relative_url }}">shared-memory tiling</a> or
+  <a href="{{ '/docs/gpu/warp/' | relative_url }}">warp operations</a>), declare a <code>gpu fn</code> and launch it yourself:</p>
+
+<pre><code class="language-miri">gpu fn scale(src Array&lt;f32, 1024&gt;, dst out Array&lt;f32, 1024&gt;)
+    let i = kernel.global_idx.x
+    if i &lt; src.length()
+        dst[i] = src[i] * 2.0
+
+fn main()
+    gpu let src = Array&lt;f32, 1024&gt;()
+    gpu var dst = Array&lt;f32, 1024&gt;()
+    scale(src, dst).launch(Dim3(4, 1, 1), Dim3(256, 1, 1))   // grid, block</code></pre>
+
+<p>Buffer parameters must be gpu-resident at the launch site (<code>gpu let</code>/<code>gpu var</code>). An
+  <code>out</code> parameter is writable, everything else is read-only. <code>.launch(grid, block)</code> takes
+  two <code>Dim3</code>s: the number of workgroups per axis and the threads per workgroup. The block shape must
+  be a compile-time literal — it is stamped into the generated shader as
+  <code>@workgroup_size</code>. Dispatch is synchronous.</p>
+
+<!-- kernel context -->

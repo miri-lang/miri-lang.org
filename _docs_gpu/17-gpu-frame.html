@@ -1,0 +1,55 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: gpu-frame
+order: 17
+nav_title: Interactive Frames
+title: Interactive Frames — Miri Programming Language
+description: Everything so far launches once and finishes.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/gpu-frame/
+pager_prev:
+  title: Tensor
+  url: /docs/gpu/tensor/
+pager_next:
+  title: Building for the Browser
+  url: /docs/gpu/web-target/
+group: Interactive &amp; Web
+---
+
+<h1>Interactive frames — <code>gpu frame</code></h1>
+<p>Everything so far launches once and finishes. <code>gpu frame</code> declares a kernel that re-runs
+  <em>every display frame</em> — the construct behind every demo in the
+  <a href="{{ '/gpu-demos/' | relative_url }}">GPU Playground</a>:</p>
+
+{% capture ex_src %}{% include examples/gpu-frame.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>A frame kernel reads one immutable buffer (<code>gpu let</code>) and writes mutable ones
+  (<code>gpu var</code>) — reading and writing the same buffer in one pass is a compile-time data-race error.
+  Multi-pass frame graphs nest ordered <code>gpu forall</code> passes inside a <code>gpu frame</code> block.
+  Each pass's read/write sets must be disjoint, and the compiler checks that per pass. The
+  <a href="{{ '/gpu-demos/#life' | relative_url }}">Game of Life</a> (5 passes) and
+  <a href="{{ '/gpu-demos/#fluid' | relative_url }}">Fluid</a> (pressure-solve chain) demos are the reference
+  frame graphs.</p>
+
+<p>Inside a frame body, the <code>frame</code> context carries per-frame inputs, delivered as one uniform
+  block:</p>
+
+<table>
+  <thead>
+    <tr><th>Field</th><th>Type</th><th>Meaning</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>frame.time</code> / <code>frame.dt</code></td><td><code>f32</code></td><td>Seconds since start / since last frame</td></tr>
+    <tr><td><code>frame.index</code></td><td><code>i32</code></td><td>Frame counter</td></tr>
+    <tr><td><code>frame.mouse_x</code> / <code>frame.mouse_y</code></td><td><code>f32</code></td><td>Pointer position (normalized)</td></tr>
+    <tr><td><code>frame.mouse_down</code></td><td><code>bool</code></td><td>Button state</td></tr>
+    <tr><td><code>frame.drag_dx</code> / <code>frame.drag_dy</code></td><td><code>f32</code></td><td>Drag delta this frame</td></tr>
+    <tr><td><code>frame.wheel</code></td><td><code>f32</code></td><td>Scroll delta</td></tr>
+    <tr><td><code>frame.clicked</code> / <code>frame.double_clicked</code></td><td><code>bool</code></td><td>Click events</td></tr>
+  </tbody>
+</table>
+
+<!-- web target -->

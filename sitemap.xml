@@ -20,4 +20,20 @@ layout: null
   {% endunless %}
   {% endunless %}
   {% endfor %}
+  {%- comment -%}
+    site.html_pages does not include collection documents (P1-1's per-topic
+    docs pages) — list the two docs collections explicitly.
+  {%- endcomment -%}
+  {% for doc in site.docs_getting_started %}
+  <url>
+    <loc>{{ doc.url | absolute_url }}</loc>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </url>
+  {% endfor %}
+  {% for doc in site.docs_gpu %}
+  <url>
+    <loc>{{ doc.url | absolute_url }}</loc>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </url>
+  {% endfor %}
 </urlset>

@@ -1,0 +1,58 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: imports-modules
+order: 27
+nav_title: Imports & Modules
+title: Imports & Modules — Miri Programming Language
+description: Miri supports a module system that resolves imports, enforces visibility across module boundaries, and detects errors like circular dependencies and…
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/imports-modules/
+pager_prev:
+  title: Generics
+  url: /docs/getting-started/generics/
+pager_next:
+  title: Multi-File Projects
+  url: /docs/getting-started/multi-file-projects/
+group: Projects &amp; Tooling
+---
+
+<h1>Imports &amp; Modules</h1>
+<p>Miri supports a module system that resolves imports, enforces visibility across module boundaries, and detects errors like circular dependencies and namespace collisions.</p>
+
+<h3>Import syntax</h3>
+{% capture ex_src %}{% include examples/docs-modules.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Standard library modules</h3>
+<table>
+  <thead>
+    <tr><th>Module</th><th>Contents</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>system.io</code></td><td><code>print</code>, <code>println</code>, <code>eprint</code>, <code>eprintln</code></td></tr>
+    <tr><td><code>system.string</code></td><td>String class with intrinsics</td></tr>
+    <tr><td><code>system.math</code></td><td><code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, <code>PI</code>, <code>E</code>, <code>INF</code></td></tr>
+    <tr><td><code>system.result</code></td><td><code>Result&lt;T, E&gt;</code> with <code>is_ok</code>, <code>is_err</code>, <code>unwrap_or</code></td></tr>
+    <tr><td><code>system.testing</code></td><td><code>assert</code>, <code>assert_eq</code>, <code>assert_ne</code>, <code>assert_panics</code></td></tr>
+    <tr><td><code>system.collections.array</code></td><td>Array methods + <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> traits</td></tr>
+    <tr><td><code>system.collections.list</code></td><td>List methods + <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> traits</td></tr>
+    <tr><td><code>system.collections.map</code></td><td>Map methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
+    <tr><td><code>system.collections.set</code></td><td>Set methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Cross-module visibility</h3>
+<p>Visibility modifiers (<code>public</code>, <code>private</code>, <code>protected</code>) are enforced across module boundaries. Top-level functions and classes are <code>public</code> by default. Accessing a private symbol from another module produces a compile error.</p>
+
+{% capture ex_src %}{% include examples/docs-visibility.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Error detection</h3>
+<ul>
+  <li><strong>Namespace collisions</strong> — Importing two modules that export the same name produces a compile error with suggestions for resolution (e.g., using aliased imports).</li>
+  <li><strong>Circular dependencies</strong> — If module <code>a.mi</code> imports <code>b.mi</code> and <code>b.mi</code> imports <code>a.mi</code>, the compiler reports the circular import chain with clear diagnostics.</li>
+</ul>
+
+<!-- Multi-File Projects -->

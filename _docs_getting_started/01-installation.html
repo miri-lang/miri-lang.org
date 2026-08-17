@@ -1,0 +1,37 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: installation
+order: 1
+nav_title: Installation
+title: Installation — Miri Programming Language
+description: Miri is built with Rust, so you'll need the Rust toolchain installed.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/installation/
+pager_prev:
+  title: Documentation
+  url: /docs/
+pager_next:
+  title: Hello World
+  url: /docs/getting-started/hello-world/
+group: Quickstart
+---
+
+<h1>Installation</h1>
+<p>Miri is built with Rust, so you'll need the Rust toolchain installed. If you don't have it yet:</p>
+<pre><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh</code></pre>
+
+<p>Then clone and build Miri:</p>
+<pre><code>git clone https://github.com/miri-lang/miri.git
+cd miri
+make build</code></pre>
+
+<p>The compiler binary will be at <code>target/debug/miri</code>. For optimized builds, use <code>make release</code> (binary at <code>target/release/miri</code>). You can add it to your PATH or run it directly.</p>
+
+<div class="note">
+  <p><strong>Note:</strong> Miri is under active development. Build from the <code>main</code> branch for the
+    latest features.</p>
+</div>
+
+<!-- Hello World -->

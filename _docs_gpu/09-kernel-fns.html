@@ -1,0 +1,44 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: kernel-fns
+order: 9
+nav_title: Functions in Kernels
+title: Functions in Kernels — Miri Programming Language
+description: 'A kernel body may call ordinary Miri functions, as long as they are device-representable: scalar parameters and return type, no I/O, no allocation, no recursion.'
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/kernel-fns/
+pager_prev:
+  title: The kernel Context
+  url: /docs/gpu/kernel-context/
+pager_next:
+  title: On-Device Reduction
+  url: /docs/gpu/reduction/
+---
+
+<h1>Functions in kernels</h1>
+<p>A kernel body may call ordinary Miri functions, as long as they are device-representable: scalar parameters
+  and return type, no I/O, no allocation, no recursion. The compiler checks all of this at the call site — a
+  violation is a compile error naming the offending function, not a runtime surprise.</p>
+
+<pre><code class="language-miri">fn dbl(x float) float: x * 2.0
+
+fn main()
+    gpu let src = [1.0, 2.0, 3.0]
+    gpu var dst = [0.0, 0.0, 0.0]
+    forall i in 0..3
+        dst[i] = dbl(src[i])       // compiled into the kernel</code></pre>
+
+<h3>Residency-polymorphic functions</h3>
+<p>A function whose buffer access happens only <em>inside</em> a <code>forall</code> accepts both host and
+  gpu-resident arguments — the launch specializes to wherever the data lives:</p>
+
+{% capture ex_src %}{% include examples/gpu-polymorphic.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>2 4 6 8 10 12 14 16</code>. <code>scale</code> mutates the device buffer in place — no copy in,
+  no copy out. A function that touches a buffer in host context (say, <code>return a[0]</code>) stays host-only,
+  and passing it a gpu-resident buffer is a compile error. The residency rules cannot be smuggled around through
+  a call boundary.</p>
+
+<!-- Reduction -->

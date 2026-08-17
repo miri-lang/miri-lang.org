@@ -1,0 +1,40 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: vectors
+order: 14
+nav_title: Vector Types
+title: Vector Types — Miri Programming Language
+description: Vec2&lt;T&gt;, Vec3&lt;T&gt;, and Vec4&lt;T&gt; (use system.gpu.vector) are value types with .x/.y/.z/.w component fields.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/vectors/
+pager_prev:
+  title: Warp Operations
+  url: /docs/gpu/warp/
+pager_next:
+  title: Scalar Widths &amp; f16
+  url: /docs/gpu/scalars/
+group: Data on the Device
+---
+
+<h1>Vector types — <code>Vec2</code> / <code>Vec3</code> / <code>Vec4</code></h1>
+<p><code>Vec2&lt;T&gt;</code>, <code>Vec3&lt;T&gt;</code>, and <code>Vec4&lt;T&gt;</code>
+  (<code>use system.gpu.vector</code>) are value types with <code>.x/.y/.z/.w</code> component fields. Inside
+  kernels they compile to native WGSL vectors, and the vector builtins — <code>dot</code>, <code>length</code>,
+  <code>normalize</code>, <code>cross</code>, <code>reflect</code>, <code>mix</code> — plus scalar broadcast
+  (<code>v * 2.0</code>) compile to the hardware's vector instructions:</p>
+
+{% capture ex_src %}{% include examples/gpu-vec-dot.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>2.0</code>. Arrays of vectors store their elements inline with std430 layout
+  (<code>Array&lt;Vec3&lt;f32&gt;, N&gt;</code> has 16-byte stride), so a buffer of vectors round-trips
+  host → GPU → host bit-exactly for <code>f32</code>, <code>i32</code>, and <code>u32</code> elements. 64-bit
+  vector components are rejected — WGSL has no portable 64-bit vectors. The type checker enforces dimensions and
+  element types: <code>cross</code> is <code>Vec3</code>-only, integer <code>normalize</code> is an error.</p>
+
+<p>The <a href="{{ '/gpu-demos/#raymarch' | relative_url }}">Raymarch</a>,
+  <a href="{{ '/gpu-demos/#blackhole' | relative_url }}">Black Hole</a>, and
+  <a href="{{ '/gpu-demos/#wormhole' | relative_url }}">Wormhole</a> demos are built on <code>Vec3</code> math.</p>
+
+<!-- Scalars -->

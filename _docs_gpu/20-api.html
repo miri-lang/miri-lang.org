@@ -1,0 +1,77 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: api
+order: 20
+nav_title: API Reference
+title: API Reference — Miri Programming Language
+description: The capability trait that gates device residency.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/api/
+pager_prev:
+  title: Cookbook
+  url: /docs/gpu/cookbook/
+pager_next:
+  title: WGSL Backend Limits
+  url: /docs/gpu/limits/
+---
+
+<h1>API reference</h1>
+
+<h3 id="api-accelerable"><code>Accelerable</code></h3>
+<p>The capability trait that gates device residency. The compiler dispatches on the trait, never on a type name,
+  so adding a new GPU-eligible container is an <code>.mi</code> edit, not a compiler change. User structs opt in
+  with <code>struct Point implements Accelerable</code>.</p>
+<pre><code class="language-miri">public trait Accelerable
+    fn byte_size() int
+    fn binding_kind() AcceleratorBindingKind   // Storage | Uniform | PushConstant</code></pre>
+
+<h3 id="api-bindings"><code>gpu let</code> / <code>gpu var</code></h3>
+<p>Declare a device-resident binding. <code>gpu let</code> is immutable, <code>gpu var</code> is mutable. The
+  initializer is an array literal, a sized constructor (<code>Array&lt;f32, N&gt;()</code>), or another
+  gpu-resident binding (a move — the device handle transfers). Upload is deferred to the first kernel that
+  captures the binding. The buffer persists across launches and is freed when the binding leaves scope.</p>
+
+<h3 id="api-forall"><code>forall</code> / <code>gpu forall</code></h3>
+<p>Launch a kernel over an index range (1D, 2D, or 3D). Bare <code>forall</code> routes by captured residency.
+  <code>gpu forall</code> forces the device. Bounds may be literals, <code>const</code>s, or runtime values,
+  including a runtime start. The body may capture device buffers and host scalars, index buffers, call scalar
+  functions, and use arithmetic, <code>if</code>, and <code>while</code>.</p>
+
+<h3 id="api-gpu-fn"><code>gpu fn</code> + <code>.launch(grid, block)</code></h3>
+<p>A named kernel with explicit dispatch. Parameters are device buffers (gpu-resident at the launch site.
+  <code>out</code> = writable) and scalars. <code>shared</code> arrays declare workgroup memory. Launch with
+  <code>kernel_name(args).launch(Dim3(gx, gy, gz), Dim3(bx, by, bz))</code>. The block shape must be a
+  compile-time literal and consistent across all launches of the same kernel.</p>
+
+<h3 id="api-kernel-obj"><code>kernel</code> context</h3>
+<p><code>thread_idx</code>, <code>block_idx</code>, <code>block_dim</code>, <code>grid_dim</code>,
+  <code>global_idx</code> (each <code>.x/.y/.z</code>), <code>barrier()</code>, and
+  <code>warp.size</code> / <code>warp.lane_id</code> / <code>warp.shuffle_down(v, n)</code>. All available
+  today. See <a href="{{ '/docs/gpu/kernel-context/' | relative_url }}">The kernel Context</a>.</p>
+
+<h3 id="api-atomics">Atomics — <code>system.gpu.atomic</code></h3>
+<p><code>Atomic&lt;i32&gt;</code> / <code>Atomic&lt;u32&gt;</code> buffer elements with
+  <code>atomic_add / sub / max / min / and / or / xor / exchange / compare_exchange(buf, index, …)</code>.
+  Kernel-only. Plain-buffer or host-context use is rejected.</p>
+
+<h3 id="api-vectors">Vectors — <code>system.gpu.vector</code></h3>
+<p><code>Vec2&lt;T&gt;</code> / <code>Vec3&lt;T&gt;</code> / <code>Vec4&lt;T&gt;</code> with component fields
+  and the builtins <code>dot</code>, <code>length</code>, <code>normalize</code>, <code>cross</code>
+  (Vec3-only), <code>reflect</code>, <code>mix</code>, plus scalar broadcast. Inline std430 storage in
+  arrays.</p>
+
+<h3 id="api-math"><code>system.math</code> on the device</h3>
+<p><code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>,
+  <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>,
+  <code>tan</code>, <code>tanh</code>, <code>atan2</code>, <code>log</code>, <code>exp</code>,
+  <code>step</code>, <code>clamp</code>, <code>mix</code> — all usable inside kernels, width-preserving on
+  <code>f32</code>.</p>
+
+<h3 id="api-telemetry">Telemetry</h3>
+<p><code>gpu_reset_telemetry()</code>, then <code>gpu_uploads()</code> / <code>gpu_launches()</code> /
+  <code>gpu_readbacks()</code> / <code>gpu_fences()</code> return cumulative counts — the executable form of the
+  <a href="{{ '/docs/gpu/cost-classes/' | relative_url }}">cost model</a>.</p>
+
+<!-- WGSL limits -->

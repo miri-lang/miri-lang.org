@@ -1,0 +1,29 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: structs
+order: 8
+nav_title: Structs
+title: Structs — Miri Programming Language
+description: Structs are value types with named fields.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/structs/
+pager_prev:
+  title: Strings
+  url: /docs/getting-started/strings/
+pager_next:
+  title: Enums
+  url: /docs/getting-started/enums/
+group: Types &amp; Data
+---
+
+<h1>Structs</h1>
+<p>Structs are value types with named fields. Construct them using named arguments.</p>
+
+{% capture ex_src %}{% include examples/docs-structs.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Structs can be passed to and returned from functions. Small structs (all primitive fields, &lt;= 128 bytes) are auto-copied on assignment — no reference counting overhead.</p>
+
+<!-- Enums -->

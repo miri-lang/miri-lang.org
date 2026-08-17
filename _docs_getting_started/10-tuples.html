@@ -1,0 +1,26 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: tuples
+order: 10
+nav_title: Tuples
+title: Tuples — Miri Programming Language
+description: Tuples are fixed-size, heterogeneous collections accessed by index.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/tuples/
+pager_prev:
+  title: Enums
+  url: /docs/getting-started/enums/
+pager_next:
+  title: Collections
+  url: /docs/getting-started/collections/
+---
+
+<h1>Tuples</h1>
+<p>Tuples are fixed-size, heterogeneous collections accessed by index. They support destructuring in match expressions.</p>
+
+{% capture ex_src %}{% include examples/docs-tuples.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<!-- Collections -->

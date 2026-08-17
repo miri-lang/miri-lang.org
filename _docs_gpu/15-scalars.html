@@ -1,0 +1,43 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: scalars
+order: 15
+nav_title: Scalar Widths &amp; f16
+title: Scalar Widths &amp; f16 — Miri Programming Language
+description: Kernels support i32, u32, f32, and f16 natively on every adapter.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/scalars/
+pager_prev:
+  title: Vector Types
+  url: /docs/gpu/vectors/
+pager_next:
+  title: Tensor
+  url: /docs/gpu/tensor/
+---
+
+<h1>Scalar widths &amp; <code>f16</code></h1>
+<p>Kernels support <code>i32</code>, <code>u32</code>, <code>f32</code>, and <code>f16</code> natively on every
+  adapter. Half precision works end-to-end on the device:</p>
+
+<pre><code class="language-miri">gpu let a = Array&lt;f16, 4&gt;()
+gpu var dst = Array&lt;f16, 4&gt;()
+forall i in 0..4
+    dst[i] = a[i] * 2.0        // float literals narrow to f16 automatically</code></pre>
+
+<p>64-bit scalars (<code>int</code>/<code>i64</code>, <code>u64</code>, <code>f64</code>) are gated on device
+  features: an adapter that supports them runs them natively. One that doesn't refuses the kernel
+  <em>before dispatch</em> with a clear message — never a silent truncation. Two guardrails back this up at
+  compile time: an <code>i64</code> value that provably exceeds the 32-bit range cannot be uploaded into a
+  narrow buffer, and float→int casts saturate identically on host and device.</p>
+
+<p><code>system.math</code> works inside kernels: <code>abs</code>, <code>min</code>, <code>max</code>,
+  <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>,
+  <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>tanh</code>, <code>atan2</code>,
+  <code>log</code>, <code>exp</code>, <code>step</code>, <code>clamp</code>, <code>mix</code>. Casts
+  (<code>x as f32</code>, <code>f as int</code>) convert between widths explicitly, and math-intrinsic results
+  keep the width of their <code>f32</code> arguments — no accidental promotion to <code>f64</code> inside a
+  kernel.</p>
+
+<!-- Tensor -->

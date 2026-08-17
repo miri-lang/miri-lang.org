@@ -1,0 +1,45 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: memory-model
+order: 18
+nav_title: Memory Model
+title: Memory Model — Miri Programming Language
+description: 'Miri''s memory model is built on a single promise: you never write memory annotations.'
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/memory-model/
+pager_prev:
+  title: Type Aliases
+  url: /docs/getting-started/type-aliases/
+pager_next:
+  title: Cloneable & .clone()
+  url: /docs/getting-started/cloneable/
+group: Memory &amp; Ownership
+---
+
+<h1>Memory Model</h1>
+<p>Miri's memory model is built on a single promise: <strong>you never write memory annotations</strong>. The compiler infers ownership, manages reference counts, and proves linear flows so it can elide the bookkeeping. The only memory-related concept that ever appears in your source code is the <code>out</code> keyword (covered below).</p>
+
+<p>Under the hood, every value falls into one of three buckets:</p>
+<ul>
+  <li><strong>Auto-copy types</strong> — Primitives (<code>int</code>, <code>float</code>, <code>bool</code>) and small all-primitive structs (≤ 128 bytes) are copied bitwise on assignment. Zero overhead, no reference counting at all.</li>
+  <li><strong>Managed types</strong> — Strings, collections (<code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>), and any struct or class with managed fields are tracked with reference counts. The compiler emits IncRef/DecRef instructions automatically — even for elements deep inside nested collections.</li>
+  <li><strong>Resource types</strong> — Any type that defines a <code>fn drop(self)</code> method. These are single-owner: aliasing is forbidden, and the compiler tracks them strictly so you cannot use one after passing it away.</li>
+</ul>
+
+<h3>Copy-on-Write: assignment shares, mutation forks</h3>
+<p>When you assign a managed value to a new variable, both bindings point at the <em>same</em> underlying buffer — there is no eager deep copy. The buffer's reference count goes up by one. The instant either side mutates the value, Miri silently forks: it copies the buffer, decrements the old RC, sets the new RC to <code>1</code>, and applies the mutation to the fresh copy.</p>
+
+{% capture ex_src %}{% include examples/docs-memory-cow.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>The result is the best of both worlds: <strong>value semantics</strong> (mutating <code>b</code> never changes <code>a</code>), but with the <strong>performance of reference passing</strong> when no one mutates. CoW applies to <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>, and <code>String</code>.</p>
+
+<h3>Zero-cost RC elision</h3>
+<p>The Perceus optimization pass analyses every function for linear flows. When the compiler proves that a value is created, used once, and discarded — never aliased, never escaping — it removes all of the IncRef/DecRef calls for that value entirely. You write idiomatic code. The compiler emits straight-line allocation and drop with no atomic counter traffic on the hot path.</p>
+
+<h3>Automatic recursive cleanup</h3>
+<p>When a managed value's RC reaches zero, Miri runs a compiler-generated destructor that, in order: (1) calls the user's <code>fn drop(self)</code> if one is defined, (2) recursively decrements every managed field, (3) frees the allocation. You never write <code>.close()</code>, <code>.dispose()</code>, or <code>try/finally</code>.</p>
+
+<!-- Cloneable -->

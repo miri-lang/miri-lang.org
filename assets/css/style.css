@@ -1214,6 +1214,12 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
   color: var(--yellow);
   border-left-color: var(--yellow);
 }
+.docs-side-full {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 18px !important;
+}
 
 .docs-main { min-width: 0; max-width: 820px; }
 .docs-breadcrumb {

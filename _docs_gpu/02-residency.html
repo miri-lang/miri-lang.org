@@ -1,0 +1,53 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: residency
+order: 2
+nav_title: The Residency Surface
+title: The Residency Surface — Miri Programming Language
+description: 'A small set of forms covers the whole surface:'
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/residency/
+pager_prev:
+  title: Introduction
+  url: /docs/gpu/gpu-intro/
+pager_next:
+  title: Launching Kernels
+  url: /docs/gpu/forall/
+---
+
+<h1>The residency surface</h1>
+<p>A small set of forms covers the whole surface:</p>
+
+<table>
+  <thead>
+    <tr><th>Form</th><th>Meaning</th><th>Cost</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>gpu let g = …</code></td><td>Immutable device buffer</td><td>Upload (deferred to first capture)</td></tr>
+    <tr><td><code>gpu var g = …</code></td><td>Mutable device buffer</td><td>Upload (deferred to first capture)</td></tr>
+    <tr><td><code>forall i in 0..n</code></td><td>Launch a kernel over indices <code>0..n</code></td><td>Kernel launch (or a CPU loop — see <a href="{{ '/docs/gpu/forall/' | relative_url }}">below</a>)</td></tr>
+    <tr><td><code>let h = g</code></td><td>Copy a device buffer back to the host</td><td>Fence + readback</td></tr>
+    <tr><td><code>gpu let b = g</code></td><td>Move a device buffer to a new binding</td><td>Free — the device handle transfers, no copy</td></tr>
+    <tr><td><code>g.slice(a..b)</code></td><td>Partial readback of <code>[a, b)</code></td><td>Fence + readback</td></tr>
+    <tr><td><code>g.reduce(init, op)</code></td><td>On-device tree reduction to a scalar</td><td>Kernel launch</td></tr>
+  </tbody>
+</table>
+
+<h3>What may be device-resident</h3>
+<p>A type can be bound with <code>gpu</code> only if it implements the <code>Accelerable</code> capability trait.
+  The standard library ships impls for <code>Array&lt;T, N&gt;</code> and <code>List&lt;T&gt;</code> over the
+  accelerable scalars — <code>int</code>, <code>i32</code>, <code>i64</code>, <code>u32</code>, <code>u64</code>,
+  <code>f16</code>, <code>f32</code>, <code>f64</code>, <code>bool</code> — plus the
+  <a href="{{ '/docs/gpu/vectors/' | relative_url }}">vector types</a>, <a href="{{ '/docs/gpu/tensor/' | relative_url }}"><code>Tensor</code></a>, and user structs declared
+  <code>implements Accelerable</code>. <code>String</code>, <code>Map</code>, <code>Set</code>, and function
+  values are not accelerable. Binding one with <code>gpu</code> is a compile error that names the missing
+  trait.</p>
+
+<div class="note">
+  <p><strong>No silent promotion.</strong> A host <code>Array</code> never becomes device-resident because a
+    kernel wants it. You write <code>gpu let</code> at the binding, and the upload is visible at that line.</p>
+</div>
+
+<!-- Forall -->

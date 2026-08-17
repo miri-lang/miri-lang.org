@@ -1,0 +1,40 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: testing
+order: 16
+nav_title: Testing
+title: Testing — Miri Programming Language
+description: system.testing provides four assertion intrinsics.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/testing/
+pager_prev:
+  title: Collection Traits
+  url: /docs/getting-started/collection-traits/
+pager_next:
+  title: Type Aliases
+  url: /docs/getting-started/type-aliases/
+---
+
+<h1>Testing</h1>
+<p><code>system.testing</code> provides four assertion intrinsics. Each is lowered directly by the compiler — the abort path is synthesized at the call site, embedding the source <code>path:line</code> in the failure message.</p>
+
+{% capture ex_src %}{% include examples/docs-testing.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Function</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>assert(cond, msg?)</code></td><td>Aborts when <code>cond</code> is <code>false</code>.</td></tr>
+    <tr><td><code>assert_eq&lt;T&gt;(actual, expected, msg?)</code></td><td>Aborts when values differ. Supports <code>int</code>/<code>float</code>/<code>bool</code>/<code>String</code> + all int widths.</td></tr>
+    <tr><td><code>assert_ne&lt;T&gt;(a, b, msg?)</code></td><td>Aborts when values are equal.</td></tr>
+    <tr><td><code>assert_panics(f, expected?)</code></td><td>Runs <code>f()</code> and aborts unless it calls <code>panic(...)</code>.</td></tr>
+  </tbody>
+</table>
+
+<p>A failed assertion aborts with <code>Runtime error: assertion failed at &lt;path&gt;:&lt;line&gt;: &lt;detail&gt;</code>. <code>assert_panics</code> uses a setjmp/longjmp catch frame so a Miri-level <code>panic(...)</code> inside the closure is caught and reported as a pass.</p>
+
+<!-- Type Aliases -->

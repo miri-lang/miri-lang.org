@@ -1,0 +1,28 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: math-module
+order: 14
+nav_title: system.math
+title: system.math — Miri Programming Language
+description: The math module ships a single set of numeric primitives that works on both CPU and GPU kernels.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/math-module/
+pager_prev:
+  title: Result&lt;T, E&gt;
+  url: /docs/getting-started/result-type/
+pager_next:
+  title: Collection Traits
+  url: /docs/getting-started/collection-traits/
+---
+
+<h1><code>system.math</code></h1>
+<p>The math module ships a single set of numeric primitives that works on both CPU and GPU kernels. Functions are imported as free names — no receiver object, no method-call syntax.</p>
+
+{% capture ex_src %}{% include examples/docs-math.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>The current surface covers <code>abs</code>, <code>min</code>, <code>max</code>, <code>pow</code>, <code>sqrt</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>sin</code>, <code>cos</code>, <code>tan</code>, <code>log</code>, <code>exp</code>, plus the constants <code>PI</code>, <code>E</code>, and <code>INF</code>. CPU calls lower to <code>libm</code> / Cranelift intrinsics. GPU calls lower to the target backend's built-in equivalents (<code>tanh</code>, <code>atan2</code>, <code>step</code>, <code>clamp</code>, and <code>mix</code> are available in kernels too) — same source, same answer.</p>
+
+<!-- Collection Traits -->

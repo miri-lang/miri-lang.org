@@ -1,0 +1,28 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: enums
+order: 9
+nav_title: Enums
+title: Enums — Miri Programming Language
+description: Enums support variants with and without associated data.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/enums/
+pager_prev:
+  title: Structs
+  url: /docs/getting-started/structs/
+pager_next:
+  title: Tuples
+  url: /docs/getting-started/tuples/
+---
+
+<h1>Enums</h1>
+<p>Enums support variants with and without associated data. Pattern matching extracts the data from each variant.</p>
+
+{% capture ex_src %}{% include examples/docs-enums.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Enums can have simple tag variants (<code>Red</code>, <code>Green</code>) or carry data (<code>Ok(int)</code>, <code>Error(String)</code>). Each variant can hold different types and numbers of fields.</p>
+
+<!-- Tuples -->

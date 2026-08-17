@@ -1,0 +1,27 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: functions
+order: 4
+nav_title: Functions
+title: Functions — Miri Programming Language
+description: Functions are declared with fn. Parameter types are required.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/functions/
+pager_prev:
+  title: Variables
+  url: /docs/getting-started/variables/
+pager_next:
+  title: Control Flow
+  url: /docs/getting-started/control-flow/
+---
+
+<h1>Functions</h1>
+<p>Functions are declared with <code>fn</code>. Parameter types are required. Parameters use <code>name type</code> syntax (no colon).</p>
+{% capture ex_src %}{% include examples/docs-functions.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Functions without a return type implicitly return <code>void</code>. Functions support named arguments at the call site.</p>
+
+<!-- Control Flow -->

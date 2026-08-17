@@ -1,0 +1,30 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: cloneable
+order: 19
+nav_title: Cloneable & .clone()
+title: Cloneable & .clone() — Miri Programming Language
+description: Sometimes you want an independent deep copy up front rather than waiting for Copy-on-Write to fire.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/cloneable/
+pager_prev:
+  title: Memory Model
+  url: /docs/getting-started/memory-model/
+pager_next:
+  title: Resource Types & drop
+  url: /docs/getting-started/resource-types/
+---
+
+<h1>Cloneable &amp; <code>.clone()</code></h1>
+<p>Sometimes you want an independent deep copy up front rather than waiting for Copy-on-Write to fire. The <code>Cloneable</code> trait provides a <code>.clone()</code> method that does exactly that.</p>
+
+{% capture ex_src %}{% include examples/docs-cloneable.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>All managed types (<code>String</code>, <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>) implicitly implement <code>Cloneable</code>. User-defined classes get an auto-generated <code>__clone_TypeName</code> helper — primitives are copied bitwise, managed fields are recursively cloned. Resource types (those with <code>fn drop(self)</code>) intentionally do <em>not</em> implement <code>Cloneable</code>: copying a file handle or a network socket is almost always a bug.</p>
+
+<p><strong>When to reach for <code>.clone()</code>:</strong> when you need to keep using a managed value after passing it to a function that consumes it (see Use-After-Move below), or when you want to break aliasing eagerly to avoid a CoW copy later in a tight loop.</p>
+
+<!-- Resource Types -->

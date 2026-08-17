@@ -1,0 +1,37 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: reduction
+order: 10
+nav_title: On-Device Reduction
+title: On-Device Reduction — Miri Programming Language
+description: '.reduce(init, fold) on a gpu-resident array runs as a single-launch tree reduction over workgroup shared memory — no host round-trip per element:'
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/reduction/
+pager_prev:
+  title: Functions in Kernels
+  url: /docs/gpu/kernel-fns/
+pager_next:
+  title: Shared Memory &amp; Barriers
+  url: /docs/gpu/shared-memory/
+---
+
+<h1>On-device reduction</h1>
+<p><code>.reduce(init, fold)</code> on a gpu-resident array runs as a single-launch tree reduction over
+  workgroup shared memory — no host round-trip per element:</p>
+
+{% capture ex_src %}{% include examples/gpu-reduce.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>sum = 36</code>. The result of a device reduce is a <strong>gpu-resident scalar</strong>.
+  Binding it to a host <code>let</code> (as above) is the fence — a single-element readback brings the value
+  over. Bind it with <code>gpu let</code> instead and it stays on the device:</p>
+
+{% capture ex_src %}{% include examples/gpu-reduce-resident.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>10</code>. The fold must be an associative binary operator — <code>+</code> or <code>*</code>
+  over the two parameters. <code>init</code> is folded in exactly once. Anything else is rejected at compile
+  time. On a host array the same <code>.reduce</code> call falls through to the ordinary CPU fold, so one
+  spelling covers both residencies.</p>
+
+<!-- Shared memory -->

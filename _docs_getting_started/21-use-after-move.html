@@ -1,0 +1,34 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: use-after-move
+order: 21
+nav_title: Use-After-Move
+title: Use-After-Move — Miri Programming Language
+description: Once you pass a resource to a function, the compiler refuses to let you use that variable again.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/use-after-move/
+pager_prev:
+  title: Resource Types & drop
+  url: /docs/getting-started/resource-types/
+pager_next:
+  title: The out Keyword
+  url: /docs/getting-started/out-keyword/
+---
+
+<h1>Use-After-Move &amp; Escape Analysis</h1>
+<p>Once you pass a resource to a function, the compiler refuses to let you use that variable again. This is enforced statically — there is no runtime check, just a compile error.</p>
+
+{% capture ex_src %}{% include examples/docs-use-after-move.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>The rule has two layers:</p>
+<ul>
+  <li><strong>Resource types</strong> are tracked strictly at every scope. Pass one to a function, store it in a field, or alias it via assignment, and the original binding is marked consumed. Any subsequent use is a compile error with diagnostic <code>E0110</code>.</li>
+  <li><strong>Managed types</strong> are tracked at the top level (script-style code) and inside function bodies via <em>escape analysis</em>. The compiler examines each callee's body to see whether your argument is just being read (a borrow) or genuinely escapes — returned, stored on the heap, or captured into a returned closure. Reads do not consume. Escapes do. The diagnostic explains the multi-hop chain that led to the move.</li>
+</ul>
+
+<p>The fix is always the same: <code>.clone()</code> the value before the consuming call. Because escape analysis is precise, you only need to clone at the spots that actually matter — the borrow-checker tax of "clone everywhere just in case" is gone.</p>
+
+<!-- The out Keyword -->

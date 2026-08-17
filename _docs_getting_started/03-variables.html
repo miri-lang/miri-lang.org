@@ -1,0 +1,42 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: variables
+order: 3
+nav_title: Variables
+title: Variables — Miri Programming Language
+description: 'Miri has two ways to declare variables:'
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/variables/
+pager_prev:
+  title: Hello World
+  url: /docs/getting-started/hello-world/
+pager_next:
+  title: Functions
+  url: /docs/getting-started/functions/
+group: Language Basics
+---
+
+<h1>Variables</h1>
+<p>Miri has two ways to declare variables:</p>
+
+<h3><code>let</code> — Immutable bindings</h3>
+{% capture ex_src %}{% include examples/let-bindings.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3><code>var</code> — Mutable bindings</h3>
+{% capture ex_src %}{% include examples/var-bindings.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Types are inferred but can be explicitly annotated:</p>
+{% capture ex_src %}{% include examples/type-annotations.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Miri supports a full range of numeric types: <code>i8</code>, <code>i16</code>, <code>i32</code>,
+  <code>i64</code>, <code>i128</code>, <code>u8</code>, <code>u16</code>, <code>u32</code>, <code>u64</code>,
+  <code>u128</code>, <code>f32</code>, <code>f64</code>. The default <code>int</code> is <code>i64</code> and
+  <code>float</code> is <code>f64</code>.
+</p>
+
+<!-- Functions -->

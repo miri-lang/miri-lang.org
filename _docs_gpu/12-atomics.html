@@ -1,0 +1,39 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: atomics
+order: 12
+nav_title: Atomics
+title: Atomics — Miri Programming Language
+description: 'When many threads write the same element — histograms, counters, scatter patterns — declare the buffer with Atomic elements and use the atomic intrinsics:'
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/atomics/
+pager_prev:
+  title: Shared Memory &amp; Barriers
+  url: /docs/gpu/shared-memory/
+pager_next:
+  title: Warp Operations
+  url: /docs/gpu/warp/
+---
+
+<h1>Atomics</h1>
+<p>When many threads write the same element — histograms, counters, scatter patterns — declare the buffer with
+  <code>Atomic</code> elements and use the atomic intrinsics:</p>
+
+{% capture ex_src %}{% include examples/gpu-atomics.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>bucket_0=576 bucket_1=576</code> — 147,456 threads increment 256 buckets concurrently, and
+  every increment lands (147456 / 256 = 576).</p>
+
+<p><code>Atomic&lt;i32&gt;</code> and <code>Atomic&lt;u32&gt;</code> support
+  <code>atomic_add</code>, <code>atomic_sub</code>, <code>atomic_max</code>, <code>atomic_min</code>,
+  <code>atomic_and</code>, <code>atomic_or</code>, <code>atomic_xor</code>, <code>atomic_exchange</code>, and
+  <code>atomic_compare_exchange</code>, each taking the buffer, the element index, and the operand
+  (<code>use system.gpu.atomic</code>). Calling one on a plain buffer, or from host code, is rejected. Reading
+  the result is the ordinary readback: <code>let host = hist</code> yields a plain host array.</p>
+
+<p>See the <a href="{{ '/gpu-demos/#particles' | relative_url }}">Particle Flow demo</a> for atomics driving a
+  real scatter workload.</p>
+
+<!-- Warp -->

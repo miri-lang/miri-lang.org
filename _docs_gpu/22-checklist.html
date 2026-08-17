@@ -1,0 +1,45 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: checklist
+order: 22
+nav_title: Review Checklist
+title: Review Checklist — Miri Programming Language
+description: A reviewer (human or LLM) verifying a Miri GPU change should answer these six questions in order.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/checklist/
+pager_prev:
+  title: WGSL Backend Limits
+  url: /docs/gpu/limits/
+pager_next:
+  title: What's Next
+  url: /docs/gpu/whats-next/
+---
+
+<h1>Review checklist — verifying GPU code</h1>
+<p>A reviewer (human or LLM) verifying a Miri GPU change should answer these six questions in order. If any answer
+  is "no" or "not visible", the change needs work.</p>
+
+<ol>
+  <li><strong>Residency.</strong> Does every GPU-touching binding start with <code>gpu let</code> / <code>gpu var</code>?
+    Does every kernel capture refer to a device-resident binding or a captured host scalar? Does every
+    <code>gpu fn</code> parameter type implement <code>Accelerable</code>?</li>
+  <li><strong>Cost classes in order.</strong> List the cost events (upload, launch, fence + readback). Does the
+    order match the source top-to-bottom? Are there any unexpected fences beyond a cross-residency assignment or
+    <code>.slice</code>?</li>
+  <li><strong>Buffer reuse.</strong> Do adjacent kernels over the same <code>gpu var</code>
+    share the buffer (no cross-residency assignment between them)? Is there any
+    <code>let h = g; …; some_kernel(g)</code> where the readback is wasted?</li>
+  <li><strong>Mutability.</strong> Is every captured <code>gpu var</code> element written by exactly one thread?
+    Concurrent writes to a non-<code>Atomic</code> element are a compile error — scatter patterns need
+    <code>Atomic</code> buffers. Is every <code>shared</code> write followed by a <code>kernel.barrier()</code>
+    before another thread reads it?</li>
+  <li><strong>Bounds + indexing.</strong> Does every in-kernel <code>arr[i]</code> have a visible bounds guard
+    when the index isn't bounded by the iteration range? In host code, are all element reads of device-resident
+    bindings either compiler-rejected or bulk-copied first?</li>
+  <li><strong>Portability.</strong> Does the change rely on 64-bit scalars, subgroup ops, or another gated
+    feature? If so, is each one necessary, and is the requirement stated near the kernel?</li>
+</ol>
+
+<!-- What's next -->

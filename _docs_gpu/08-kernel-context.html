@@ -1,0 +1,44 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: kernel-context
+order: 8
+nav_title: The kernel Context
+title: The kernel Context — Miri Programming Language
+description: Inside any kernel body — forall or gpu fn — the implicit kernel object exposes the launch geometry.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/kernel-context/
+pager_prev:
+  title: Named Kernels — gpu fn
+  url: /docs/gpu/gpu-fn/
+pager_next:
+  title: Functions in Kernels
+  url: /docs/gpu/kernel-fns/
+---
+
+<h1>The <code>kernel</code> context</h1>
+<p>Inside any kernel body — <code>forall</code> or <code>gpu fn</code> — the implicit <code>kernel</code> object
+  exposes the launch geometry. All fields have <code>.x</code>, <code>.y</code>, and <code>.z</code>
+  components:</p>
+
+<table>
+  <thead>
+    <tr><th>Field</th><th>Meaning</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>kernel.thread_idx</code></td><td>Thread index within its block</td></tr>
+    <tr><td><code>kernel.block_idx</code></td><td>Block index within the grid</td></tr>
+    <tr><td><code>kernel.block_dim</code></td><td>Threads per block</td></tr>
+    <tr><td><code>kernel.grid_dim</code></td><td>Blocks per grid</td></tr>
+    <tr><td><code>kernel.global_idx</code></td><td><code>block_idx * block_dim + thread_idx</code></td></tr>
+    <tr><td><code>kernel.barrier()</code></td><td>Workgroup synchronization — see <a href="{{ '/docs/gpu/shared-memory/' | relative_url }}">Shared Memory</a></td></tr>
+    <tr><td><code>kernel.warp.size</code> / <code>.lane_id</code> / <code>.shuffle_down(v, n)</code></td><td>Subgroup ops — see <a href="{{ '/docs/gpu/warp/' | relative_url }}">Warp Operations</a></td></tr>
+  </tbody>
+</table>
+
+<p>In a <code>forall</code>, the loop index already is the global index, so you rarely touch <code>kernel</code>
+  there. In an explicitly launched <code>gpu fn</code>, <code>kernel.global_idx</code> is how each thread finds
+  its element.</p>
+
+<!-- functions in kernels -->

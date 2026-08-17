@@ -1,0 +1,26 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: strings
+order: 7
+nav_title: Strings
+title: Strings — Miri Programming Language
+description: 'Miri has built-in string support with f-string interpolation:'
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/strings/
+pager_prev:
+  title: Pattern Matching
+  url: /docs/getting-started/pattern-matching/
+pager_next:
+  title: Structs
+  url: /docs/getting-started/structs/
+---
+
+<h1>Strings &amp; Formatted Strings</h1>
+<p>Miri has built-in string support with f-string interpolation:</p>
+
+{% capture ex_src %}{% include examples/strings.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<!-- Structs -->

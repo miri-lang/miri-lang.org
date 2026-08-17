@@ -1,0 +1,48 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: classes
+order: 23
+nav_title: Classes
+title: Classes — Miri Programming Language
+description: Classes are reference types with constructors, methods, visibility modifiers, and single inheritance.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/classes/
+pager_prev:
+  title: The out Keyword
+  url: /docs/getting-started/out-keyword/
+pager_next:
+  title: Traits
+  url: /docs/getting-started/traits/
+group: Abstraction
+---
+
+<h1>Classes</h1>
+<p>Classes are reference types with constructors, methods, visibility modifiers, and single inheritance. Method calls on base-typed variables are dispatched at runtime via vtables.</p>
+
+{% capture ex_src %}{% include examples/docs-classes.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Key concepts</h3>
+<ul>
+  <li><strong><code>init</code></strong> — Constructor method. Fields are initialized via <code>self.field = value</code>. Instantiation uses named arguments matching <code>init</code> parameters.</li>
+  <li><strong><code>extends</code></strong> — Single inheritance. Subclasses inherit all fields and methods.</li>
+  <li><strong><code>super.method()</code></strong> — Calls the parent class implementation. <code>super.init()</code> chains to the parent constructor.</li>
+  <li><strong><code>abstract</code></strong> — Abstract classes cannot be instantiated. Abstract methods must be overridden in concrete subclasses.</li>
+  <li><strong>Virtual dispatch</strong> — When a variable is typed as a base class, method calls are resolved at runtime to the correct subclass implementation.</li>
+</ul>
+
+<h3>Visibility modifiers</h3>
+<table>
+  <thead>
+    <tr><th>Modifier</th><th>Accessible from</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>public</code></td><td>Everywhere (default for methods)</td></tr>
+    <tr><td><code>protected</code></td><td>Declaring class and all subclasses</td></tr>
+    <tr><td><code>private</code></td><td>Declaring class only</td></tr>
+  </tbody>
+</table>
+
+<!-- Traits -->

@@ -1,0 +1,47 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: whats-next
+order: 29
+nav_title: What's Next
+title: 'What''s Next: Getting Started — Miri Programming Language'
+description: You've covered the core language available in Miri v0.5.0-beta.3.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/whats-next/
+pager_prev:
+  title: Multi-File Projects
+  url: /docs/getting-started/multi-file-projects/
+pager_next:
+  title: GPU Programming
+  url: /docs/gpu/
+---
+
+<h1>What's Next</h1>
+<p>You've covered the core language available in Miri v0.5.0-beta.3. The headline of this release is the
+  <strong>GPU preview</strong>: device-resident bindings (<code>gpu let</code> / <code>gpu var</code>),
+  <code>forall</code> kernels, on-device reduction, shared memory, atomics, warp operations, vector types, and
+  interactive <code>gpu frame</code> programs that compile to the browser via WebGPU — all in the same language
+  you just learned, with no shader files and no FFI.</p>
+<p>Continue with the <a href="{{ '/docs/gpu/' | relative_url }}">GPU Programming guide</a> — it starts from your
+  first kernel and assumes no GPU background — or see the programs running live in the
+  <a href="{{ '/gpu-demos/' | relative_url }}">GPU Playground</a>.</p>
+<p>Here's what's coming next:</p>
+<ul>
+  <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, async/await and
+    <code>async gpu</code> streams, channel-based concurrency, native GPU backends (SPIR-V, PTX, Metal)</li>
+</ul>
+<p>More resources:</p>
+<ul>
+  <li>Explore <a href="{{ site.github_url }}/tree/main/tests" target="_blank" rel="noopener">the
+      test suite</a> for more code examples</li>
+  <li>Star the project on <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a>
+    and follow development</li>
+  <li>Check the <a href="{{ site.github_url }}/issues" target="_blank" rel="noopener">issue
+      tracker</a> for the roadmap</li>
+</ul>
+
+<div class="note">
+  <p><strong>Miri is evolving fast.</strong> Trait objects, async, and the native GPU backends are actively
+    being designed. Join us on GitHub to shape the language!</p>
+</div>

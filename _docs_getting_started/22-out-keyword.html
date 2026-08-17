@@ -1,0 +1,36 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: out-keyword
+order: 22
+nav_title: The out Keyword
+title: The out Keyword — Miri Programming Language
+description: So far, every memory rule has been inferred.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/out-keyword/
+pager_prev:
+  title: Use-After-Move
+  url: /docs/getting-started/use-after-move/
+pager_next:
+  title: Classes
+  url: /docs/getting-started/classes/
+---
+
+<h1>The <code>out</code> Keyword</h1>
+<p>So far, every memory rule has been inferred. The one — and only — explicit memory concept in the language is <code>out</code>. Mark a parameter <code>out</code> to let a function modify a caller's variable in place.</p>
+
+{% capture ex_src %}{% include examples/docs-out-param.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Rules at a glance</h3>
+<ul>
+  <li>The argument passed to an <code>out</code> parameter <strong>must be a <code>var</code></strong>. Passing a <code>let</code> is a compile error.</li>
+  <li>The same variable cannot appear twice as <code>out</code> in a single call (no aliasing through the back door).</li>
+  <li>Types must match exactly — no implicit coercion.</li>
+  <li>For small auto-copy types, <code>out</code> compiles to a mutable reference (no allocation). For managed/large types, the value is moved in and moved back out — ownership transfers to the callee and returns to the caller.</li>
+</ul>
+
+<p>That's the whole memory-keyword surface. No lifetimes, no <code>&amp;mut</code>, no borrow-vs-move distinctions to memorize.</p>
+
+<!-- Classes -->

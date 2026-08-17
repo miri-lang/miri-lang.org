@@ -1,0 +1,28 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: result-type
+order: 13
+nav_title: Result&lt;T, E&gt;
+title: Result&lt;T, E&gt; — Miri Programming Language
+description: Fallible operations return Result&lt;T, E&gt; — an enum with two variants, Ok(T) and Err(E).
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/result-type/
+pager_prev:
+  title: Option Types
+  url: /docs/getting-started/option-types/
+pager_next:
+  title: system.math
+  url: /docs/getting-started/math-module/
+---
+
+<h1><code>Result&lt;T, E&gt;</code></h1>
+<p>Fallible operations return <code>Result&lt;T, E&gt;</code> — an enum with two variants, <code>Ok(T)</code> and <code>Err(E)</code>. The compiler enforces <code>must_use</code> semantics: ignoring a <code>Result</code> value without inspecting it is a compile error, so fallible APIs cannot be silently dropped.</p>
+
+{% capture ex_src %}{% include examples/docs-result.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Inspect a result with <code>match</code> for full extraction, or with the helpers <code>is_ok()</code>, <code>is_err()</code>, and <code>unwrap_or(default)</code> for quick paths. There is no <code>unwrap()</code> that panics on <code>Err</code> — Miri's standard library does not panic, so the failure path is always explicit at the call site.</p>
+
+<!-- system.math -->

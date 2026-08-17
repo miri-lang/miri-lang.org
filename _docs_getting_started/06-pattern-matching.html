@@ -1,0 +1,37 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: pattern-matching
+order: 6
+nav_title: Pattern Matching
+title: Pattern Matching — Miri Programming Language
+description: Pattern matching is a core feature of Miri.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/pattern-matching/
+pager_prev:
+  title: Control Flow
+  url: /docs/getting-started/control-flow/
+pager_next:
+  title: Strings
+  url: /docs/getting-started/strings/
+---
+
+<h1>Pattern Matching</h1>
+<p>Pattern matching is a core feature of Miri. It's exhaustive — the compiler checks that all cases are covered.
+</p>
+
+{% capture ex_src %}{% include examples/enum-direction.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Destructuring</h3>
+{% capture ex_src %}{% include examples/destructuring.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<h3>Matching on values</h3>
+{% capture ex_src %}{% include examples/match-values.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Match supports or-patterns (<code>2 | 3</code>), guard clauses (<code>x if x > 10</code>), and wildcard (<code>_</code>).</p>
+
+<!-- Strings -->

@@ -1,0 +1,33 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: option-types
+order: 12
+nav_title: Option Types
+title: Option Types — Miri Programming Language
+description: Option types represent values that may or may not be present.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/option-types/
+pager_prev:
+  title: Collections
+  url: /docs/getting-started/collections/
+pager_next:
+  title: Result&lt;T, E&gt;
+  url: /docs/getting-started/result-type/
+---
+
+<h1>Option Types</h1>
+<p>Option types represent values that may or may not be present. Add <code>?</code> to any type to make it optional. The compiler prevents using option values without checking first — eliminating null pointer errors at compile time.</p>
+
+{% capture ex_src %}{% include examples/docs-options.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Three ways to handle option types:</p>
+<ul>
+  <li><strong><code>if let Some(x) = val</code></strong> — unwrap and use in a block</li>
+  <li><strong><code>match</code></strong> — handle <code>Some</code> and <code>None</code> branches</li>
+  <li><strong><code>val ?? default</code></strong> — coalesce to a default value</li>
+</ul>
+
+<!-- Result -->

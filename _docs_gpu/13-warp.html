@@ -1,0 +1,33 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: warp
+order: 13
+nav_title: Warp Operations
+title: Warp Operations — Miri Programming Language
+description: Threads execute in hardware groups — warps (NVIDIA), waves (AMD), SIMD-groups (Apple) — that can exchange registers without touching shared memory.
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/warp/
+pager_prev:
+  title: Atomics
+  url: /docs/gpu/atomics/
+pager_next:
+  title: Vector Types
+  url: /docs/gpu/vectors/
+---
+
+<h1>Warp (subgroup) operations</h1>
+<p>Threads execute in hardware groups — warps (NVIDIA), waves (AMD), SIMD-groups (Apple) — that can exchange
+  registers without touching shared memory. <code>kernel.warp</code> exposes the portable subset:
+  <code>kernel.warp.size</code>, <code>kernel.warp.lane_id</code>, and
+  <code>kernel.warp.shuffle_down(v, n)</code> (the shuffle offset is a compile-time literal). The canonical use
+  is a register-only tree reduction:</p>
+
+{% capture ex_src %}{% include examples/gpu-warp-reduce.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>528</code> — the sum of 1..32, reduced in five shuffle steps with no shared memory and no
+  barrier. Warp ops require adapter subgroup support. A device without it refuses the kernel before dispatch
+  rather than miscomputing.</p>
+
+<!-- Vectors -->

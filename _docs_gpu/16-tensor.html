@@ -1,0 +1,32 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: tensor
+order: 16
+nav_title: Tensor
+title: Tensor — Miri Programming Language
+description: Tensor&lt;T, Rank&gt; (use system.collections.tensor) is a multi-dimensional array whose rank is fixed at compile time and whose extents are runtime values,…
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/tensor/
+pager_prev:
+  title: Scalar Widths &amp; f16
+  url: /docs/gpu/scalars/
+pager_next:
+  title: Interactive Frames
+  url: /docs/gpu/gpu-frame/
+---
+
+<h1>Tensor — statically ranked, dynamically sized</h1>
+<p><code>Tensor&lt;T, Rank&gt;</code> (<code>use system.collections.tensor</code>) is a multi-dimensional array
+  whose rank is fixed at compile time and whose extents are runtime values, stored flat in row-major order:</p>
+
+<pre><code class="language-miri">let t = Tensor&lt;int, 2&gt;(shape: [2, 3], data: List([1, 2, 3, 4, 5, 6]))
+println(f"{t.rank()}")       // 2
+println(f"{t.dimension(1)}") // 3
+println(f"{t.size()}")       // 6</code></pre>
+
+<p><code>Tensor</code> implements <code>Accelerable</code> and is defined entirely in the standard library —
+  the compiler has no Tensor-specific logic. It is the intended carrier for ML data reaching the device.</p>
+
+<!-- gpu frame -->

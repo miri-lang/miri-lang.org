@@ -1,0 +1,63 @@
+---
+layout: docs-topic
+guide: gpu
+guide_title: GPU Programming
+topic_id: forall
+order: 3
+nav_title: Launching Kernels
+title: Launching Kernels — Miri Programming Language
+description: 'A forall body is a data-parallel loop: every index runs independently.'
+og_image: /assets/og/docs.png
+permalink: /docs/gpu/forall/
+pager_prev:
+  title: The Residency Surface
+  url: /docs/gpu/residency/
+pager_next:
+  title: Getting Data Back
+  url: /docs/gpu/readback/
+---
+
+<h1>Launching kernels — <code>forall</code></h1>
+<p>A <code>forall</code> body is a data-parallel loop: every index runs independently. Where it runs is decided
+  by what it captures:</p>
+
+<ul>
+  <li><strong><code>forall</code></strong> (bare) — routes automatically. If the body captures a device-resident
+    binding, it launches on the GPU. If it captures only host data, it runs as a plain CPU loop. Same syntax,
+    both worlds.</li>
+  <li><strong><code>gpu forall</code></strong> — explicitly a GPU launch. One GPU thread per index.</li>
+</ul>
+
+{% capture ex_src %}{% include examples/gpu-forall-routing.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+<p>Output: <code>246</code>. The bare <code>forall</code> captures <code>g</code> and <code>result</code>, both
+  device-resident, so it launches on the GPU. Change both bindings to plain <code>let</code>/<code>var</code>
+  and the identical loop runs on the CPU.</p>
+
+<h3>What a kernel body may do</h3>
+<p>A <code>forall</code> kernel may capture device-resident bindings and index them, capture <strong>host
+  scalars</strong> (<code>int</code>, <code>bool</code>, <code>f32</code> — passed as read-only uniforms), call
+  <a href="{{ '/docs/gpu/kernel-fns/' | relative_url }}">scalar functions</a> and <code>system.math</code> intrinsics, and use arithmetic,
+  <code>if</code>, and <code>while</code>. It may not do I/O or allocate.</p>
+
+<h3>2D and 3D launches</h3>
+<p>Multi-dimensional domains launch with one index per axis — the compiler picks the workgroup shape
+  (256×1×1 for 1D, 16×16×1 for 2D, 8×8×4 for 3D):</p>
+
+<pre><code class="language-miri">gpu forall i, j in 0..W, 0..H          // 2D: one thread per (i, j)
+    img[j * W + i] = i + j
+
+gpu forall i, j, k in 0..2, 0..2, 0..2  // 3D
+    voxels[i * 4 + j * 2 + k] = i + j + k</code></pre>
+
+<p>Bounds may be literals, <code>const</code>s, or runtime values — including a runtime start
+  (<code>forall i in a..n</code>). Runtime bounds travel to the kernel as uniforms. Threads past the bound
+  exit immediately, so over-dispatch is safe.</p>
+
+<h3>Safety checks at compile time</h3>
+<p>The compiler rejects kernels where two threads could write the same non-atomic element
+  (<code>dst[i / 2] = …</code> is an error. <code>dst[i] = …</code> is fine). Scatter writes — indices computed
+  from data — need <a href="{{ '/docs/gpu/atomics/' | relative_url }}">atomics</a>. It also validates kernel names against WGSL reserved words
+  and checks that integer division operands fit the device's 32-bit range.</p>
+
+<!-- Readback -->

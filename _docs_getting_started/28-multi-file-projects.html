@@ -1,0 +1,29 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: multi-file-projects
+order: 28
+nav_title: Multi-File Projects
+title: Multi-File Projects — Miri Programming Language
+description: Programs can span multiple .mi files. The compiler discovers, parses, and links all files in a project automatically.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/multi-file-projects/
+pager_prev:
+  title: Imports & Modules
+  url: /docs/getting-started/imports-modules/
+pager_next:
+  title: What's Next
+  url: /docs/getting-started/whats-next/
+---
+
+<h1>Multi-File Projects</h1>
+<p>Programs can span multiple <code>.mi</code> files. The compiler discovers, parses, and links all files in a project automatically. Local files are imported using the <code>local</code> prefix, with the path mapping directly to the file system relative to the project root.</p>
+
+{% capture ex_src %}{% include examples/docs-multi-file.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Compile and run multi-file projects the same way — point the compiler at your entry file and it resolves all dependencies:</p>
+<pre><code>./target/release/miri run main.mi</code></pre>
+
+<!-- What's Next -->
