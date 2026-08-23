@@ -1,0 +1,21 @@
+use system.io
+use system.text
+
+fn main()
+    // Regex.compile reports a bad pattern as a value, never a panic.
+    match Regex.compile("[0-9]+")
+        Result.Ok(digits)
+            let has_digit = digits.matches("a1b2")
+            println(f"contains a digit: {has_digit}")
+
+            // find returns the first Match, or None.
+            match digits.find("port 8080, fallback 9090")
+                Some(m): println(f"{m.text()} at {m.start()}..{m.end()}")
+                None: println("no digits")
+
+            // find_all returns every non-overlapping match.
+            for m in digits.find_all("a1b2c3")
+                println(f"found {m.text()}")
+
+            println(digits.replace("a1b2c3", "#"))
+        Result.Err(e): println(f"bad pattern: {e}")

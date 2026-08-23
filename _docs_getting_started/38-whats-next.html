@@ -1,0 +1,56 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: whats-next
+order: 38
+nav_title: What's Next
+title: 'What''s Next: Getting Started — Miri Programming Language'
+description: You've covered the core language available in Miri v0.6.0-beta.4.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/whats-next/
+pager_prev:
+  title: Memory Diagnostics
+  url: /docs/getting-started/diagnostics/
+pager_next:
+  title: GPU Programming
+  url: /docs/gpu/
+---
+
+<h1>What's Next</h1>
+<p>You've covered the core language available in Miri v0.6.0-beta.4. The headline of this release is the
+  <strong>extended standard library</strong>: <code>system.fs</code>, <code>system.os</code> and
+  <code>system.time</code> for capability-scoped access to the outside world, regular expressions in
+  <code>system.text</code>, a pure-Miri JSON parser in <code>system.json</code>, and <code>Queue</code> and
+  <code>Stack</code> — together with a closed attribute set, the native <code>miri test</code> runner, and
+  memory diagnostics that keep the whole library provably leak-free.</p>
+<p>Nothing in that library panics, and none of it hands back a sentinel: <code>index_of</code> returns
+  <code>int?</code> rather than <code>-1</code>, and <code>pop</code> and <code>remove_at</code> return
+  <code>T?</code> rather than trapping. The absent case is always a value you handle.</p>
+<p>The <strong>GPU preview</strong> from the previous release is unchanged and still current: device-resident
+  bindings (<code>gpu let</code> / <code>gpu var</code>), <code>forall</code> kernels, on-device reduction,
+  shared memory, atomics, warp operations, vector types, and interactive <code>gpu frame</code> programs that
+  compile to the browser via WebGPU — with no shader files and no FFI.</p>
+<p>Continue with the <a href="{{ '/docs/gpu/' | relative_url }}">GPU Programming guide</a> — it starts from your
+  first kernel and assumes no GPU background — or see the programs running live in the
+  <a href="{{ '/gpu-demos/' | relative_url }}">GPU Playground</a>.</p>
+<p>Here's what's coming next:</p>
+<ul>
+  <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, async/await and
+    <code>async gpu</code> streams, channel-based concurrency, and additional GPU backends behind the same
+    <code>forall</code> surface, starting with a native SPIR-V / Vulkan path</li>
+</ul>
+<p>More resources:</p>
+<ul>
+  <li>Explore <a href="{{ site.github_url }}/tree/main/tests" target="_blank" rel="noopener">the
+      test suite</a> for more code examples</li>
+  <li>Star the project on <a href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub</a>
+    and follow development</li>
+  <li>Check the <a href="{{ site.github_url }}/issues" target="_blank" rel="noopener">issue
+      tracker</a> for the roadmap</li>
+</ul>
+
+<div class="note">
+  <p><strong>Miri is evolving fast.</strong> Trait objects, async, and the native GPU backends are actively
+    being designed. Join us on GitHub to shape the language!</p>
+</div>

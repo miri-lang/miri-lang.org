@@ -29,6 +29,8 @@ sidebar:
     title: Tuples
   - id: collections
     title: Collections
+  - id: queue-stack
+    title: Queue &amp; Stack
   - id: option-types
     title: Option Types
   - id: result-type
@@ -41,6 +43,17 @@ sidebar:
     title: Testing
   - id: type-aliases
     title: Type Aliases
+  - id: text-module
+    title: system.text
+    group: Standard Library
+  - id: json-module
+    title: system.json
+  - id: fs-module
+    title: system.fs
+  - id: os-module
+    title: system.os
+  - id: time-module
+    title: system.time
   - id: memory-model
     title: Memory Model
     group: Memory &amp; Ownership
@@ -66,6 +79,12 @@ sidebar:
     group: Projects &amp; Tooling
   - id: multi-file-projects
     title: Multi-File Projects
+  - id: attributes
+    title: Attributes
+  - id: test-runner
+    title: The miri test Runner
+  - id: diagnostics
+    title: Memory Diagnostics
   - id: whats-next
     title: What's Next
 breadcrumb: getting-started
@@ -235,6 +254,29 @@ make build</code></pre>
 
 <p>Each collection requires its corresponding import: <code>use system.collections.array</code>, <code>use system.collections.list</code>, <code>use system.collections.map</code>, <code>use system.collections.set</code>.</p>
 
+<!-- Queue & Stack -->
+<h2 id="queue-stack">Queue &amp; Stack</h2>
+<p><code>Queue&lt;T&gt;</code> and <code>Stack&lt;T&gt;</code> add the two classic ordering disciplines on top of the collections above. Neither is a new primitive: both are built by composition over an existing collection, and both implement <code>Iterable&lt;T&gt;</code>, <code>Queryable&lt;T&gt;</code> and <code>Foldable&lt;T&gt;</code>, so that whole surface — <code>for..in</code>, <code>contains</code>, <code>index_of</code>, <code>first</code>, <code>last</code>, <code>is_empty</code>, <code>reduce</code>, <code>any</code>, <code>all</code>, <code>count_where</code>, <code>sum</code>, <code>min</code>, <code>max</code> — comes for free from the traits rather than being reimplemented on each type.</p>
+
+{% capture ex_src %}{% include examples/docs-queue-stack.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Type</th><th>Order</th><th>Add</th><th>Remove</th><th>Inspect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Queue&lt;T&gt;</code></td><td>First in, first out</td><td><code>enqueue(item T)</code></td><td><code>dequeue() T?</code></td><td><code>peek() T?</code></td></tr>
+    <tr><td><code>Stack&lt;T&gt;</code></td><td>Last in, first out</td><td><code>push(item T)</code></td><td><code>pop() T?</code></td><td><code>peek() T?</code></td></tr>
+  </tbody>
+</table>
+
+<p>Both also carry <code>length()</code> and <code>element_at(index int)</code>. Note that removal and inspection return <code>T?</code>, not <code>T</code>: draining an empty queue yields <code>None</code> rather than trapping or handing back a sentinel value, so the empty case is one you handle in the type system like any other.</p>
+
+<p>Neither implements <code>Transformable</code>, so <code>map</code> and <code>filter</code> are not available on a queue or a stack directly — iterate it, or build a <code>List</code> from it, when you need those.</p>
+
+<p>Import them with <code>use system.collections.queue</code> and <code>use system.collections.stack</code>.</p>
+
 <!-- Option Types -->
 <h2 id="option-types">Option Types</h2>
 <p>Option types represent values that may or may not be present. Add <code>?</code> to any type to make it optional. The compiler prevents using option values without checking first — eliminating null pointer errors at compile time.</p>
@@ -303,7 +345,7 @@ make build</code></pre>
   </thead>
   <tbody>
     <tr><td><code>assert(cond, msg?)</code></td><td>Aborts when <code>cond</code> is <code>false</code>.</td></tr>
-    <tr><td><code>assert_eq&lt;T&gt;(actual, expected, msg?)</code></td><td>Aborts when values differ. Supports <code>int</code>/<code>float</code>/<code>bool</code>/<code>String</code> + all int widths.</td></tr>
+    <tr><td><code>assert_eq&lt;T&gt;(actual, expected, msg?)</code></td><td>Aborts when values differ. Supports <code>int</code>/<code>float</code>/<code>bool</code>/<code>String</code> + all int widths, plus enums, <code>Option</code>, <code>Result</code>, structs, and classes defining <code>equals</code>.</td></tr>
     <tr><td><code>assert_ne&lt;T&gt;(a, b, msg?)</code></td><td>Aborts when values are equal.</td></tr>
     <tr><td><code>assert_panics(f, expected?)</code></td><td>Runs <code>f()</code> and aborts unless it calls <code>panic(...)</code>.</td></tr>
   </tbody>
@@ -311,12 +353,149 @@ make build</code></pre>
 
 <p>A failed assertion aborts with <code>Runtime error: assertion failed at &lt;path&gt;:&lt;line&gt;: &lt;detail&gt;</code>. <code>assert_panics</code> uses a setjmp/longjmp catch frame so a Miri-level <code>panic(...)</code> inside the closure is caught and reported as a pass.</p>
 
+<p>The detail is rendered structurally rather than as an address, so a failure names the values that actually differ:</p>
+
+<table>
+  <thead>
+    <tr><th>Compared values</th><th>Failure detail</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Structs</td><td><code>expected Point(x=3, y=4), got Point(x=1, y=2)</code></td></tr>
+    <tr><td>Enums with a payload</td><td><code>expected Circle(4), got Circle(3)</code></td></tr>
+    <tr><td><code>Result</code></td><td><code>expected Err(boom), got Ok(1)</code></td></tr>
+    <tr><td><code>Option</code></td><td><code>expected None, got Some(1)</code></td></tr>
+    <tr><td><code>assert_ne</code></td><td><code>values must differ, both were 5</code></td></tr>
+  </tbody>
+</table>
+
+<p>The same rendering is available in ordinary string interpolation — an <code>Option</code>, a <code>Result</code>, or any enum you define can go straight into an f-string:</p>
+
+{% capture ex_src %}{% include examples/docs-formatting.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Structural <code>==</code> underpins all of this: enum payloads and managed fields compare by value, not by pointer. Note that a struct renders in an assertion failure but is not itself interpolatable — put its fields in the f-string instead.</p>
+
 <!-- Type Aliases -->
 <h2 id="type-aliases">Type Aliases</h2>
 <p>Type aliases create semantic names for existing types. They are transparent to the type checker — fully interchangeable with the underlying type.</p>
 
 {% capture ex_src %}{% include examples/docs-type-aliases.mi %}{% endcapture %}
 <pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<!-- system.text -->
+<h2 id="text-module">system.text</h2>
+<p><code>system.text</code> provides regular expressions. <code>Regex.compile</code> returns a <code>Result&lt;Regex, RegexError&gt;</code> rather than panicking, so a malformed pattern is a value you handle — the same discipline as every other fallible operation in the standard library.</p>
+
+{% capture ex_src %}{% include examples/docs-text.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Regex.compile(pattern String)</code></td><td><code>Result&lt;Regex, RegexError&gt;</code></td><td>Static. Compiles a pattern, reporting a syntax error as <code>Err</code>.</td></tr>
+    <tr><td><code>matches(text String)</code></td><td><code>bool</code></td><td>Whether the pattern occurs anywhere in <code>text</code>.</td></tr>
+    <tr><td><code>find(text String)</code></td><td><code>Match?</code></td><td>The first match, or <code>None</code>.</td></tr>
+    <tr><td><code>find_all(text String)</code></td><td><code>[Match]</code></td><td>Every non-overlapping match, in order.</td></tr>
+    <tr><td><code>replace(text String, to String)</code></td><td><code>String</code></td><td>Every match replaced with <code>to</code>.</td></tr>
+    <tr><td><code>Match.text()</code> / <code>start()</code> / <code>end()</code></td><td><code>String</code> / <code>int</code> / <code>int</code></td><td>The matched text and its half-open byte range.</td></tr>
+  </tbody>
+</table>
+
+<p>A pattern that is fixed at compile time can be written as a regex literal — <code>re"^\d+$"</code>, with optional trailing flags — which the compiler validates while it type-checks, turning an invalid pattern into a compile error instead of a runtime <code>Err</code>. <code>String</code> also gained <code>split</code>, <code>join</code>, <code>to_int</code> and <code>to_float</code>, and match arms accept string, float and regex predicates.</p>
+
+<!-- system.json -->
+<h2 id="json-module">system.json</h2>
+<p><code>system.json</code> is a recursive <code>Json</code> enum with a parser and serializer written in Miri itself — the compiler has no special knowledge of it. Parse failures carry the line and column where the document went wrong.</p>
+
+{% capture ex_src %}{% include examples/docs-json.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>The <code>Json</code> enum has six variants — <code>Object</code>, <code>Array</code>, <code>Text</code>, <code>Number</code>, <code>Bool</code> and <code>Null</code> — and you can <code>match</code> on them directly. Most code instead reaches for the accessors, each of which returns an option so a missing or mistyped field is a value rather than a crash:</p>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Json.parse(source String)</code></td><td><code>Result&lt;Json, JsonError&gt;</code></td><td>Static. Parses a document; the error carries a position.</td></tr>
+    <tr><td><code>to_string()</code></td><td><code>String</code></td><td>Serializes back to JSON text.</td></tr>
+    <tr><td><code>get(key String)</code></td><td><code>Json?</code></td><td>An object member, or <code>None</code>.</td></tr>
+    <tr><td><code>at(index int)</code></td><td><code>Json?</code></td><td>An array element, or <code>None</code>.</td></tr>
+    <tr><td><code>as_string()</code> / <code>as_int()</code> / <code>as_float()</code> / <code>as_bool()</code></td><td><code>String?</code> / <code>int?</code> / <code>float?</code> / <code>bool?</code></td><td>The scalar value when the variant matches, else <code>None</code>.</td></tr>
+  </tbody>
+</table>
+
+<p>Numbers keep their original lexeme, so a value written <code>1</code> stays <code>1</code> and no precision is lost on a round trip. Object members are stored in a map, so <code>to_string()</code> does not preserve the key order of the source document.</p>
+
+<!-- system.fs -->
+<h2 id="fs-module">system.fs</h2>
+<p><code>system.fs</code> reaches the filesystem through an <code>Fs</code> handle. The handle is the capability: a function that is not given one cannot read or write a file, so the ability to touch the disk is visible in a signature instead of ambient across the whole program.</p>
+
+{% capture ex_src %}{% include examples/docs-fs.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Method</th><th>Returns</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>exists(path String)</code></td><td><code>bool</code></td></tr>
+    <tr><td><code>read_file(path String)</code></td><td><code>Result&lt;String, FsError&gt;</code></td></tr>
+    <tr><td><code>write_file(path String, contents String)</code></td><td><code>Result&lt;int, FsError&gt;</code> — bytes written</td></tr>
+    <tr><td><code>append_file(path String, contents String)</code></td><td><code>Result&lt;int, FsError&gt;</code> — bytes appended</td></tr>
+    <tr><td><code>list_dir(path String)</code></td><td><code>Result&lt;[String], FsError&gt;</code></td></tr>
+    <tr><td><code>create_dir(path String)</code></td><td><code>Result&lt;bool, FsError&gt;</code></td></tr>
+    <tr><td><code>delete(path String)</code></td><td><code>Result&lt;bool, FsError&gt;</code></td></tr>
+    <tr><td><code>cwd()</code></td><td><code>Result&lt;String, FsError&gt;</code></td></tr>
+  </tbody>
+</table>
+
+<p><code>FsError</code> distinguishes <code>NotFound</code>, <code>PermissionDenied</code>, <code>AlreadyExists</code>, <code>NotADirectory</code>, <code>InvalidData</code> and <code>Other</code>, each carrying a message. It is <code>@non_exhaustive</code>, so a <code>match</code> on it needs a <code>default</code> arm and stays compiling when a future release adds a case.</p>
+
+<!-- system.os -->
+<h2 id="os-module">system.os</h2>
+<p><code>system.os</code> covers the process environment, the command line, and the host platform. <code>Env</code> and <code>Args</code> follow the same capability rule as <code>Fs</code>.</p>
+
+{% capture ex_src %}{% include examples/docs-os.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Env().get(name String)</code></td><td><code>String?</code></td><td>An unset variable is <code>None</code>, distinct from a variable set to the empty string.</td></tr>
+    <tr><td><code>Env().set(name String, value String)</code></td><td><code>Result&lt;bool, EnvError&gt;</code></td><td><code>true</code> when an existing value was replaced.</td></tr>
+    <tr><td><code>Args().length()</code></td><td><code>int</code></td><td>Number of command-line arguments.</td></tr>
+    <tr><td><code>Args().element_at(index int)</code></td><td><code>String</code></td><td>One argument; <code>Args</code> is <code>Iterable&lt;String&gt;</code>, so <code>for..in</code> works.</td></tr>
+    <tr><td><code>platform()</code></td><td><code>String</code></td><td>Free function naming the host: <code>macos</code>, <code>linux</code> or <code>windows</code>.</td></tr>
+    <tr><td><code>exit(code int)</code></td><td>—</td><td>Ends the process with a status code.</td></tr>
+  </tbody>
+</table>
+
+<!-- system.time -->
+<h2 id="time-module">system.time</h2>
+<p><code>system.time</code> splits time into three types so that a duration can never be confused with a point in time, and neither can be confused with a bare number. A <code>Clock</code> is the capability for reading the wall clock and for sleeping.</p>
+
+{% capture ex_src %}{% include examples/docs-time.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Duration.from_nanos</code> / <code>from_micros</code> / <code>from_millis</code> / <code>from_seconds</code></td><td><code>Duration</code></td><td>Static constructors — the unit is named at the call site, never implied.</td></tr>
+    <tr><td><code>as_nanos()</code> / <code>as_micros()</code> / <code>as_millis()</code> / <code>as_seconds()</code></td><td><code>int</code></td><td>Reads a <code>Duration</code> back in a chosen unit.</td></tr>
+    <tr><td><code>Clock().now()</code></td><td><code>Instant</code></td><td>A point in time.</td></tr>
+    <tr><td><code>Clock().sleep(d Duration)</code></td><td>—</td><td>Blocks for at least <code>d</code>.</td></tr>
+    <tr><td><code>Instant.elapsed(clock Clock)</code></td><td><code>Duration</code></td><td>Time since the instant was taken.</td></tr>
+  </tbody>
+</table>
+
+<p>Those static constructors are what made <code>Duration.from_millis(500)</code> possible: static class members shipped as the language feature this module needed.</p>
 
 <!-- Memory Model -->
 <h2 id="memory-model">Memory Model</h2>
@@ -488,6 +667,13 @@ make build</code></pre>
     <tr><td><code>system.collections.list</code></td><td>List methods + <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> traits</td></tr>
     <tr><td><code>system.collections.map</code></td><td>Map methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
     <tr><td><code>system.collections.set</code></td><td>Set methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
+    <tr><td><code>system.collections.queue</code></td><td><code>Queue&lt;T&gt;</code> — <code>enqueue</code>, <code>dequeue</code>, <code>peek</code></td></tr>
+    <tr><td><code>system.collections.stack</code></td><td><code>Stack&lt;T&gt;</code> — <code>push</code>, <code>pop</code>, <code>peek</code></td></tr>
+    <tr><td><code>system.text</code></td><td><code>Regex</code>, <code>Match</code> — <code>compile</code>, <code>matches</code>, <code>find</code>, <code>find_all</code>, <code>replace</code></td></tr>
+    <tr><td><code>system.json</code></td><td><code>Json</code>, <code>JsonError</code> — <code>parse</code>, <code>to_string</code>, <code>get</code>, <code>at</code>, typed accessors</td></tr>
+    <tr><td><code>system.fs</code></td><td><code>Fs</code>, <code>FsError</code> — files and directories</td></tr>
+    <tr><td><code>system.os</code></td><td><code>Env</code>, <code>Args</code>, <code>platform</code>, <code>exit</code></td></tr>
+    <tr><td><code>system.time</code></td><td><code>Clock</code>, <code>Instant</code>, <code>Duration</code></td></tr>
   </tbody>
 </table>
 
@@ -513,20 +699,102 @@ make build</code></pre>
 <p>Compile and run multi-file projects the same way — point the compiler at your entry file and it resolves all dependencies:</p>
 <pre><code>./target/release/miri run main.mi</code></pre>
 
+<!-- Attributes -->
+<h2 id="attributes">Attributes</h2>
+<p>An attribute is written <code>@name</code> above a declaration, optionally with a string argument. Attributes are a <strong>closed set</strong>: the compiler knows every one it accepts and rejects anything else with an error. A misspelled attribute can therefore never be silently ignored, which is the failure mode that makes attributes untrustworthy in other languages — <code>@tset</code> is a compile error, not a test that quietly never runs.</p>
+
+{% capture ex_src %}{% include examples/docs-attributes.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Attribute</th><th>Applies to</th><th>Argument</th><th>Effect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>@non_exhaustive</code></td><td>Enum</td><td>—</td><td>The enum may gain variants, so a <code>match</code> on it outside the defining module needs a <code>default</code> arm.</td></tr>
+    <tr><td><code>@must_use</code></td><td>Enum</td><td>—</td><td>The value may not be silently discarded at a call site.</td></tr>
+    <tr><td><code>@deprecated</code></td><td>Function, class, enum</td><td>Required</td><td>Callers get a warning carrying the message — normally the replacement to use.</td></tr>
+    <tr><td><code>@test</code></td><td>Function</td><td>—</td><td>Marks the function for discovery by <code>miri test</code>.</td></tr>
+    <tr><td><code>@ignore</code></td><td>Function</td><td>Required</td><td>Skips the test and reports the reason. Requires <code>@test</code>.</td></tr>
+    <tr><td><code>@xfail</code></td><td>Function</td><td>Required</td><td>The test is expected to fail. Requires <code>@test</code>.</td></tr>
+  </tbody>
+</table>
+
+<p>Applying an attribute to the wrong kind of declaration, omitting a required argument, or passing one where none is accepted are all errors as well — as is using <code>@ignore</code> or <code>@xfail</code> without the <code>@test</code> they depend on.</p>
+
+<!-- The miri test Runner -->
+<h2 id="test-runner">The <code>miri test</code> Runner</h2>
+<p><code>miri test</code> is a native test runner. It walks a directory tree, discovers every <code>@test</code> function, and runs each one <strong>in its own subprocess</strong> — so a test that segfaults is reported as a failure instead of taking the whole run down with it.</p>
+
+{% capture ex_src %}{% include examples/docs-test-runner.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Run it against a directory:</p>
+<pre><code>miri test --dir .</code></pre>
+
+<p>which reports in the familiar cargo style:</p>
+<pre><code>running 4 tests
+test docs-test-runner.mi::addition_works ... ok
+test docs-test-runner.mi::strings_concatenate ... ok
+test docs-test-runner.mi::reads_the_config ... ignored, needs a fixture file
+test docs-test-runner.mi::known_bug ... ok (expected failure)
+test result: ok. 3 passed; 0 failed; 1 ignored</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Option</th><th>Effect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--dir DIR</code></td><td>Directory to search. Defaults to the current directory.</td></tr>
+    <tr><td><code>--filter SUBSTRING</code></td><td>Runs only tests whose <code>path::name</code> contains the substring.</td></tr>
+    <tr><td><code>--format pretty|json</code></td><td>Human-readable (default) or machine-readable output.</td></tr>
+  </tbody>
+</table>
+
+<p>The point of <code>@xfail</code> is that it refuses to rot. A known-broken test stays in the suite and stays red-free, but the moment the underlying bug is fixed the test starts passing and the run turns red with <code>FAILED (unexpected pass)</code> — so a fix cannot land while the bug is still marked broken. That is the opposite of commenting a test out, which is how known bugs normally become forgotten bugs.</p>
+
+<p>Two file shapes are rejected rather than run: a file that declares its own <code>main</code> (it would collide with the dispatcher the runner synthesizes), and a file with executable statements outside any function (they would be silently dropped). A rejected file fails the run even when every test that did execute passed.</p>
+
+<!-- Memory Diagnostics -->
+<h2 id="diagnostics">Memory Diagnostics</h2>
+<p>Miri manages memory for you, which means a reference-counting mistake is a compiler bug rather than yours. These tools exist to catch such bugs — they are how the standard library above was brought to a provably leak-free state, and running your own program under them costs you nothing but a rebuild.</p>
+
+<table>
+  <thead>
+    <tr><th>Tool</th><th>How</th><th>What it reports</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Shadow heap</td><td><code>MIRI_HEAP_GUARD=1</code></td><td>An ASan-style shadow heap that traps use-after-free and double-free at the moment they happen, and attributes each leak to the allocation site. Silent on a correct program.</td></tr>
+    <tr><td>Allocation count</td><td><code>MIRI_ALLOC_COUNT=1</code></td><td>Exact allocation totals for the run, split by category, so a change in allocation behaviour is measurable rather than guessed at.</td></tr>
+    <tr><td>RC verifier</td><td><code>--verify-mir</code></td><td>A path-sensitive check of the reference-counting invariants after the Perceus transform. Reports any imbalance as a hard error.</td></tr>
+  </tbody>
+</table>
+
+<p>The verifier also honours the <code>MIRI_VERIFY_MIR</code> environment variable, which is how it runs across the compiler's own test suite on every change.</p>
+
 <!-- What's Next -->
 <h2 id="whats-next">What's Next</h2>
-<p>You've covered the core language available in Miri v0.5.0-beta.3. The headline of this release is the
-  <strong>GPU preview</strong>: device-resident bindings (<code>gpu let</code> / <code>gpu var</code>),
-  <code>forall</code> kernels, on-device reduction, shared memory, atomics, warp operations, vector types, and
-  interactive <code>gpu frame</code> programs that compile to the browser via WebGPU — all in the same language
-  you just learned, with no shader files and no FFI.</p>
+<p>You've covered the core language available in Miri v0.6.0-beta.4. The headline of this release is the
+  <strong>extended standard library</strong>: <code>system.fs</code>, <code>system.os</code> and
+  <code>system.time</code> for capability-scoped access to the outside world, regular expressions in
+  <code>system.text</code>, a pure-Miri JSON parser in <code>system.json</code>, and <code>Queue</code> and
+  <code>Stack</code> — together with a closed attribute set, the native <code>miri test</code> runner, and
+  memory diagnostics that keep the whole library provably leak-free.</p>
+<p>Nothing in that library panics, and none of it hands back a sentinel: <code>index_of</code> returns
+  <code>int?</code> rather than <code>-1</code>, and <code>pop</code> and <code>remove_at</code> return
+  <code>T?</code> rather than trapping. The absent case is always a value you handle.</p>
+<p>The <strong>GPU preview</strong> from the previous release is unchanged and still current: device-resident
+  bindings (<code>gpu let</code> / <code>gpu var</code>), <code>forall</code> kernels, on-device reduction,
+  shared memory, atomics, warp operations, vector types, and interactive <code>gpu frame</code> programs that
+  compile to the browser via WebGPU — with no shader files and no FFI.</p>
 <p>Continue with the <a href="{{ '/docs/gpu/' | relative_url }}">GPU Programming guide</a> — it starts from your
   first kernel and assumes no GPU background — or see the programs running live in the
   <a href="{{ '/gpu-demos/' | relative_url }}">GPU Playground</a>.</p>
 <p>Here's what's coming next:</p>
 <ul>
   <li><strong>Future milestones</strong> — Trait objects, capture-by-reference closures, async/await and
-    <code>async gpu</code> streams, channel-based concurrency, native GPU backends (SPIR-V, PTX, Metal)</li>
+    <code>async gpu</code> streams, channel-based concurrency, and additional GPU backends behind the same
+    <code>forall</code> surface, starting with a native SPIR-V / Vulkan path</li>
 </ul>
 <p>More resources:</p>
 <ul>

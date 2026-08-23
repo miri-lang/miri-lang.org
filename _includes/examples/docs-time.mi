@@ -1,0 +1,20 @@
+use system.io
+use system.time
+
+fn main()
+    // Clock is the capability for reading the wall clock and sleeping.
+    let clock = Clock()
+
+    // Duration is built through static constructors, never a bare number,
+    // so the unit is always visible at the call site.
+    let pause = Duration.from_millis(50)
+    println(f"pausing for {pause.as_millis()} ms")
+
+    let started = clock.now()
+    clock.sleep(pause)
+
+    // An Instant measures against the clock it was taken from.
+    let taken = started.elapsed(clock)
+    println(f"slept at least 50 ms: {taken.as_millis() >= 50}")
+
+    println(f"{Duration.from_seconds(2).as_millis()} ms in two seconds")

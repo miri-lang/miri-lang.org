@@ -1,0 +1,52 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: test-runner
+order: 36
+nav_title: The miri test Runner
+title: The miri test Runner — Miri Programming Language
+description: miri test is a native test runner. It walks a directory tree, discovers every @test function, and runs each one in its own subprocess — so a test that…
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/test-runner/
+pager_prev:
+  title: Attributes
+  url: /docs/getting-started/attributes/
+pager_next:
+  title: Memory Diagnostics
+  url: /docs/getting-started/diagnostics/
+---
+
+<h1>The <code>miri test</code> Runner</h1>
+<p><code>miri test</code> is a native test runner. It walks a directory tree, discovers every <code>@test</code> function, and runs each one <strong>in its own subprocess</strong> — so a test that segfaults is reported as a failure instead of taking the whole run down with it.</p>
+
+{% capture ex_src %}{% include examples/docs-test-runner.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Run it against a directory:</p>
+<pre><code>miri test --dir .</code></pre>
+
+<p>which reports in the familiar cargo style:</p>
+<pre><code>running 4 tests
+test docs-test-runner.mi::addition_works ... ok
+test docs-test-runner.mi::strings_concatenate ... ok
+test docs-test-runner.mi::reads_the_config ... ignored, needs a fixture file
+test docs-test-runner.mi::known_bug ... ok (expected failure)
+test result: ok. 3 passed; 0 failed; 1 ignored</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Option</th><th>Effect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--dir DIR</code></td><td>Directory to search. Defaults to the current directory.</td></tr>
+    <tr><td><code>--filter SUBSTRING</code></td><td>Runs only tests whose <code>path::name</code> contains the substring.</td></tr>
+    <tr><td><code>--format pretty|json</code></td><td>Human-readable (default) or machine-readable output.</td></tr>
+  </tbody>
+</table>
+
+<p>The point of <code>@xfail</code> is that it refuses to rot. A known-broken test stays in the suite and stays red-free, but the moment the underlying bug is fixed the test starts passing and the run turns red with <code>FAILED (unexpected pass)</code> — so a fix cannot land while the bug is still marked broken. That is the opposite of commenting a test out, which is how known bugs normally become forgotten bugs.</p>
+
+<p>Two file shapes are rejected rather than run: a file that declares its own <code>main</code> (it would collide with the dispatcher the runner synthesizes), and a file with executable statements outside any function (they would be silently dropped). A rejected file fails the run even when every test that did execute passed.</p>
+
+<!-- Memory Diagnostics -->

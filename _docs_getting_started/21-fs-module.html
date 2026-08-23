@@ -1,0 +1,44 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: fs-module
+order: 21
+nav_title: system.fs
+title: system.fs — Miri Programming Language
+description: system.fs reaches the filesystem through an Fs handle.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/fs-module/
+pager_prev:
+  title: system.json
+  url: /docs/getting-started/json-module/
+pager_next:
+  title: system.os
+  url: /docs/getting-started/os-module/
+---
+
+<h1>system.fs</h1>
+<p><code>system.fs</code> reaches the filesystem through an <code>Fs</code> handle. The handle is the capability: a function that is not given one cannot read or write a file, so the ability to touch the disk is visible in a signature instead of ambient across the whole program.</p>
+
+{% capture ex_src %}{% include examples/docs-fs.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Method</th><th>Returns</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>exists(path String)</code></td><td><code>bool</code></td></tr>
+    <tr><td><code>read_file(path String)</code></td><td><code>Result&lt;String, FsError&gt;</code></td></tr>
+    <tr><td><code>write_file(path String, contents String)</code></td><td><code>Result&lt;int, FsError&gt;</code> — bytes written</td></tr>
+    <tr><td><code>append_file(path String, contents String)</code></td><td><code>Result&lt;int, FsError&gt;</code> — bytes appended</td></tr>
+    <tr><td><code>list_dir(path String)</code></td><td><code>Result&lt;[String], FsError&gt;</code></td></tr>
+    <tr><td><code>create_dir(path String)</code></td><td><code>Result&lt;bool, FsError&gt;</code></td></tr>
+    <tr><td><code>delete(path String)</code></td><td><code>Result&lt;bool, FsError&gt;</code></td></tr>
+    <tr><td><code>cwd()</code></td><td><code>Result&lt;String, FsError&gt;</code></td></tr>
+  </tbody>
+</table>
+
+<p><code>FsError</code> distinguishes <code>NotFound</code>, <code>PermissionDenied</code>, <code>AlreadyExists</code>, <code>NotADirectory</code>, <code>InvalidData</code> and <code>Other</code>, each carrying a message. It is <code>@non_exhaustive</code>, so a <code>match</code> on it needs a <code>default</code> arm and stays compiling when a future release adds a case.</p>
+
+<!-- system.os -->

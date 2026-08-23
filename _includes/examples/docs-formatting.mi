@@ -1,0 +1,34 @@
+use system.io
+use system.testing
+
+enum Shape
+    Circle(int)
+    Square(int)
+
+struct Point
+    x int
+    y int
+
+fn missing() int?
+    None
+
+fn load() Result<int, String>
+    Result.Err("no such key")
+
+fn main()
+    // f-strings render Option, Result and any user enum by variant.
+    let found = Some(15)
+    let absent = missing()
+    println(f"{found}")            // Some(15)
+    println(f"{absent}")           // None
+    println(f"{load()}")           // Err(no such key)
+
+    let shape = Shape.Circle(3)
+    println(f"{shape}")            // Circle(3)
+
+    // assert_eq compares and diffs the same shapes, plus structs and any
+    // class defining equals:
+    //   assert_eq(Point(x: 1, y: 2), Point(x: 3, y: 4))
+    //   -> expected Point(x=3, y=4), got Point(x=1, y=2)
+    assert_eq(Point(x: 1, y: 2), Point(x: 1, y: 2))
+    assert_eq(shape, Shape.Circle(3))

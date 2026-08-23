@@ -1,0 +1,23 @@
+use system.io
+use system.os
+
+fn main()
+    // platform() names the host: "macos", "linux" or "windows".
+    println(f"platform: {platform()}")
+
+    // Env is the capability for the process environment.
+    let env = Env()
+    match env.set("MIRI_GREETING", "hello")
+        Result.Ok(replaced): println(f"set (replaced an existing value: {replaced})")
+        Result.Err(e): println(f"could not set: {e}")
+
+    // get returns String? — an unset variable is None, not an empty string.
+    match env.get("MIRI_GREETING")
+        Some(value): println(f"MIRI_GREETING={value}")
+        None: println("MIRI_GREETING is unset")
+
+    // Args is Iterable<String> over the command line.
+    let args = Args()
+    println(f"{args.length()} argument(s)")
+    for arg in args
+        println(f"  {arg}")

@@ -3,7 +3,7 @@ layout: docs-topic
 guide: getting-started
 guide_title: Getting Started
 topic_id: imports-modules
-order: 27
+order: 33
 nav_title: Imports & Modules
 title: Imports & Modules — Miri Programming Language
 description: Miri supports a module system that resolves imports, enforces visibility across module boundaries, and detects errors like circular dependencies and…
@@ -40,6 +40,13 @@ group: Projects &amp; Tooling
     <tr><td><code>system.collections.list</code></td><td>List methods + <code>Queryable</code>/<code>Transformable</code>/<code>Foldable</code>/<code>Sequenced</code> traits</td></tr>
     <tr><td><code>system.collections.map</code></td><td>Map methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
     <tr><td><code>system.collections.set</code></td><td>Set methods + ad-hoc <code>map</code>/<code>filter</code>/<code>reduce</code></td></tr>
+    <tr><td><code>system.collections.queue</code></td><td><code>Queue&lt;T&gt;</code> — <code>enqueue</code>, <code>dequeue</code>, <code>peek</code></td></tr>
+    <tr><td><code>system.collections.stack</code></td><td><code>Stack&lt;T&gt;</code> — <code>push</code>, <code>pop</code>, <code>peek</code></td></tr>
+    <tr><td><code>system.text</code></td><td><code>Regex</code>, <code>Match</code> — <code>compile</code>, <code>matches</code>, <code>find</code>, <code>find_all</code>, <code>replace</code></td></tr>
+    <tr><td><code>system.json</code></td><td><code>Json</code>, <code>JsonError</code> — <code>parse</code>, <code>to_string</code>, <code>get</code>, <code>at</code>, typed accessors</td></tr>
+    <tr><td><code>system.fs</code></td><td><code>Fs</code>, <code>FsError</code> — files and directories</td></tr>
+    <tr><td><code>system.os</code></td><td><code>Env</code>, <code>Args</code>, <code>platform</code>, <code>exit</code></td></tr>
+    <tr><td><code>system.time</code></td><td><code>Clock</code>, <code>Instant</code>, <code>Duration</code></td></tr>
   </tbody>
 </table>
 

@@ -1,0 +1,42 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: attributes
+order: 35
+nav_title: Attributes
+title: Attributes — Miri Programming Language
+description: An attribute is written @name above a declaration, optionally with a string argument.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/attributes/
+pager_prev:
+  title: Multi-File Projects
+  url: /docs/getting-started/multi-file-projects/
+pager_next:
+  title: The miri test Runner
+  url: /docs/getting-started/test-runner/
+---
+
+<h1>Attributes</h1>
+<p>An attribute is written <code>@name</code> above a declaration, optionally with a string argument. Attributes are a <strong>closed set</strong>: the compiler knows every one it accepts and rejects anything else with an error. A misspelled attribute can therefore never be silently ignored, which is the failure mode that makes attributes untrustworthy in other languages — <code>@tset</code> is a compile error, not a test that quietly never runs.</p>
+
+{% capture ex_src %}{% include examples/docs-attributes.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Attribute</th><th>Applies to</th><th>Argument</th><th>Effect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>@non_exhaustive</code></td><td>Enum</td><td>—</td><td>The enum may gain variants, so a <code>match</code> on it outside the defining module needs a <code>default</code> arm.</td></tr>
+    <tr><td><code>@must_use</code></td><td>Enum</td><td>—</td><td>The value may not be silently discarded at a call site.</td></tr>
+    <tr><td><code>@deprecated</code></td><td>Function, class, enum</td><td>Required</td><td>Callers get a warning carrying the message — normally the replacement to use.</td></tr>
+    <tr><td><code>@test</code></td><td>Function</td><td>—</td><td>Marks the function for discovery by <code>miri test</code>.</td></tr>
+    <tr><td><code>@ignore</code></td><td>Function</td><td>Required</td><td>Skips the test and reports the reason. Requires <code>@test</code>.</td></tr>
+    <tr><td><code>@xfail</code></td><td>Function</td><td>Required</td><td>The test is expected to fail. Requires <code>@test</code>.</td></tr>
+  </tbody>
+</table>
+
+<p>Applying an attribute to the wrong kind of declaration, omitting a required argument, or passing one where none is accepted are all errors as well — as is using <code>@ignore</code> or <code>@xfail</code> without the <code>@test</code> they depend on.</p>
+
+<!-- The miri test Runner -->

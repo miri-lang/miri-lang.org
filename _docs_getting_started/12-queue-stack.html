@@ -1,0 +1,42 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: queue-stack
+order: 12
+nav_title: Queue &amp; Stack
+title: Queue &amp; Stack — Miri Programming Language
+description: Queue&lt;T&gt; and Stack&lt;T&gt; add the two classic ordering disciplines on top of the collections above.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/queue-stack/
+pager_prev:
+  title: Collections
+  url: /docs/getting-started/collections/
+pager_next:
+  title: Option Types
+  url: /docs/getting-started/option-types/
+---
+
+<h1>Queue &amp; Stack</h1>
+<p><code>Queue&lt;T&gt;</code> and <code>Stack&lt;T&gt;</code> add the two classic ordering disciplines on top of the collections above. Neither is a new primitive: both are built by composition over an existing collection, and both implement <code>Iterable&lt;T&gt;</code>, <code>Queryable&lt;T&gt;</code> and <code>Foldable&lt;T&gt;</code>, so that whole surface — <code>for..in</code>, <code>contains</code>, <code>index_of</code>, <code>first</code>, <code>last</code>, <code>is_empty</code>, <code>reduce</code>, <code>any</code>, <code>all</code>, <code>count_where</code>, <code>sum</code>, <code>min</code>, <code>max</code> — comes for free from the traits rather than being reimplemented on each type.</p>
+
+{% capture ex_src %}{% include examples/docs-queue-stack.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Type</th><th>Order</th><th>Add</th><th>Remove</th><th>Inspect</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Queue&lt;T&gt;</code></td><td>First in, first out</td><td><code>enqueue(item T)</code></td><td><code>dequeue() T?</code></td><td><code>peek() T?</code></td></tr>
+    <tr><td><code>Stack&lt;T&gt;</code></td><td>Last in, first out</td><td><code>push(item T)</code></td><td><code>pop() T?</code></td><td><code>peek() T?</code></td></tr>
+  </tbody>
+</table>
+
+<p>Both also carry <code>length()</code> and <code>element_at(index int)</code>. Note that removal and inspection return <code>T?</code>, not <code>T</code>: draining an empty queue yields <code>None</code> rather than trapping or handing back a sentinel value, so the empty case is one you handle in the type system like any other.</p>
+
+<p>Neither implements <code>Transformable</code>, so <code>map</code> and <code>filter</code> are not available on a queue or a stack directly — iterate it, or build a <code>List</code> from it, when you need those.</p>
+
+<p>Import them with <code>use system.collections.queue</code> and <code>use system.collections.stack</code>.</p>
+
+<!-- Option Types -->

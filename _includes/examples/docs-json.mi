@@ -1,0 +1,32 @@
+use system.io
+use system.json
+
+fn main()
+    let source = "{\"name\": \"miri\", \"stars\": 3, \"tags\": [\"gpu\", \"compiler\"]}"
+
+    // parse returns Result<Json, JsonError>; the error carries line and column.
+    match Json.parse(source)
+        Result.Ok(doc)
+            // get(key) and at(index) return Json?, so a missing field is a
+            // value you handle, not a crash.
+            match doc.get("name")
+                Some(field)
+                    let name = field.as_string() ?? "<unnamed>"
+                    println(f"name: {name}")
+                None: println("no name field")
+
+            match doc.get("stars")
+                Some(field)
+                    let stars = field.as_int() ?? 0
+                    println(f"stars: {stars}")
+                None: println("no stars field")
+
+            match doc.get("tags")
+                Some(tags)
+                    match tags.at(0)
+                        Some(first)
+                            let tag = first.as_string() ?? "?"
+                            println(f"first tag: {tag}")
+                        None: println("no tags")
+                None: println("no tags field")
+        Result.Err(e): println(f"parse error: {e}")

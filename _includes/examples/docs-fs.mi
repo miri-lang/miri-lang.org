@@ -1,0 +1,26 @@
+use system.io
+use system.fs
+
+fn main()
+    // An Fs handle is the capability: a function without one cannot touch
+    // the filesystem at all.
+    let fs = Fs()
+    let path = "/tmp/miri-notes.txt"
+
+    match fs.write_file(path, "first line\n")
+        Result.Ok(written): println(f"wrote {written} bytes")
+        Result.Err(e): println(f"write failed: {e}")
+
+    match fs.append_file(path, "second line\n")
+        Result.Ok(written): println(f"appended {written} bytes")
+        Result.Err(e): println(f"append failed: {e}")
+
+    match fs.read_file(path)
+        Result.Ok(text): println(f"read {text.length()} chars")
+        Result.Err(e): println(f"read failed: {e}")
+
+    println(f"exists: {fs.exists(path)}")
+
+    match fs.delete(path)
+        Result.Ok(removed): println(f"deleted: {removed}")
+        Result.Err(e): println(f"delete failed: {e}")

@@ -28,8 +28,8 @@ pager_next:
   <li><strong>Kernel debugging</strong> — a <code>gpu simulate</code> mode: CPU interpretation of kernels with
     race and divergence detectors, plus in-kernel printing.</li>
   <li><strong>Zero-copy on unified memory</strong> — opt-in host views over device buffers on UMA hardware.</li>
-  <li><strong>Native backends</strong> — SPIR-V, PTX, and Metal for the features WGSL core can't express:
-    64-bit atomics, cooperative matrix, <code>bf16</code>/<code>fp8</code>.</li>
+  <li><strong>Native backends</strong> — a SPIR-V / Vulkan path first, for the features WGSL core can't
+    express: 64-bit atomics, cooperative matrix, <code>bf16</code>/<code>fp8</code>.</li>
   <li><strong>Richer reductions</strong> — multi-workgroup hierarchical reduce, <code>min</code>/<code>max</code>
     and general closure folds.</li>
 </ul>

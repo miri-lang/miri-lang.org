@@ -1,0 +1,41 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: time-module
+order: 23
+nav_title: system.time
+title: system.time — Miri Programming Language
+description: system.time splits time into three types so that a duration can never be confused with a point in time, and neither can be confused with a bare number.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/time-module/
+pager_prev:
+  title: system.os
+  url: /docs/getting-started/os-module/
+pager_next:
+  title: Memory Model
+  url: /docs/getting-started/memory-model/
+---
+
+<h1>system.time</h1>
+<p><code>system.time</code> splits time into three types so that a duration can never be confused with a point in time, and neither can be confused with a bare number. A <code>Clock</code> is the capability for reading the wall clock and for sleeping.</p>
+
+{% capture ex_src %}{% include examples/docs-time.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Duration.from_nanos</code> / <code>from_micros</code> / <code>from_millis</code> / <code>from_seconds</code></td><td><code>Duration</code></td><td>Static constructors — the unit is named at the call site, never implied.</td></tr>
+    <tr><td><code>as_nanos()</code> / <code>as_micros()</code> / <code>as_millis()</code> / <code>as_seconds()</code></td><td><code>int</code></td><td>Reads a <code>Duration</code> back in a chosen unit.</td></tr>
+    <tr><td><code>Clock().now()</code></td><td><code>Instant</code></td><td>A point in time.</td></tr>
+    <tr><td><code>Clock().sleep(d Duration)</code></td><td>—</td><td>Blocks for at least <code>d</code>.</td></tr>
+    <tr><td><code>Instant.elapsed(clock Clock)</code></td><td><code>Duration</code></td><td>Time since the instant was taken.</td></tr>
+  </tbody>
+</table>
+
+<p>Those static constructors are what made <code>Duration.from_millis(500)</code> possible: static class members shipped as the language feature this module needed.</p>
+
+<!-- Memory Model -->

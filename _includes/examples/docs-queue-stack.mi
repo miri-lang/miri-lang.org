@@ -1,0 +1,34 @@
+use system.io
+use system.collections.queue
+use system.collections.stack
+
+fn main()
+    // Queue<T> — first in, first out.
+    let jobs = Queue<String>()
+    jobs.enqueue("build")
+    jobs.enqueue("test")
+    jobs.enqueue("deploy")
+
+    println(f"{jobs.length()} queued")
+    match jobs.peek()
+        Some(next): println(f"next: {next}")
+        None: println("nothing queued")
+
+    // dequeue returns T? — draining an empty queue yields None, never a trap.
+    while jobs.length() > 0
+        match jobs.dequeue()
+            Some(job): println(f"running {job}")
+            None: println("empty")
+
+    // Stack<T> — last in, first out.
+    let undo = Stack<String>()
+    undo.push("type 'a'")
+    undo.push("type 'b'")
+
+    match undo.pop()
+        Some(step): println(f"undid: {step}")
+        None: println("nothing to undo")
+
+    // Both are built by composition over the existing collections, so the
+    // whole Iterable / Queryable / Foldable surface comes along for free.
+    println(f"{undo.length()} step(s) left")

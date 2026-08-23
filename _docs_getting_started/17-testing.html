@@ -3,7 +3,7 @@ layout: docs-topic
 guide: getting-started
 guide_title: Getting Started
 topic_id: testing
-order: 16
+order: 17
 nav_title: Testing
 title: Testing — Miri Programming Language
 description: system.testing provides four assertion intrinsics.
@@ -29,12 +29,34 @@ pager_next:
   </thead>
   <tbody>
     <tr><td><code>assert(cond, msg?)</code></td><td>Aborts when <code>cond</code> is <code>false</code>.</td></tr>
-    <tr><td><code>assert_eq&lt;T&gt;(actual, expected, msg?)</code></td><td>Aborts when values differ. Supports <code>int</code>/<code>float</code>/<code>bool</code>/<code>String</code> + all int widths.</td></tr>
+    <tr><td><code>assert_eq&lt;T&gt;(actual, expected, msg?)</code></td><td>Aborts when values differ. Supports <code>int</code>/<code>float</code>/<code>bool</code>/<code>String</code> + all int widths, plus enums, <code>Option</code>, <code>Result</code>, structs, and classes defining <code>equals</code>.</td></tr>
     <tr><td><code>assert_ne&lt;T&gt;(a, b, msg?)</code></td><td>Aborts when values are equal.</td></tr>
     <tr><td><code>assert_panics(f, expected?)</code></td><td>Runs <code>f()</code> and aborts unless it calls <code>panic(...)</code>.</td></tr>
   </tbody>
 </table>
 
 <p>A failed assertion aborts with <code>Runtime error: assertion failed at &lt;path&gt;:&lt;line&gt;: &lt;detail&gt;</code>. <code>assert_panics</code> uses a setjmp/longjmp catch frame so a Miri-level <code>panic(...)</code> inside the closure is caught and reported as a pass.</p>
+
+<p>The detail is rendered structurally rather than as an address, so a failure names the values that actually differ:</p>
+
+<table>
+  <thead>
+    <tr><th>Compared values</th><th>Failure detail</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Structs</td><td><code>expected Point(x=3, y=4), got Point(x=1, y=2)</code></td></tr>
+    <tr><td>Enums with a payload</td><td><code>expected Circle(4), got Circle(3)</code></td></tr>
+    <tr><td><code>Result</code></td><td><code>expected Err(boom), got Ok(1)</code></td></tr>
+    <tr><td><code>Option</code></td><td><code>expected None, got Some(1)</code></td></tr>
+    <tr><td><code>assert_ne</code></td><td><code>values must differ, both were 5</code></td></tr>
+  </tbody>
+</table>
+
+<p>The same rendering is available in ordinary string interpolation — an <code>Option</code>, a <code>Result</code>, or any enum you define can go straight into an f-string:</p>
+
+{% capture ex_src %}{% include examples/docs-formatting.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>Structural <code>==</code> underpins all of this: enum payloads and managed fields compare by value, not by pointer. Note that a struct renders in an assertion failure but is not itself interpolatable — put its fields in the f-string instead.</p>
 
 <!-- Type Aliases -->

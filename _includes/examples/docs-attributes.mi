@@ -1,0 +1,21 @@
+use system.io
+
+// @non_exhaustive: this enum may gain variants later, so a match on it
+// outside the defining module must carry a default arm.
+@non_exhaustive
+public enum ConnectionError
+    Refused(String)
+    TimedOut(int)
+
+// @must_use: the value may not be silently discarded at a call site.
+@must_use
+public enum Receipt
+    Written(int)
+
+// @deprecated carries the replacement, and callers get a warning.
+@deprecated("acquire a Clock and use clock.now()")
+fn legacy_timestamp() int
+    0
+
+fn main()
+    println("attributes are a closed set — an unknown one is a compile error")

@@ -1,0 +1,43 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: text-module
+order: 19
+nav_title: system.text
+title: system.text — Miri Programming Language
+description: system.text provides regular expressions.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/text-module/
+pager_prev:
+  title: Type Aliases
+  url: /docs/getting-started/type-aliases/
+pager_next:
+  title: system.json
+  url: /docs/getting-started/json-module/
+group: Standard Library
+---
+
+<h1>system.text</h1>
+<p><code>system.text</code> provides regular expressions. <code>Regex.compile</code> returns a <code>Result&lt;Regex, RegexError&gt;</code> rather than panicking, so a malformed pattern is a value you handle — the same discipline as every other fallible operation in the standard library.</p>
+
+{% capture ex_src %}{% include examples/docs-text.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Regex.compile(pattern String)</code></td><td><code>Result&lt;Regex, RegexError&gt;</code></td><td>Static. Compiles a pattern, reporting a syntax error as <code>Err</code>.</td></tr>
+    <tr><td><code>matches(text String)</code></td><td><code>bool</code></td><td>Whether the pattern occurs anywhere in <code>text</code>.</td></tr>
+    <tr><td><code>find(text String)</code></td><td><code>Match?</code></td><td>The first match, or <code>None</code>.</td></tr>
+    <tr><td><code>find_all(text String)</code></td><td><code>[Match]</code></td><td>Every non-overlapping match, in order.</td></tr>
+    <tr><td><code>replace(text String, to String)</code></td><td><code>String</code></td><td>Every match replaced with <code>to</code>.</td></tr>
+    <tr><td><code>Match.text()</code> / <code>start()</code> / <code>end()</code></td><td><code>String</code> / <code>int</code> / <code>int</code></td><td>The matched text and its half-open byte range.</td></tr>
+  </tbody>
+</table>
+
+<p>A pattern that is fixed at compile time can be written as a regex literal — <code>re"^\d+$"</code>, with optional trailing flags — which the compiler validates while it type-checks, turning an invalid pattern into a compile error instead of a runtime <code>Err</code>. <code>String</code> also gained <code>split</code>, <code>join</code>, <code>to_int</code> and <code>to_float</code>, and match arms accept string, float and regex predicates.</p>
+
+<!-- system.json -->

@@ -343,6 +343,16 @@ fn main()
         <p>GPU kernels live alongside CPU code in the same language — no shader files, no FFI. Mark a binding <code>gpu</code>, launch with <code>forall</code>, and every upload, launch, and readback is visible in the source. Runs natively and in the browser via WebGPU.</p>
       </div>
       <div class="feature-card reveal">
+        <div class="pix" data-px="1111110000111111000011111"></div>
+        <h3>Batteries-Included Standard Library</h3>
+        <p>Files, the environment, time, regular expressions and JSON, alongside the collection types. Access to the outside world is a capability you pass in, so a function that cannot touch the disk says so in its signature. Nothing panics, and nothing hands back a sentinel.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="pix" data-px="0000100010101000100000000"></div>
+        <h3>Testing Built In</h3>
+        <p>Mark a function <code>@test</code> and run <code>miri test</code> — each test runs in its own subprocess, so a crash is a failure rather than a lost run. Attributes are a closed set, so a typo is a compile error, never a test that silently never runs.</p>
+      </div>
+      <div class="feature-card reveal">
         <span class="soon-tag">COMING SOON</span>
         <div class="pix blue" data-px="0101010101000000101010101"></div>
         <h3>Async &amp; Parallelism</h3>

@@ -1,0 +1,43 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: json-module
+order: 20
+nav_title: system.json
+title: system.json — Miri Programming Language
+description: system.json is a recursive Json enum with a parser and serializer written in Miri itself — the compiler has no special knowledge of it.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/json-module/
+pager_prev:
+  title: system.text
+  url: /docs/getting-started/text-module/
+pager_next:
+  title: system.fs
+  url: /docs/getting-started/fs-module/
+---
+
+<h1>system.json</h1>
+<p><code>system.json</code> is a recursive <code>Json</code> enum with a parser and serializer written in Miri itself — the compiler has no special knowledge of it. Parse failures carry the line and column where the document went wrong.</p>
+
+{% capture ex_src %}{% include examples/docs-json.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<p>The <code>Json</code> enum has six variants — <code>Object</code>, <code>Array</code>, <code>Text</code>, <code>Number</code>, <code>Bool</code> and <code>Null</code> — and you can <code>match</code> on them directly. Most code instead reaches for the accessors, each of which returns an option so a missing or mistyped field is a value rather than a crash:</p>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Json.parse(source String)</code></td><td><code>Result&lt;Json, JsonError&gt;</code></td><td>Static. Parses a document; the error carries a position.</td></tr>
+    <tr><td><code>to_string()</code></td><td><code>String</code></td><td>Serializes back to JSON text.</td></tr>
+    <tr><td><code>get(key String)</code></td><td><code>Json?</code></td><td>An object member, or <code>None</code>.</td></tr>
+    <tr><td><code>at(index int)</code></td><td><code>Json?</code></td><td>An array element, or <code>None</code>.</td></tr>
+    <tr><td><code>as_string()</code> / <code>as_int()</code> / <code>as_float()</code> / <code>as_bool()</code></td><td><code>String?</code> / <code>int?</code> / <code>float?</code> / <code>bool?</code></td><td>The scalar value when the variant matches, else <code>None</code>.</td></tr>
+  </tbody>
+</table>
+
+<p>Numbers keep their original lexeme, so a value written <code>1</code> stays <code>1</code> and no precision is lost on a round trip. Object members are stored in a map, so <code>to_string()</code> does not preserve the key order of the source document.</p>
+
+<!-- system.fs -->

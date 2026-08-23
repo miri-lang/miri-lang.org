@@ -1,0 +1,36 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: diagnostics
+order: 37
+nav_title: Memory Diagnostics
+title: Memory Diagnostics — Miri Programming Language
+description: Miri manages memory for you, which means a reference-counting mistake is a compiler bug rather than yours.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/diagnostics/
+pager_prev:
+  title: The miri test Runner
+  url: /docs/getting-started/test-runner/
+pager_next:
+  title: What's Next
+  url: /docs/getting-started/whats-next/
+---
+
+<h1>Memory Diagnostics</h1>
+<p>Miri manages memory for you, which means a reference-counting mistake is a compiler bug rather than yours. These tools exist to catch such bugs — they are how the standard library above was brought to a provably leak-free state, and running your own program under them costs you nothing but a rebuild.</p>
+
+<table>
+  <thead>
+    <tr><th>Tool</th><th>How</th><th>What it reports</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Shadow heap</td><td><code>MIRI_HEAP_GUARD=1</code></td><td>An ASan-style shadow heap that traps use-after-free and double-free at the moment they happen, and attributes each leak to the allocation site. Silent on a correct program.</td></tr>
+    <tr><td>Allocation count</td><td><code>MIRI_ALLOC_COUNT=1</code></td><td>Exact allocation totals for the run, split by category, so a change in allocation behaviour is measurable rather than guessed at.</td></tr>
+    <tr><td>RC verifier</td><td><code>--verify-mir</code></td><td>A path-sensitive check of the reference-counting invariants after the Perceus transform. Reports any imbalance as a hard error.</td></tr>
+  </tbody>
+</table>
+
+<p>The verifier also honours the <code>MIRI_VERIFY_MIR</code> environment variable, which is how it runs across the compiler's own test suite on every change.</p>
+
+<!-- What's Next -->

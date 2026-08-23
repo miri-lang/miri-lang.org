@@ -41,7 +41,7 @@
 - id: production-ready
   q: "Is Miri production ready?"
   a: >-
-    <p>No. Miri is in beta and not production ready. The current release is v0.5.0-beta.3, and there are no
+    <p>No. Miri is in beta and not production ready. The current release is v0.6.0-beta.4, and there are no
     prebuilt binaries yet — you install it by cloning the repository and building the compiler from source.
     Async and parallelism are unimplemented, WGSL/WebGPU is the only GPU backend, and Cranelift is the only CPU
     backend. Use it to explore the language, write kernels and file issues; do not put it under a production
@@ -51,11 +51,13 @@
   q: "What works in Miri today, and what does not?"
   a: >-
     <p>Working today: the CPU language — static typing with inference, value semantics with automatic reference
-    counting, classes, traits, generics, closures, pattern matching, <code>Option</code>/<code>Result</code>,
-    modules, a standard library and a test runner — plus the GPU preview: <code>gpu</code> residency, 1–3D
+    counting, classes, traits, generics, closures, pattern matching, <code>Option</code>/<code>Result</code> and
+    modules — over a standard library that now covers files, the environment, time, regular expressions, JSON
+    and the collection types (including <code>Queue</code> and <code>Stack</code>), with a native
+    <code>miri test</code> runner and attributes. Plus the GPU preview: <code>gpu</code> residency, 1–3D
     <code>forall</code>, <code>gpu fn</code> kernels with shared memory, atomics and warp operations, vector
     types, and <code>miri build --target web-gpu</code>. Not there yet: async and parallelism, trait objects,
-    capture-by-reference closures, native SPIR-V/PTX/Metal backends and an LLVM CPU backend.</p>
+    capture-by-reference closures, native SPIR-V/Vulkan and Metal backends, and an LLVM CPU backend.</p>
 
 - id: different-from-wgsl-cuda
   q: "How is Miri different from writing GPU kernels by hand?"
@@ -81,7 +83,8 @@
     <p>The compiler runs on macOS, Linux and Windows. Kernels compile to WGSL and execute through WebGPU, so any
     adapter reachable that way runs them — Metal on Apple hardware, Vulkan on Linux and Windows, DirectX 12 on
     Windows. No vendor SDK and no CUDA toolchain is involved, so the same kernel runs on AMD, Intel, Apple and
-    NVIDIA hardware. Native SPIR-V, PTX and Metal backends are planned but not shipped.</p>
+    NVIDIA hardware. Additional native backends, starting with a SPIR-V / Vulkan path, are planned but not
+    shipped.</p>
 
 - id: browser
   q: "Can Miri programs run in a browser?"

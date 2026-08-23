@@ -1,0 +1,25 @@
+use system.testing
+
+// `miri test` discovers every @test function in the directory tree and runs
+// each one in its own subprocess, so a crash reports as a failure rather
+// than taking the whole run down.
+@test
+fn addition_works()
+    assert_eq(2 + 2, 4)
+
+@test
+fn strings_concatenate()
+    assert_eq("mi" + "ri", "miri")
+
+// @ignore skips the test and prints the reason. It requires @test.
+@test
+@ignore("needs a fixture file")
+fn reads_the_config()
+    assert(false)
+
+// @xfail pins a known bug: the test is expected to fail, and the run turns
+// red if it starts passing — so a fixed bug cannot stay marked broken.
+@test
+@xfail("sub-word element stride, tracked upstream")
+fn known_bug()
+    assert_eq(1, 2)

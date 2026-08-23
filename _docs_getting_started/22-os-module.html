@@ -1,0 +1,40 @@
+---
+layout: docs-topic
+guide: getting-started
+guide_title: Getting Started
+topic_id: os-module
+order: 22
+nav_title: system.os
+title: system.os — Miri Programming Language
+description: system.os covers the process environment, the command line, and the host platform.
+og_image: /assets/og/docs.png
+permalink: /docs/getting-started/os-module/
+pager_prev:
+  title: system.fs
+  url: /docs/getting-started/fs-module/
+pager_next:
+  title: system.time
+  url: /docs/getting-started/time-module/
+---
+
+<h1>system.os</h1>
+<p><code>system.os</code> covers the process environment, the command line, and the host platform. <code>Env</code> and <code>Args</code> follow the same capability rule as <code>Fs</code>.</p>
+
+{% capture ex_src %}{% include examples/docs-os.mi %}{% endcapture %}
+<pre><code class="language-miri">{{ ex_src | strip | escape }}</code></pre>
+
+<table>
+  <thead>
+    <tr><th>Member</th><th>Returns</th><th>Behaviour</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Env().get(name String)</code></td><td><code>String?</code></td><td>An unset variable is <code>None</code>, distinct from a variable set to the empty string.</td></tr>
+    <tr><td><code>Env().set(name String, value String)</code></td><td><code>Result&lt;bool, EnvError&gt;</code></td><td><code>true</code> when an existing value was replaced.</td></tr>
+    <tr><td><code>Args().length()</code></td><td><code>int</code></td><td>Number of command-line arguments.</td></tr>
+    <tr><td><code>Args().element_at(index int)</code></td><td><code>String</code></td><td>One argument; <code>Args</code> is <code>Iterable&lt;String&gt;</code>, so <code>for..in</code> works.</td></tr>
+    <tr><td><code>platform()</code></td><td><code>String</code></td><td>Free function naming the host: <code>macos</code>, <code>linux</code> or <code>windows</code>.</td></tr>
+    <tr><td><code>exit(code int)</code></td><td>—</td><td>Ends the process with a status code.</td></tr>
+  </tbody>
+</table>
+
+<!-- system.time -->
