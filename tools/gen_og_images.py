@@ -236,8 +236,21 @@ for d in DEMO_CARDS:
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):
+    """Silent, and it remembers what was asked for.
+
+    `served` is how we prove Chrome actually rendered the card: a browser that
+    navigated to the template must have fetched it from here. Without that
+    proof a mis-navigation writes a screenshot of whatever Chrome happened to
+    show — see the note on `--user-data-dir` in `shoot`."""
+
+    served = set()
+
     def log_message(self, *_args):
         pass
+
+    def do_GET(self):
+        _Quiet.served.add(self.path.lstrip("/"))
+        super().do_GET()
 
 
 def serve():
@@ -250,6 +263,43 @@ def serve():
     return httpd
 
 
+ATTEMPTS = 3
+
+
+def shoot(url_path, port, shot):
+    """Screenshot one template, and prove it is the template.
+
+    Headless Chrome shares the desktop browser's profile here — a throwaway
+    `--user-data-dir` never finishes starting up on macOS — and when the
+    desktop instance holds the profile lock, the headless run sometimes
+    abandons the navigation and photographs the new-tab page instead. Nothing
+    about that failure looks like one: Chrome exits 0 and writes a valid
+    1200x630 PNG, so a Google new-tab screenshot lands in assets/og/ wearing a
+    card's file name. That is exactly how default.png got replaced once.
+
+    The navigation is therefore checked rather than trusted: a Chrome that
+    rendered the card must have fetched it from our own server, so a card
+    missing from `served` means the screenshot is of something else. The lock
+    contention is transient, so retry before giving up."""
+    for attempt in range(1, ATTEMPTS + 1):
+        _Quiet.served.discard(url_path)
+        subprocess.run(
+            [CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars",
+             "--force-device-scale-factor=1",
+             "--no-first-run", "--no-default-browser-check",
+             f"--window-size={W},{H}", "--virtual-time-budget=6000",
+             f"--screenshot={shot}",
+             f"http://127.0.0.1:{port}/{url_path}"],
+            check=True, capture_output=True, timeout=120)
+        if url_path in _Quiet.served:
+            return
+        print(f"  retrying {url_path}: Chrome screenshotted some other page "
+              f"(attempt {attempt}/{ATTEMPTS})")
+    raise RuntimeError(
+        f"Chrome never requested {url_path} in {ATTEMPTS} attempts, so the "
+        f"screenshot is not the card. Quit Google Chrome and re-run.")
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     httpd = serve()
@@ -260,13 +310,7 @@ def main() -> None:
             tmp.write_text(html)
             shot = OUT / (name + ".raw.png")
             try:
-                subprocess.run(
-                    [CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars",
-                     "--force-device-scale-factor=1",
-                     f"--window-size={W},{H}", "--virtual-time-budget=6000",
-                     f"--screenshot={shot}",
-                     f"http://127.0.0.1:{port}/{tmp.name}"],
-                    check=True, capture_output=True, timeout=120)
+                shoot(tmp.name, port, shot)
             finally:
                 tmp.unlink()
             im = Image.open(shot).convert("RGB")
