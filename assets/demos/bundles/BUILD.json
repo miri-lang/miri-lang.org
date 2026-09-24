@@ -2,8 +2,8 @@
   "generatedBy": "tools/gen_demo_bundles.py",
   "compiledFrom": "assets/demos/<name>.mi",
   "compiler": {
-    "commit": "1b8d44fae447dc242db9f9bc98a3221d5397a8ee",
-    "dirty": true
+    "commit": "c69e9bdf867c5efcba136e9f50bf2c3a2579c6ca",
+    "dirty": false
   },
   "runtimeJsBytes": 43517,
   "demos": {
@@ -16,8 +16,8 @@
       "gzip": 4529
     },
     "particles": {
-      "raw": 138803,
-      "gzip": 8874
+      "raw": 138815,
+      "gzip": 8872
     },
     "fluid": {
       "raw": 260182,
@@ -28,8 +28,8 @@
       "gzip": 10460
     },
     "neural": {
-      "raw": 190347,
-      "gzip": 16837
+      "raw": 190207,
+      "gzip": 16849
     },
     "blackhole": {
       "raw": 165890,
