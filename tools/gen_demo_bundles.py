@@ -4,7 +4,8 @@
 Run from anywhere:  python3 tools/gen_demo_bundles.py
 
 Each demo is compiled from `assets/demos/<name>.mi` — the exact bytes shown on
-`gpu-demos.html` and copied by readers — with `miri build --target web-gpu`. The
+the demo's page under `_gpu_demos/` and copied by readers — with
+`miri build --target web-gpu`. The
 emitted manifest, which carries the WGSL the compiler produced, is vendored to
 `assets/demos/bundles/<name>.json`, and the shared runtime driver to
 `assets/js/miri-gpu.js`. The site then runs the compiler's own output rather
