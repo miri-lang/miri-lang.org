@@ -572,8 +572,8 @@ println(f"{t.size()}")       // 6</code></pre>
 
 <h3 id="api-accelerable"><code>Accelerable</code></h3>
 <p>The capability trait that gates device residency. The compiler dispatches on the trait, never on a type name,
-  so adding a new GPU-eligible container is an <code>.mi</code> edit, not a compiler change. User structs opt in
-  with <code>struct Point implements Accelerable</code>.</p>
+  so adding a new GPU-eligible container is an <code>.mi</code> edit, not a compiler change. A user struct needs no
+  marker: a struct is data, so one whose every field is accelerable is GPU-eligible as it is.</p>
 <pre><code class="language-miri">public trait Accelerable
     fn byte_size() int
     fn binding_kind() AcceleratorBindingKind   // Storage | Uniform | PushConstant</code></pre>

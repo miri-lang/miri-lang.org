@@ -4,6 +4,6 @@ use system.collections.array
 
 fn main()
     gpu var data = [1, 2, 3, 4]
-    gpu let sum = data.reduce(0, fn(a i32, b i32) i32: a + b)
+    gpu let sum = data.reduce(0, fn(a int, b int) int: a + b)
     let host_sum = sum
     println(f'{host_sum}')
