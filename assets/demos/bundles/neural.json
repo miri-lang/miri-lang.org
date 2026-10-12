@@ -51,7 +51,7 @@
   "seed": [
     {
       "entryPoint": "miri_gpu_forall_0",
-      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> w_a: array<f32>;\n@group(0) @binding(1) var<storage, read_write> v_a: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_forall_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: bool = false;\n    var _12: i32 = 0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    var _17: f32 = 0.0;\n    var _18: f32 = 0.0;\n    var _19: f32 = 0.0;\n    _3 = _local_id.x;\n    _4 = _workgroup_id.x;\n    _5 = 256u;\n    _6 = (_4 * _5);\n    _7 = i32(_3);\n    _8 = i32(_6);\n    _9 = (_7 + _8);\n    _10 = (_9 + 0);\n    _11 = (_10 < 205);\n    if (bool(_11)) {\n        _12 = (_10 + 1);\n        _13 = rand_unit(_12);\n        _14 = (_13 * 2.0);\n        _15 = (_14 - 1.0);\n        _16 = init_scale(_10);\n        _17 = (_15 * _16);\n        w_a[i32(_10)] = _17;\n        _18 = _17;\n        v_a[i32(_10)] = 0.0;\n        _19 = 0.0;\n    }\n}\n\n",
+      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> w_a: array<f32>;\n@group(0) @binding(1) var<storage, read_write> v_a: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_forall_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: bool = false;\n    var _12: i32 = 0;\n    var _13: f32 = 0.0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    var _17: f32 = 0.0;\n    var _18: f32 = 0.0;\n    var _19: f32 = 0.0;\n    _3 = _local_id.x;\n    _4 = _workgroup_id.x;\n    _5 = 256u;\n    _6 = (_4 * _5);\n    _7 = i32(_3);\n    _8 = i32(_6);\n    _9 = (_7 + _8);\n    _10 = (_9 + 0);\n    _11 = (_10 < 205);\n    if (bool(_11)) {\n        _12 = _checked_add__i32(_10, 1);\n        _13 = rand_unit(_12);\n        _14 = (_13 * 2.0);\n        _15 = (_14 - 1.0);\n        _16 = init_scale(_10);\n        _17 = (_15 * _16);\n        w_a[i32(_10)] = _17;\n        _18 = _17;\n        v_a[i32(_10)] = 0.0;\n        _19 = 0.0;\n    }\n}\n\n@group(1) @binding(0) var<storage, read_write> miri_fault: atomic<u32>;\n\nfn _checked_add__i32(a: i32, b: i32) -> i32 {\n    let r = a + b;\n    if (((a ^ r) & (b ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\n",
       "workgroups": [
         1,
         1,
@@ -232,111 +232,111 @@
         },
         {
           "wgsl": 96,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 97,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 98,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 99,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 100,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 101,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 102,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 103,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 104,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 105,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 106,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 107,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 108,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 109,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 110,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 111,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 112,
-          "miri": 56
+          "miri": 76
         },
         {
           "wgsl": 113,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 114,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 115,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 116,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 117,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 118,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 119,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 120,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 121,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 122,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 147,
@@ -430,7 +430,7 @@
     },
     {
       "entryPoint": "miri_gpu_forall_1",
-      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> data: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_forall_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: bool = false;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    var _17: f32 = 0.0;\n    var _18: f32 = 0.0;\n    var _19: f32 = 0.0;\n    var _20: f32 = 0.0;\n    var _21: f32 = 0.0;\n    var _22: f32 = 0.0;\n    var _23: f32 = 0.0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: f32 = 0.0;\n    var _28: f32 = 0.0;\n    var _29: f32 = 0.0;\n    var _30: i32 = 0;\n    var _31: i32 = 0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: i32 = 0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: i32 = 0;\n    var _43: i32 = 0;\n    var _44: f32 = 0.0;\n    var _45: f32 = 0.0;\n    var _46: i32 = 0;\n    var _47: i32 = 0;\n    var _48: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 256u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = (_9 < 100);\n    if (bool(_10)) {\n        _11 = (_9 / 50);\n        _13 = (_11 * 50);\n        _12 = (_9 - _13);\n        _15 = f32(_12);\n        _16 = f32(50);\n        _14 = (_15 / _16);\n        _18 = (0.74 * _14);\n        _17 = (0.13 + _18);\n        _20 = (_14 * 4.4);\n        _21 = f32(_11);\n        _22 = f32(3.1415927);\n        _23 = (_21 * _22);\n        _19 = (_20 + _23);\n        _25 = (_9 * 2);\n        _26 = (_25 + 1);\n        _27 = rand_unit(_26);\n        _28 = (_27 - 0.5);\n        _24 = (_28 * 0.07);\n        _30 = (_9 * 2);\n        _31 = (_30 + 2);\n        _32 = rand_unit(_31);\n        _33 = (_32 - 0.5);\n        _29 = (_33 * 0.07);\n        _34 = cos(_19);\n        _35 = (_17 * _34);\n        _36 = (_35 + _24);\n        _37 = (_9 * 3);\n        data[i32(_37)] = _36;\n        _38 = _36;\n        _39 = sin(_19);\n        _40 = (_17 * _39);\n        _41 = (_40 + _29);\n        _42 = (_9 * 3);\n        _43 = (_42 + 1);\n        data[i32(_43)] = _41;\n        _44 = _41;\n        _45 = f32(_11);\n        _46 = (_9 * 3);\n        _47 = (_46 + 2);\n        data[i32(_47)] = _45;\n        _48 = _45;\n    }\n}\n\n",
+      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> data: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_forall_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: bool = false;\n    var _11: i32 = 0;\n    var _12: i32 = 0;\n    var _13: i32 = 0;\n    var _14: f32 = 0.0;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    var _17: f32 = 0.0;\n    var _18: f32 = 0.0;\n    var _19: f32 = 0.0;\n    var _20: f32 = 0.0;\n    var _21: f32 = 0.0;\n    var _22: f32 = 0.0;\n    var _23: f32 = 0.0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: f32 = 0.0;\n    var _28: f32 = 0.0;\n    var _29: f32 = 0.0;\n    var _30: i32 = 0;\n    var _31: i32 = 0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: i32 = 0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: i32 = 0;\n    var _43: i32 = 0;\n    var _44: f32 = 0.0;\n    var _45: f32 = 0.0;\n    var _46: i32 = 0;\n    var _47: i32 = 0;\n    var _48: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 256u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = (_9 < 100);\n    if (bool(_10)) {\n        _11 = (_9 / 50);\n        _13 = _checked_mul__i32(_11, 50);\n        _12 = _checked_sub__i32(_9, _13);\n        _15 = f32(_12);\n        _16 = f32(50);\n        _14 = (_15 / _16);\n        _18 = (0.74 * _14);\n        _17 = (0.13 + _18);\n        _20 = (_14 * 4.4);\n        _21 = f32(_11);\n        _22 = f32(3.1415927);\n        _23 = (_21 * _22);\n        _19 = (_20 + _23);\n        _25 = _checked_mul__i32(_9, 2);\n        _26 = _checked_add__i32(_25, 1);\n        _27 = rand_unit(_26);\n        _28 = (_27 - 0.5);\n        _24 = (_28 * 0.07);\n        _30 = _checked_mul__i32(_9, 2);\n        _31 = _checked_add__i32(_30, 2);\n        _32 = rand_unit(_31);\n        _33 = (_32 - 0.5);\n        _29 = (_33 * 0.07);\n        _34 = cos(_19);\n        _35 = (_17 * _34);\n        _36 = (_35 + _24);\n        _37 = _checked_mul__i32(_9, 3);\n        data[i32(_37)] = _36;\n        _38 = _36;\n        _39 = sin(_19);\n        _40 = (_17 * _39);\n        _41 = (_40 + _29);\n        _42 = _checked_mul__i32(_9, 3);\n        _43 = _checked_add__i32(_42, 1);\n        data[i32(_43)] = _41;\n        _44 = _41;\n        _45 = f32(_11);\n        _46 = _checked_mul__i32(_9, 3);\n        _47 = _checked_add__i32(_46, 2);\n        data[i32(_47)] = _45;\n        _48 = _45;\n    }\n}\n\n@group(1) @binding(0) var<storage, read_write> miri_fault: atomic<u32>;\n\nfn _checked_add__i32(a: i32, b: i32) -> i32 {\n    let r = a + b;\n    if (((a ^ r) & (b ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_mul__i32(a: i32, b: i32) -> i32 {\n    let r = a * b;\n    if ((a == -2147483648 && b == -1) || (b == -2147483648 && a == -1) || (b != 0 && r / b != a)) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_sub__i32(a: i32, b: i32) -> i32 {\n    let r = a - b;\n    if (((a ^ b) & (a ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\n",
       "workgroups": [
         1,
         1,
@@ -606,111 +606,111 @@
         },
         {
           "wgsl": 96,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 97,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 98,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 99,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 100,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 101,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 102,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 103,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 104,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 105,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 106,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 107,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 108,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 109,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 110,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 111,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 112,
-          "miri": 56
+          "miri": 76
         },
         {
           "wgsl": 113,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 114,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 115,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 116,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 117,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 118,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 119,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 120,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 121,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 122,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 176,
@@ -928,7 +928,7 @@
     },
     {
       "entryPoint": "miri_gpu_forall_2",
-      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(16, 16, 1)\nfn miri_gpu_forall_2(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: bool = false;\n    var _19: bool = false;\n    var _20: bool = false;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: f32 = 0.0;\n    var _27: i32 = 0;\n    var _28: f32 = 0.0;\n    var _29: i32 = 0;\n    var _30: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 16u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = _local_id.y;\n    _11 = _workgroup_id.y;\n    _12 = 16u;\n    _13 = (_11 * _12);\n    _14 = i32(_10);\n    _15 = i32(_13);\n    _16 = (_14 + _15);\n    _17 = (_16 + 0);\n    _18 = (_9 < 960);\n    _19 = (_17 < 540);\n    _20 = (_18 & _19);\n    if (bool(_20)) {\n        _22 = (_17 * 960);\n        _23 = (_22 + _9);\n        _21 = (_23 * 4);\n        paint[i32(_21)] = 0.012;\n        _24 = 0.012;\n        _25 = (_21 + 1);\n        paint[i32(_25)] = 0.02;\n        _26 = 0.02;\n        _27 = (_21 + 2);\n        paint[i32(_27)] = 0.046;\n        _28 = 0.046;\n        _29 = (_21 + 3);\n        paint[i32(_29)] = 1.0;\n        _30 = 1.0;\n    }\n}\n\n",
+      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read_write> paint: array<f32>;\n\n@compute @workgroup_size(16, 16, 1)\nfn miri_gpu_forall_2(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _2: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: i32 = 0;\n    var _7: i32 = 0;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: i32 = 0;\n    var _15: i32 = 0;\n    var _16: i32 = 0;\n    var _17: i32 = 0;\n    var _18: bool = false;\n    var _19: bool = false;\n    var _20: bool = false;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: f32 = 0.0;\n    var _27: i32 = 0;\n    var _28: f32 = 0.0;\n    var _29: i32 = 0;\n    var _30: f32 = 0.0;\n    _2 = _local_id.x;\n    _3 = _workgroup_id.x;\n    _4 = 16u;\n    _5 = (_3 * _4);\n    _6 = i32(_2);\n    _7 = i32(_5);\n    _8 = (_6 + _7);\n    _9 = (_8 + 0);\n    _10 = _local_id.y;\n    _11 = _workgroup_id.y;\n    _12 = 16u;\n    _13 = (_11 * _12);\n    _14 = i32(_10);\n    _15 = i32(_13);\n    _16 = (_14 + _15);\n    _17 = (_16 + 0);\n    _18 = (_9 < 960);\n    _19 = (_17 < 540);\n    _20 = (_18 & _19);\n    if (bool(_20)) {\n        _22 = _checked_mul__i32(_17, 960);\n        _23 = _checked_add__i32(_22, _9);\n        _21 = _checked_mul__i32(_23, 4);\n        paint[i32(_21)] = 0.012;\n        _24 = 0.012;\n        _25 = _checked_add__i32(_21, 1);\n        paint[i32(_25)] = 0.02;\n        _26 = 0.02;\n        _27 = _checked_add__i32(_21, 2);\n        paint[i32(_27)] = 0.046;\n        _28 = 0.046;\n        _29 = _checked_add__i32(_21, 3);\n        paint[i32(_29)] = 1.0;\n        _30 = 1.0;\n    }\n}\n\n@group(1) @binding(0) var<storage, read_write> miri_fault: atomic<u32>;\n\nfn _checked_add__i32(a: i32, b: i32) -> i32 {\n    let r = a + b;\n    if (((a ^ r) & (b ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_mul__i32(a: i32, b: i32) -> i32 {\n    let r = a * b;\n    if ((a == -2147483648 && b == -1) || (b == -2147483648 && a == -1) || (b != 0 && r / b != a)) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\n",
       "workgroups": [
         60,
         34,
@@ -1104,111 +1104,111 @@
         },
         {
           "wgsl": 96,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 97,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 98,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 99,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 100,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 101,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 102,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 103,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 104,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 105,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 106,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 107,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 108,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 109,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 110,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 111,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 112,
-          "miri": 56
+          "miri": 76
         },
         {
           "wgsl": 113,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 114,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 115,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 116,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 117,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 118,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 119,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 120,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 121,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 122,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 158,
@@ -1360,7 +1360,7 @@
   "framePasses": [
     {
       "entryPoint": "miri_gpu_for_3_0",
-      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read> w_a: array<f32>;\n@group(0) @binding(1) var<storage, read> v_a: array<f32>;\n@group(0) @binding(2) var<storage, read> data: array<f32>;\n@group(0) @binding(3) var<storage, read_write> w_b: array<f32>;\n@group(0) @binding(4) var<storage, read_write> v_b: array<f32>;\n@group(0) @binding(5) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_3_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    var _23: u32 = 0u;\n    var _24: i32 = 0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: i32 = 0;\n    var _28: bool = false;\n    var<function> _29: array<f32, 205>;\n    var<function> _30: array<f32, 205>;\n    var _31: i32 = 0;\n    var _32: bool = false;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: i32 = 0;\n    var _36: i32 = 0;\n    var<function> _37: array<f32, 205>;\n    var<function> _38: array<f32, 12>;\n    var<function> _39: array<f32, 12>;\n    var<function> _40: array<f32, 12>;\n    var<function> _41: array<f32, 12>;\n    var _42: i32 = 0;\n    var _43: bool = false;\n    var _44: i32 = 0;\n    var _45: bool = false;\n    var _46: f32 = 0.0;\n    var _47: i32 = 0;\n    var _48: i32 = 0;\n    var _49: i32 = 0;\n    var _50: bool = false;\n    var _51: f32 = 0.0;\n    var _52: i32 = 0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: i32 = 0;\n    var _56: f32 = 0.0;\n    var _57: i32 = 0;\n    var _58: i32 = 0;\n    var _59: i32 = 0;\n    var _60: bool = false;\n    var _61: f32 = 0.0;\n    var _62: i32 = 0;\n    var _63: i32 = 0;\n    var _64: f32 = 0.0;\n    var _65: i32 = 0;\n    var _66: i32 = 0;\n    var _67: i32 = 0;\n    var _68: f32 = 0.0;\n    var _69: f32 = 0.0;\n    var _70: i32 = 0;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: i32 = 0;\n    var _74: i32 = 0;\n    var _75: i32 = 0;\n    var _76: bool = false;\n    var _77: f32 = 0.0;\n    var _78: i32 = 0;\n    var _79: i32 = 0;\n    var _80: bool = false;\n    var _81: i32 = 0;\n    var _82: i32 = 0;\n    var _83: i32 = 0;\n    var _84: f32 = 0.0;\n    var _85: f32 = 0.0;\n    var _86: f32 = 0.0;\n    var _87: i32 = 0;\n    var _88: i32 = 0;\n    var _89: f32 = 0.0;\n    var _90: f32 = 0.0;\n    var _91: i32 = 0;\n    var _92: i32 = 0;\n    var _93: f32 = 0.0;\n    var _94: i32 = 0;\n    var _95: i32 = 0;\n    var _96: bool = false;\n    var _97: i32 = 0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: f32 = 0.0;\n    var _101: i32 = 0;\n    var _102: i32 = 0;\n    var _103: f32 = 0.0;\n    var _104: f32 = 0.0;\n    var _105: f32 = 0.0;\n    var _106: f32 = 0.0;\n    var _107: f32 = 0.0;\n    var _108: i32 = 0;\n    var _109: f32 = 0.0;\n    var _110: i32 = 0;\n    var _111: f32 = 0.0;\n    var _112: i32 = 0;\n    var _113: bool = false;\n    var _114: i32 = 0;\n    var _115: f32 = 0.0;\n    var _116: f32 = 0.0;\n    var _117: i32 = 0;\n    var _118: f32 = 0.0;\n    var _119: i32 = 0;\n    var _120: f32 = 0.0;\n    var _121: f32 = 0.0;\n    var _122: f32 = 0.0;\n    var _123: f32 = 0.0;\n    var _124: f32 = 0.0;\n    var _125: i32 = 0;\n    var _126: i32 = 0;\n    var _127: i32 = 0;\n    var _128: bool = false;\n    var _129: i32 = 0;\n    var _130: f32 = 0.0;\n    var _131: i32 = 0;\n    var _132: f32 = 0.0;\n    var _133: i32 = 0;\n    var _134: bool = false;\n    var _135: i32 = 0;\n    var _136: i32 = 0;\n    var _137: i32 = 0;\n    var _138: f32 = 0.0;\n    var _139: f32 = 0.0;\n    var _140: i32 = 0;\n    var _141: i32 = 0;\n    var _142: i32 = 0;\n    var _143: f32 = 0.0;\n    var _144: i32 = 0;\n    var _145: i32 = 0;\n    var _146: i32 = 0;\n    var _147: i32 = 0;\n    var _148: i32 = 0;\n    var _149: bool = false;\n    var _150: f32 = 0.0;\n    var _151: i32 = 0;\n    var _152: bool = false;\n    var _153: i32 = 0;\n    var _154: i32 = 0;\n    var _155: i32 = 0;\n    var _156: f32 = 0.0;\n    var _157: f32 = 0.0;\n    var _158: f32 = 0.0;\n    var _159: i32 = 0;\n    var _160: i32 = 0;\n    var _161: f32 = 0.0;\n    var _162: f32 = 0.0;\n    var _163: f32 = 0.0;\n    var _164: f32 = 0.0;\n    var _165: i32 = 0;\n    var _166: i32 = 0;\n    var _167: i32 = 0;\n    var _168: bool = false;\n    var _169: i32 = 0;\n    var _170: f32 = 0.0;\n    var _171: i32 = 0;\n    var _172: f32 = 0.0;\n    var _173: i32 = 0;\n    var _174: i32 = 0;\n    var _175: f32 = 0.0;\n    var _176: f32 = 0.0;\n    var _177: i32 = 0;\n    var _178: i32 = 0;\n    var _179: f32 = 0.0;\n    var _180: i32 = 0;\n    var _181: i32 = 0;\n    var _182: i32 = 0;\n    var _183: f32 = 0.0;\n    var _184: f32 = 0.0;\n    var _185: i32 = 0;\n    var _186: i32 = 0;\n    var _187: i32 = 0;\n    var _188: f32 = 0.0;\n    var _189: i32 = 0;\n    var _190: i32 = 0;\n    var _191: i32 = 0;\n    var _192: i32 = 0;\n    var _193: f32 = 0.0;\n    var _194: f32 = 0.0;\n    var _195: i32 = 0;\n    var _196: bool = false;\n    var _197: f32 = 0.0;\n    var _198: f32 = 0.0;\n    var _199: f32 = 0.0;\n    var _200: f32 = 0.0;\n    var _201: f32 = 0.0;\n    var _202: f32 = 0.0;\n    var _203: i32 = 0;\n    var _204: i32 = 0;\n    var _205: i32 = 0;\n    var _206: i32 = 0;\n    var _207: f32 = 0.0;\n    var _208: f32 = 0.0;\n    var _209: bool = false;\n    var _210: bool = false;\n    var _211: bool = false;\n    var _212: i32 = 0;\n    var _213: i32 = 0;\n    var _214: bool = false;\n    var _215: i32 = 0;\n    var _216: f32 = 0.0;\n    var _217: i32 = 0;\n    var _218: i32 = 0;\n    var _219: i32 = 0;\n    var _220: i32 = 0;\n    var _221: bool = false;\n    var _222: i32 = 0;\n    var _223: i32 = 0;\n    var _224: f32 = 0.0;\n    var _225: f32 = 0.0;\n    var _226: f32 = 0.0;\n    var _227: f32 = 0.0;\n    var _228: f32 = 0.0;\n    var _229: f32 = 0.0;\n    var _230: f32 = 0.0;\n    var _231: f32 = 0.0;\n    var _232: f32 = 0.0;\n    var _233: i32 = 0;\n    var _234: i32 = 0;\n    var _235: f32 = 0.0;\n    var _236: i32 = 0;\n    var _237: f32 = 0.0;\n    var _238: f32 = 0.0;\n    var _239: i32 = 0;\n    var _240: f32 = 0.0;\n    _20 = _local_id.x;\n    _21 = _workgroup_id.x;\n    _22 = 256u;\n    _23 = (_21 * _22);\n    _24 = i32(_20);\n    _25 = i32(_23);\n    _26 = (_24 + _25);\n    _27 = (_26 + 0);\n    _28 = (_27 < 1);\n    if (bool(_28)) {\n        _31 = 0;\n        loop {\n            _32 = (_31 < 205);\n            if (!(bool(_32))) { break; }\n            _29[i32(_31)] = w_a[i32(_31)];\n            _33 = w_a[i32(_31)];\n            _30[i32(_31)] = v_a[i32(_31)];\n            _34 = v_a[i32(_31)];\n            _35 = (_31 + 1);\n            _31 = _35;\n            _36 = _35;\n            continuing {\n            }\n        }\n        _42 = 0;\n        loop {\n            _43 = (_42 < 3);\n            if (!(bool(_43))) { break; }\n            _44 = 0;\n            loop {\n                _45 = (_44 < 205);\n                if (!(bool(_45))) { break; }\n                _37[i32(_44)] = 0.0;\n                _46 = 0.0;\n                _47 = (_44 + 1);\n                _44 = _47;\n                _48 = _47;\n                continuing {\n                }\n            }\n            _49 = 0;\n            loop {\n                _50 = (_49 < 100);\n                if (!(bool(_50))) { break; }\n                _52 = (_49 * 3);\n                _51 = data[i32(_52)];\n                _54 = (_49 * 3);\n                _55 = (_54 + 1);\n                _53 = data[i32(_55)];\n                _57 = (_49 * 3);\n                _58 = (_57 + 2);\n                _56 = data[i32(_58)];\n                _59 = 0;\n                loop {\n                    _60 = (_59 < 12);\n                    if (!(bool(_60))) { break; }\n                    _62 = (_59 * 2);\n                    _63 = (0 + _62);\n                    _64 = (_29[i32(_63)] * _51);\n                    _65 = (_59 * 2);\n                    _66 = (0 + _65);\n                    _67 = (_66 + 1);\n                    _68 = (_29[i32(_67)] * _53);\n                    _69 = (_64 + _68);\n                    _70 = (24 + _59);\n                    _61 = (_69 + _29[i32(_70)]);\n                    _71 = tanh(_61);\n                    _38[i32(_59)] = _71;\n                    _72 = _71;\n                    _73 = (_59 + 1);\n                    _59 = _73;\n                    _74 = _73;\n                    continuing {\n                    }\n                }\n                _59 = 0;\n                _75 = 0;\n                loop {\n                    _76 = (_59 < 12);\n                    if (!(bool(_76))) { break; }\n                    _78 = (180 + _59);\n                    _77 = _29[i32(_78)];\n                    _79 = 0;\n                    loop {\n                        _80 = (_79 < 12);\n                        if (!(bool(_80))) { break; }\n                        _81 = (_59 * 12);\n                        _82 = (36 + _81);\n                        _83 = (_82 + _79);\n                        _84 = (_29[i32(_83)] * _38[i32(_79)]);\n                        _85 = (_77 + _84);\n                        _77 = _85;\n                        _86 = _85;\n                        _87 = (_79 + 1);\n                        _79 = _87;\n                        _88 = _87;\n                        continuing {\n                        }\n                    }\n                    _89 = tanh(_77);\n                    _39[i32(_59)] = _89;\n                    _90 = _89;\n                    _91 = (_59 + 1);\n                    _59 = _91;\n                    _92 = _91;\n                    continuing {\n                    }\n                }\n                _94 = 204;\n                _93 = _29[i32(_94)];\n                _59 = 0;\n                _95 = 0;\n                loop {\n                    _96 = (_59 < 12);\n                    if (!(bool(_96))) { break; }\n                    _97 = (192 + _59);\n                    _98 = (_29[i32(_97)] * _39[i32(_59)]);\n                    _99 = (_93 + _98);\n                    _93 = _99;\n                    _100 = _99;\n                    _101 = (_59 + 1);\n                    _59 = _101;\n                    _102 = _101;\n                    continuing {\n                    }\n                }\n                _104 = (0.0 - _93);\n                _105 = exp(_104);\n                _106 = (1.0 + _105);\n                _103 = (1.0 / _106);\n                _107 = (_103 - _56);\n                _108 = 204;\n                _109 = (_37[i32(_108)] + _107);\n                _110 = 204;\n                _37[i32(_110)] = _109;\n                _111 = _109;\n                _59 = 0;\n                _112 = 0;\n                loop {\n                    _113 = (_59 < 12);\n                    if (!(bool(_113))) { break; }\n                    _114 = (192 + _59);\n                    _115 = (_107 * _39[i32(_59)]);\n                    _116 = (_37[i32(_114)] + _115);\n                    _117 = (192 + _59);\n                    _37[i32(_117)] = _116;\n                    _118 = _116;\n                    _119 = (192 + _59);\n                    _120 = (_107 * _29[i32(_119)]);\n                    _121 = (_39[i32(_59)] * _39[i32(_59)]);\n                    _122 = (1.0 - _121);\n                    _123 = (_120 * _122);\n                    _41[i32(_59)] = _123;\n                    _124 = _123;\n                    _125 = (_59 + 1);\n                    _59 = _125;\n                    _126 = _125;\n                    continuing {\n                    }\n                }\n                _59 = 0;\n                _127 = 0;\n                loop {\n                    _128 = (_59 < 12);\n                    if (!(bool(_128))) { break; }\n                    _129 = (180 + _59);\n                    _130 = (_37[i32(_129)] + _41[i32(_59)]);\n                    _131 = (180 + _59);\n                    _37[i32(_131)] = _130;\n                    _132 = _130;\n                    _133 = 0;\n                    loop {\n                        _134 = (_133 < 12);\n                        if (!(bool(_134))) { break; }\n                        _135 = (_59 * 12);\n                        _136 = (36 + _135);\n                        _137 = (_136 + _133);\n                        _138 = (_41[i32(_59)] * _38[i32(_133)]);\n                        _139 = (_37[i32(_137)] + _138);\n                        _140 = (_59 * 12);\n                        _141 = (36 + _140);\n                        _142 = (_141 + _133);\n                        _37[i32(_142)] = _139;\n                        _143 = _139;\n                        _144 = (_133 + 1);\n                        _133 = _144;\n                        _145 = _144;\n                        continuing {\n                        }\n                    }\n                    _146 = (_59 + 1);\n                    _59 = _146;\n                    _147 = _146;\n                    continuing {\n                    }\n                }\n                _148 = 0;\n                loop {\n                    _149 = (_148 < 12);\n                    if (!(bool(_149))) { break; }\n                    _150 = 0.0;\n                    _59 = 0;\n                    _151 = 0;\n                    loop {\n                        _152 = (_59 < 12);\n                        if (!(bool(_152))) { break; }\n                        _153 = (_59 * 12);\n                        _154 = (36 + _153);\n                        _155 = (_154 + _148);\n                        _156 = (_41[i32(_59)] * _29[i32(_155)]);\n                        _157 = (_150 + _156);\n                        _150 = _157;\n                        _158 = _157;\n                        _159 = (_59 + 1);\n                        _59 = _159;\n                        _160 = _159;\n                        continuing {\n                        }\n                    }\n                    _161 = (_38[i32(_148)] * _38[i32(_148)]);\n                    _162 = (1.0 - _161);\n                    _163 = (_150 * _162);\n                    _40[i32(_148)] = _163;\n                    _164 = _163;\n                    _165 = (_148 + 1);\n                    _148 = _165;\n                    _166 = _165;\n                    continuing {\n                    }\n                }\n                _148 = 0;\n                _167 = 0;\n                loop {\n                    _168 = (_148 < 12);\n                    if (!(bool(_168))) { break; }\n                    _169 = (24 + _148);\n                    _170 = (_37[i32(_169)] + _40[i32(_148)]);\n                    _171 = (24 + _148);\n                    _37[i32(_171)] = _170;\n                    _172 = _170;\n                    _173 = (_148 * 2);\n                    _174 = (0 + _173);\n                    _175 = (_40[i32(_148)] * _51);\n                    _176 = (_37[i32(_174)] + _175);\n                    _177 = (_148 * 2);\n                    _178 = (0 + _177);\n                    _37[i32(_178)] = _176;\n                    _179 = _176;\n                    _180 = (_148 * 2);\n                    _181 = (0 + _180);\n                    _182 = (_181 + 1);\n                    _183 = (_40[i32(_148)] * _53);\n                    _184 = (_37[i32(_182)] + _183);\n                    _185 = (_148 * 2);\n                    _186 = (0 + _185);\n                    _187 = (_186 + 1);\n                    _37[i32(_187)] = _184;\n                    _188 = _184;\n                    _189 = (_148 + 1);\n                    _148 = _189;\n                    _190 = _189;\n                    continuing {\n                    }\n                }\n                _191 = (_49 + 1);\n                _49 = _191;\n                _192 = _191;\n                continuing {\n                }\n            }\n            _194 = f32(100);\n            _193 = (0.25 / _194);\n            _195 = 0;\n            loop {\n                _196 = (_195 < 205);\n                if (!(bool(_196))) { break; }\n                _198 = (0.9 * _30[i32(_195)]);\n                _199 = (_193 * _37[i32(_195)]);\n                _197 = (_198 - _199);\n                _30[i32(_195)] = _197;\n                _200 = _197;\n                _201 = (_29[i32(_195)] + _197);\n                _29[i32(_195)] = _201;\n                _202 = _201;\n                _203 = (_195 + 1);\n                _195 = _203;\n                _204 = _203;\n                continuing {\n                }\n            }\n            _205 = (_42 + 1);\n            _42 = _205;\n            _206 = _205;\n            continuing {\n            }\n        }\n        _207 = (_inputs.f0 - _inputs.f1);\n        _209 = (_207 > 0.0);\n        if (bool(_209)) {\n            _208 = _207;\n        } else {\n            _208 = 0.0;\n        }\n        _211 = bool(_inputs.f9);\n        if (!bool(_211)) {\n            _212 = mode_at(_inputs.f0);\n            _213 = mode_at(_208);\n            _214 = (_212 != _213);\n            _211 = _214;\n        } else {\n            _211 = true;\n        }\n        _210 = _211;\n        _216 = (_inputs.f0 * 97.0);\n        _217 = i32(_216);\n        _218 = (_217 % 9973);\n        _219 = (_218 * 205);\n        _215 = i32(_219);\n        _220 = 0;\n        loop {\n            _221 = (_220 < 205);\n            if (!(bool(_221))) { break; }\n            if (bool(_210)) {\n                _222 = (_215 + _220);\n                _223 = (_222 + 1);\n                _224 = rand_unit(_223);\n                _225 = (_224 * 2.0);\n                _226 = (_225 - 1.0);\n                _227 = init_scale(_220);\n                _228 = (_226 * _227);\n                w_b[i32(_220)] = _228;\n                _229 = _228;\n                v_b[i32(_220)] = 0.0;\n                _230 = 0.0;\n            } else {\n                w_b[i32(_220)] = _29[i32(_220)];\n                _231 = _29[i32(_220)];\n                v_b[i32(_220)] = _30[i32(_220)];\n                _232 = _30[i32(_220)];\n            }\n            _233 = (_220 + 1);\n            _220 = _233;\n            _234 = _233;\n            continuing {\n            }\n        }\n        if (bool(_210)) {\n            _235 = 0.0;\n        } else {\n            _236 = 205;\n            _235 = w_a[i32(_236)];\n        }\n        _237 = f32(3);\n        _238 = (_235 + _237);\n        _239 = 205;\n        w_b[i32(_239)] = _238;\n        _240 = _238;\n        return;\n    } else {\n    }\n}\n\n",
+      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read> w_a: array<f32>;\n@group(0) @binding(1) var<storage, read> v_a: array<f32>;\n@group(0) @binding(2) var<storage, read> data: array<f32>;\n@group(0) @binding(3) var<storage, read_write> w_b: array<f32>;\n@group(0) @binding(4) var<storage, read_write> v_b: array<f32>;\n@group(0) @binding(5) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_3_0(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    var _23: u32 = 0u;\n    var _24: i32 = 0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: i32 = 0;\n    var _28: bool = false;\n    var<function> _29: array<f32, 205>;\n    var<function> _30: array<f32, 205>;\n    var _31: i32 = 0;\n    var _32: bool = false;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: i32 = 0;\n    var _36: i32 = 0;\n    var<function> _37: array<f32, 205>;\n    var<function> _38: array<f32, 12>;\n    var<function> _39: array<f32, 12>;\n    var<function> _40: array<f32, 12>;\n    var<function> _41: array<f32, 12>;\n    var _42: i32 = 0;\n    var _43: bool = false;\n    var _44: i32 = 0;\n    var _45: bool = false;\n    var _46: f32 = 0.0;\n    var _47: i32 = 0;\n    var _48: i32 = 0;\n    var _49: i32 = 0;\n    var _50: bool = false;\n    var _51: f32 = 0.0;\n    var _52: i32 = 0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: i32 = 0;\n    var _56: f32 = 0.0;\n    var _57: i32 = 0;\n    var _58: i32 = 0;\n    var _59: i32 = 0;\n    var _60: bool = false;\n    var _61: f32 = 0.0;\n    var _62: i32 = 0;\n    var _63: i32 = 0;\n    var _64: f32 = 0.0;\n    var _65: i32 = 0;\n    var _66: i32 = 0;\n    var _67: i32 = 0;\n    var _68: f32 = 0.0;\n    var _69: f32 = 0.0;\n    var _70: i32 = 0;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: i32 = 0;\n    var _74: i32 = 0;\n    var _75: i32 = 0;\n    var _76: bool = false;\n    var _77: f32 = 0.0;\n    var _78: i32 = 0;\n    var _79: i32 = 0;\n    var _80: bool = false;\n    var _81: i32 = 0;\n    var _82: i32 = 0;\n    var _83: i32 = 0;\n    var _84: f32 = 0.0;\n    var _85: f32 = 0.0;\n    var _86: f32 = 0.0;\n    var _87: i32 = 0;\n    var _88: i32 = 0;\n    var _89: f32 = 0.0;\n    var _90: f32 = 0.0;\n    var _91: i32 = 0;\n    var _92: i32 = 0;\n    var _93: f32 = 0.0;\n    var _94: i32 = 0;\n    var _95: i32 = 0;\n    var _96: bool = false;\n    var _97: i32 = 0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: f32 = 0.0;\n    var _101: i32 = 0;\n    var _102: i32 = 0;\n    var _103: f32 = 0.0;\n    var _104: f32 = 0.0;\n    var _105: f32 = 0.0;\n    var _106: f32 = 0.0;\n    var _107: f32 = 0.0;\n    var _108: i32 = 0;\n    var _109: f32 = 0.0;\n    var _110: i32 = 0;\n    var _111: f32 = 0.0;\n    var _112: i32 = 0;\n    var _113: bool = false;\n    var _114: i32 = 0;\n    var _115: f32 = 0.0;\n    var _116: f32 = 0.0;\n    var _117: i32 = 0;\n    var _118: f32 = 0.0;\n    var _119: i32 = 0;\n    var _120: f32 = 0.0;\n    var _121: f32 = 0.0;\n    var _122: f32 = 0.0;\n    var _123: f32 = 0.0;\n    var _124: f32 = 0.0;\n    var _125: i32 = 0;\n    var _126: i32 = 0;\n    var _127: i32 = 0;\n    var _128: bool = false;\n    var _129: i32 = 0;\n    var _130: f32 = 0.0;\n    var _131: i32 = 0;\n    var _132: f32 = 0.0;\n    var _133: i32 = 0;\n    var _134: bool = false;\n    var _135: i32 = 0;\n    var _136: i32 = 0;\n    var _137: i32 = 0;\n    var _138: f32 = 0.0;\n    var _139: f32 = 0.0;\n    var _140: i32 = 0;\n    var _141: i32 = 0;\n    var _142: i32 = 0;\n    var _143: f32 = 0.0;\n    var _144: i32 = 0;\n    var _145: i32 = 0;\n    var _146: i32 = 0;\n    var _147: i32 = 0;\n    var _148: i32 = 0;\n    var _149: bool = false;\n    var _150: f32 = 0.0;\n    var _151: i32 = 0;\n    var _152: bool = false;\n    var _153: i32 = 0;\n    var _154: i32 = 0;\n    var _155: i32 = 0;\n    var _156: f32 = 0.0;\n    var _157: f32 = 0.0;\n    var _158: f32 = 0.0;\n    var _159: i32 = 0;\n    var _160: i32 = 0;\n    var _161: f32 = 0.0;\n    var _162: f32 = 0.0;\n    var _163: f32 = 0.0;\n    var _164: f32 = 0.0;\n    var _165: i32 = 0;\n    var _166: i32 = 0;\n    var _167: i32 = 0;\n    var _168: bool = false;\n    var _169: i32 = 0;\n    var _170: f32 = 0.0;\n    var _171: i32 = 0;\n    var _172: f32 = 0.0;\n    var _173: i32 = 0;\n    var _174: i32 = 0;\n    var _175: f32 = 0.0;\n    var _176: f32 = 0.0;\n    var _177: i32 = 0;\n    var _178: i32 = 0;\n    var _179: f32 = 0.0;\n    var _180: i32 = 0;\n    var _181: i32 = 0;\n    var _182: i32 = 0;\n    var _183: f32 = 0.0;\n    var _184: f32 = 0.0;\n    var _185: i32 = 0;\n    var _186: i32 = 0;\n    var _187: i32 = 0;\n    var _188: f32 = 0.0;\n    var _189: i32 = 0;\n    var _190: i32 = 0;\n    var _191: i32 = 0;\n    var _192: i32 = 0;\n    var _193: f32 = 0.0;\n    var _194: f32 = 0.0;\n    var _195: i32 = 0;\n    var _196: bool = false;\n    var _197: f32 = 0.0;\n    var _198: f32 = 0.0;\n    var _199: f32 = 0.0;\n    var _200: f32 = 0.0;\n    var _201: f32 = 0.0;\n    var _202: f32 = 0.0;\n    var _203: i32 = 0;\n    var _204: i32 = 0;\n    var _205: i32 = 0;\n    var _206: i32 = 0;\n    var _207: f32 = 0.0;\n    var _208: f32 = 0.0;\n    var _209: bool = false;\n    var _210: bool = false;\n    var _211: bool = false;\n    var _212: i32 = 0;\n    var _213: i32 = 0;\n    var _214: bool = false;\n    var _215: i32 = 0;\n    var _216: f32 = 0.0;\n    var _217: i32 = 0;\n    var _218: i32 = 0;\n    var _219: i32 = 0;\n    var _220: i32 = 0;\n    var _221: bool = false;\n    var _222: i32 = 0;\n    var _223: i32 = 0;\n    var _224: f32 = 0.0;\n    var _225: f32 = 0.0;\n    var _226: f32 = 0.0;\n    var _227: f32 = 0.0;\n    var _228: f32 = 0.0;\n    var _229: f32 = 0.0;\n    var _230: f32 = 0.0;\n    var _231: f32 = 0.0;\n    var _232: f32 = 0.0;\n    var _233: i32 = 0;\n    var _234: i32 = 0;\n    var _235: f32 = 0.0;\n    var _236: i32 = 0;\n    var _237: f32 = 0.0;\n    var _238: f32 = 0.0;\n    var _239: i32 = 0;\n    var _240: f32 = 0.0;\n    _20 = _local_id.x;\n    _21 = _workgroup_id.x;\n    _22 = 256u;\n    _23 = (_21 * _22);\n    _24 = i32(_20);\n    _25 = i32(_23);\n    _26 = (_24 + _25);\n    _27 = (_26 + 0);\n    _28 = (_27 < 1);\n    if (bool(_28)) {\n        _31 = 0;\n        loop {\n            _32 = (_31 < 205);\n            if (!(bool(_32))) { break; }\n            _29[i32(_31)] = w_a[i32(_31)];\n            _33 = w_a[i32(_31)];\n            _30[i32(_31)] = v_a[i32(_31)];\n            _34 = v_a[i32(_31)];\n            _35 = _checked_add__i32(_31, 1);\n            _31 = _35;\n            _36 = _35;\n            continuing {\n            }\n        }\n        _42 = 0;\n        loop {\n            _43 = (_42 < 3);\n            if (!(bool(_43))) { break; }\n            _44 = 0;\n            loop {\n                _45 = (_44 < 205);\n                if (!(bool(_45))) { break; }\n                _37[i32(_44)] = 0.0;\n                _46 = 0.0;\n                _47 = _checked_add__i32(_44, 1);\n                _44 = _47;\n                _48 = _47;\n                continuing {\n                }\n            }\n            _49 = 0;\n            loop {\n                _50 = (_49 < 100);\n                if (!(bool(_50))) { break; }\n                _52 = _checked_mul__i32(_49, 3);\n                _51 = data[i32(_52)];\n                _54 = _checked_mul__i32(_49, 3);\n                _55 = _checked_add__i32(_54, 1);\n                _53 = data[i32(_55)];\n                _57 = _checked_mul__i32(_49, 3);\n                _58 = _checked_add__i32(_57, 2);\n                _56 = data[i32(_58)];\n                _59 = 0;\n                loop {\n                    _60 = (_59 < 12);\n                    if (!(bool(_60))) { break; }\n                    _62 = _checked_mul__i32(_59, 2);\n                    _63 = _checked_add__i32(0, _62);\n                    _64 = (_29[i32(_63)] * _51);\n                    _65 = _checked_mul__i32(_59, 2);\n                    _66 = _checked_add__i32(0, _65);\n                    _67 = _checked_add__i32(_66, 1);\n                    _68 = (_29[i32(_67)] * _53);\n                    _69 = (_64 + _68);\n                    _70 = _checked_add__i32(24, _59);\n                    _61 = (_69 + _29[i32(_70)]);\n                    _71 = tanh(_61);\n                    _38[i32(_59)] = _71;\n                    _72 = _71;\n                    _73 = _checked_add__i32(_59, 1);\n                    _59 = _73;\n                    _74 = _73;\n                    continuing {\n                    }\n                }\n                _59 = 0;\n                _75 = 0;\n                loop {\n                    _76 = (_59 < 12);\n                    if (!(bool(_76))) { break; }\n                    _78 = _checked_add__i32(180, _59);\n                    _77 = _29[i32(_78)];\n                    _79 = 0;\n                    loop {\n                        _80 = (_79 < 12);\n                        if (!(bool(_80))) { break; }\n                        _81 = _checked_mul__i32(_59, 12);\n                        _82 = _checked_add__i32(36, _81);\n                        _83 = _checked_add__i32(_82, _79);\n                        _84 = (_29[i32(_83)] * _38[i32(_79)]);\n                        _85 = (_77 + _84);\n                        _77 = _85;\n                        _86 = _85;\n                        _87 = _checked_add__i32(_79, 1);\n                        _79 = _87;\n                        _88 = _87;\n                        continuing {\n                        }\n                    }\n                    _89 = tanh(_77);\n                    _39[i32(_59)] = _89;\n                    _90 = _89;\n                    _91 = _checked_add__i32(_59, 1);\n                    _59 = _91;\n                    _92 = _91;\n                    continuing {\n                    }\n                }\n                _94 = 204;\n                _93 = _29[i32(_94)];\n                _59 = 0;\n                _95 = 0;\n                loop {\n                    _96 = (_59 < 12);\n                    if (!(bool(_96))) { break; }\n                    _97 = _checked_add__i32(192, _59);\n                    _98 = (_29[i32(_97)] * _39[i32(_59)]);\n                    _99 = (_93 + _98);\n                    _93 = _99;\n                    _100 = _99;\n                    _101 = _checked_add__i32(_59, 1);\n                    _59 = _101;\n                    _102 = _101;\n                    continuing {\n                    }\n                }\n                _104 = (0.0 - _93);\n                _105 = exp(_104);\n                _106 = (1.0 + _105);\n                _103 = (1.0 / _106);\n                _107 = (_103 - _56);\n                _108 = 204;\n                _109 = (_37[i32(_108)] + _107);\n                _110 = 204;\n                _37[i32(_110)] = _109;\n                _111 = _109;\n                _59 = 0;\n                _112 = 0;\n                loop {\n                    _113 = (_59 < 12);\n                    if (!(bool(_113))) { break; }\n                    _114 = _checked_add__i32(192, _59);\n                    _115 = (_107 * _39[i32(_59)]);\n                    _116 = (_37[i32(_114)] + _115);\n                    _117 = _checked_add__i32(192, _59);\n                    _37[i32(_117)] = _116;\n                    _118 = _116;\n                    _119 = _checked_add__i32(192, _59);\n                    _120 = (_107 * _29[i32(_119)]);\n                    _121 = (_39[i32(_59)] * _39[i32(_59)]);\n                    _122 = (1.0 - _121);\n                    _123 = (_120 * _122);\n                    _41[i32(_59)] = _123;\n                    _124 = _123;\n                    _125 = _checked_add__i32(_59, 1);\n                    _59 = _125;\n                    _126 = _125;\n                    continuing {\n                    }\n                }\n                _59 = 0;\n                _127 = 0;\n                loop {\n                    _128 = (_59 < 12);\n                    if (!(bool(_128))) { break; }\n                    _129 = _checked_add__i32(180, _59);\n                    _130 = (_37[i32(_129)] + _41[i32(_59)]);\n                    _131 = _checked_add__i32(180, _59);\n                    _37[i32(_131)] = _130;\n                    _132 = _130;\n                    _133 = 0;\n                    loop {\n                        _134 = (_133 < 12);\n                        if (!(bool(_134))) { break; }\n                        _135 = _checked_mul__i32(_59, 12);\n                        _136 = _checked_add__i32(36, _135);\n                        _137 = _checked_add__i32(_136, _133);\n                        _138 = (_41[i32(_59)] * _38[i32(_133)]);\n                        _139 = (_37[i32(_137)] + _138);\n                        _140 = _checked_mul__i32(_59, 12);\n                        _141 = _checked_add__i32(36, _140);\n                        _142 = _checked_add__i32(_141, _133);\n                        _37[i32(_142)] = _139;\n                        _143 = _139;\n                        _144 = _checked_add__i32(_133, 1);\n                        _133 = _144;\n                        _145 = _144;\n                        continuing {\n                        }\n                    }\n                    _146 = _checked_add__i32(_59, 1);\n                    _59 = _146;\n                    _147 = _146;\n                    continuing {\n                    }\n                }\n                _148 = 0;\n                loop {\n                    _149 = (_148 < 12);\n                    if (!(bool(_149))) { break; }\n                    _150 = 0.0;\n                    _59 = 0;\n                    _151 = 0;\n                    loop {\n                        _152 = (_59 < 12);\n                        if (!(bool(_152))) { break; }\n                        _153 = _checked_mul__i32(_59, 12);\n                        _154 = _checked_add__i32(36, _153);\n                        _155 = _checked_add__i32(_154, _148);\n                        _156 = (_41[i32(_59)] * _29[i32(_155)]);\n                        _157 = (_150 + _156);\n                        _150 = _157;\n                        _158 = _157;\n                        _159 = _checked_add__i32(_59, 1);\n                        _59 = _159;\n                        _160 = _159;\n                        continuing {\n                        }\n                    }\n                    _161 = (_38[i32(_148)] * _38[i32(_148)]);\n                    _162 = (1.0 - _161);\n                    _163 = (_150 * _162);\n                    _40[i32(_148)] = _163;\n                    _164 = _163;\n                    _165 = _checked_add__i32(_148, 1);\n                    _148 = _165;\n                    _166 = _165;\n                    continuing {\n                    }\n                }\n                _148 = 0;\n                _167 = 0;\n                loop {\n                    _168 = (_148 < 12);\n                    if (!(bool(_168))) { break; }\n                    _169 = _checked_add__i32(24, _148);\n                    _170 = (_37[i32(_169)] + _40[i32(_148)]);\n                    _171 = _checked_add__i32(24, _148);\n                    _37[i32(_171)] = _170;\n                    _172 = _170;\n                    _173 = _checked_mul__i32(_148, 2);\n                    _174 = _checked_add__i32(0, _173);\n                    _175 = (_40[i32(_148)] * _51);\n                    _176 = (_37[i32(_174)] + _175);\n                    _177 = _checked_mul__i32(_148, 2);\n                    _178 = _checked_add__i32(0, _177);\n                    _37[i32(_178)] = _176;\n                    _179 = _176;\n                    _180 = _checked_mul__i32(_148, 2);\n                    _181 = _checked_add__i32(0, _180);\n                    _182 = _checked_add__i32(_181, 1);\n                    _183 = (_40[i32(_148)] * _53);\n                    _184 = (_37[i32(_182)] + _183);\n                    _185 = _checked_mul__i32(_148, 2);\n                    _186 = _checked_add__i32(0, _185);\n                    _187 = _checked_add__i32(_186, 1);\n                    _37[i32(_187)] = _184;\n                    _188 = _184;\n                    _189 = _checked_add__i32(_148, 1);\n                    _148 = _189;\n                    _190 = _189;\n                    continuing {\n                    }\n                }\n                _191 = _checked_add__i32(_49, 1);\n                _49 = _191;\n                _192 = _191;\n                continuing {\n                }\n            }\n            _194 = f32(100);\n            _193 = (0.25 / _194);\n            _195 = 0;\n            loop {\n                _196 = (_195 < 205);\n                if (!(bool(_196))) { break; }\n                _198 = (0.9 * _30[i32(_195)]);\n                _199 = (_193 * _37[i32(_195)]);\n                _197 = (_198 - _199);\n                _30[i32(_195)] = _197;\n                _200 = _197;\n                _201 = (_29[i32(_195)] + _197);\n                _29[i32(_195)] = _201;\n                _202 = _201;\n                _203 = _checked_add__i32(_195, 1);\n                _195 = _203;\n                _204 = _203;\n                continuing {\n                }\n            }\n            _205 = _checked_add__i32(_42, 1);\n            _42 = _205;\n            _206 = _205;\n            continuing {\n            }\n        }\n        _207 = (_inputs.f0 - _inputs.f1);\n        _209 = (_207 > 0.0);\n        if (bool(_209)) {\n            _208 = _207;\n        } else {\n            _208 = 0.0;\n        }\n        _211 = bool(_inputs.f9);\n        if (!bool(_211)) {\n            _212 = mode_at(_inputs.f0);\n            _213 = mode_at(_208);\n            _214 = (_212 != _213);\n            _211 = _214;\n        } else {\n            _211 = true;\n        }\n        _210 = _211;\n        _216 = (_inputs.f0 * 97.0);\n        _217 = i32(_216);\n        _218 = (_217 % 9973);\n        _219 = _checked_mul__i32(_218, 205);\n        _215 = i32(_219);\n        _220 = 0;\n        loop {\n            _221 = (_220 < 205);\n            if (!(bool(_221))) { break; }\n            if (bool(_210)) {\n                _222 = _checked_add__i32(_215, _220);\n                _223 = _checked_add__i32(_222, 1);\n                _224 = rand_unit(_223);\n                _225 = (_224 * 2.0);\n                _226 = (_225 - 1.0);\n                _227 = init_scale(_220);\n                _228 = (_226 * _227);\n                w_b[i32(_220)] = _228;\n                _229 = _228;\n                v_b[i32(_220)] = 0.0;\n                _230 = 0.0;\n            } else {\n                w_b[i32(_220)] = _29[i32(_220)];\n                _231 = _29[i32(_220)];\n                v_b[i32(_220)] = _30[i32(_220)];\n                _232 = _30[i32(_220)];\n            }\n            _233 = _checked_add__i32(_220, 1);\n            _220 = _233;\n            _234 = _233;\n            continuing {\n            }\n        }\n        if (bool(_210)) {\n            _235 = 0.0;\n        } else {\n            _236 = 205;\n            _235 = w_a[i32(_236)];\n        }\n        _237 = f32(3);\n        _238 = (_235 + _237);\n        _239 = 205;\n        w_b[i32(_239)] = _238;\n        _240 = _238;\n        return;\n    } else {\n    }\n}\n\n@group(1) @binding(0) var<storage, read_write> miri_fault: atomic<u32>;\n\nfn _checked_add__i32(a: i32, b: i32) -> i32 {\n    let r = a + b;\n    if (((a ^ r) & (b ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_mul__i32(a: i32, b: i32) -> i32 {\n    let r = a * b;\n    if ((a == -2147483648 && b == -1) || (b == -2147483648 && a == -1) || (b != 0 && r / b != a)) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\n",
       "workgroups": [
         1,
         1,
@@ -1630,111 +1630,111 @@
         },
         {
           "wgsl": 96,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 97,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 98,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 99,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 100,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 101,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 102,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 103,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 104,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 105,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 106,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 107,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 108,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 109,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 110,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 111,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 112,
-          "miri": 56
+          "miri": 76
         },
         {
           "wgsl": 113,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 114,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 115,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 116,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 117,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 118,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 119,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 120,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 121,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 122,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 372,
@@ -3044,7 +3044,7 @@
     },
     {
       "entryPoint": "miri_gpu_for_4_1",
-      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read> data: array<f32>;\n@group(0) @binding(1) var<storage, read> w_b: array<f32>;\n@group(0) @binding(2) var<storage, read_write> stats: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_4_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: bool = false;\n    var<function> _13: array<f32, 12>;\n    var<function> _14: array<f32, 12>;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    var _17: i32 = 0;\n    var _18: bool = false;\n    var _19: f32 = 0.0;\n    var _20: i32 = 0;\n    var _21: f32 = 0.0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: i32 = 0;\n    var _28: bool = false;\n    var _29: f32 = 0.0;\n    var _30: i32 = 0;\n    var _31: i32 = 0;\n    var _32: f32 = 0.0;\n    var _33: i32 = 0;\n    var _34: i32 = 0;\n    var _35: i32 = 0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: i32 = 0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: i32 = 0;\n    var _42: i32 = 0;\n    var _43: i32 = 0;\n    var _44: bool = false;\n    var _45: f32 = 0.0;\n    var _46: i32 = 0;\n    var _47: i32 = 0;\n    var _48: bool = false;\n    var _49: i32 = 0;\n    var _50: i32 = 0;\n    var _51: i32 = 0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: f32 = 0.0;\n    var _55: i32 = 0;\n    var _56: i32 = 0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: i32 = 0;\n    var _60: i32 = 0;\n    var _61: f32 = 0.0;\n    var _62: i32 = 0;\n    var _63: i32 = 0;\n    var _64: bool = false;\n    var _65: i32 = 0;\n    var _66: f32 = 0.0;\n    var _67: f32 = 0.0;\n    var _68: f32 = 0.0;\n    var _69: i32 = 0;\n    var _70: i32 = 0;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: f32 = 0.0;\n    var _74: f32 = 0.0;\n    var _75: f32 = 0.0;\n    var _76: f32 = 0.0;\n    var _77: f32 = 0.0;\n    var _78: f32 = 0.0;\n    var _79: f32 = 0.0;\n    var _80: f32 = 0.0;\n    var _81: f32 = 0.0;\n    var _82: f32 = 0.0;\n    var _83: f32 = 0.0;\n    var _84: f32 = 0.0;\n    var _85: f32 = 0.0;\n    var _86: f32 = 0.0;\n    var _87: f32 = 0.0;\n    var _88: f32 = 0.0;\n    var _89: bool = false;\n    var _90: f32 = 0.0;\n    var _91: f32 = 0.0;\n    var _92: i32 = 0;\n    var _93: i32 = 0;\n    var _94: f32 = 0.0;\n    var _95: f32 = 0.0;\n    var _96: i32 = 0;\n    var _97: f32 = 0.0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: i32 = 0;\n    var _101: f32 = 0.0;\n    var _102: i32 = 0;\n    var _103: i32 = 0;\n    var _104: f32 = 0.0;\n    _4 = _local_id.x;\n    _5 = _workgroup_id.x;\n    _6 = 256u;\n    _7 = (_5 * _6);\n    _8 = i32(_4);\n    _9 = i32(_7);\n    _10 = (_8 + _9);\n    _11 = (_10 + 0);\n    _12 = (_11 < 1);\n    if (bool(_12)) {\n        _15 = 0.0;\n        _16 = 0.0;\n        _17 = 0;\n        loop {\n            _18 = (_17 < 100);\n            if (!(bool(_18))) { break; }\n            _20 = (_17 * 3);\n            _19 = data[i32(_20)];\n            _22 = (_17 * 3);\n            _23 = (_22 + 1);\n            _21 = data[i32(_23)];\n            _25 = (_17 * 3);\n            _26 = (_25 + 2);\n            _24 = data[i32(_26)];\n            _27 = 0;\n            loop {\n                _28 = (_27 < 12);\n                if (!(bool(_28))) { break; }\n                _30 = (_27 * 2);\n                _31 = (0 + _30);\n                _32 = (w_b[i32(_31)] * _19);\n                _33 = (_27 * 2);\n                _34 = (0 + _33);\n                _35 = (_34 + 1);\n                _36 = (w_b[i32(_35)] * _21);\n                _37 = (_32 + _36);\n                _38 = (24 + _27);\n                _29 = (_37 + w_b[i32(_38)]);\n                _39 = tanh(_29);\n                _13[i32(_27)] = _39;\n                _40 = _39;\n                _41 = (_27 + 1);\n                _27 = _41;\n                _42 = _41;\n                continuing {\n                }\n            }\n            _27 = 0;\n            _43 = 0;\n            loop {\n                _44 = (_27 < 12);\n                if (!(bool(_44))) { break; }\n                _46 = (180 + _27);\n                _45 = w_b[i32(_46)];\n                _47 = 0;\n                loop {\n                    _48 = (_47 < 12);\n                    if (!(bool(_48))) { break; }\n                    _49 = (_27 * 12);\n                    _50 = (36 + _49);\n                    _51 = (_50 + _47);\n                    _52 = (w_b[i32(_51)] * _13[i32(_47)]);\n                    _53 = (_45 + _52);\n                    _45 = _53;\n                    _54 = _53;\n                    _55 = (_47 + 1);\n                    _47 = _55;\n                    _56 = _55;\n                    continuing {\n                    }\n                }\n                _57 = tanh(_45);\n                _14[i32(_27)] = _57;\n                _58 = _57;\n                _59 = (_27 + 1);\n                _27 = _59;\n                _60 = _59;\n                continuing {\n                }\n            }\n            _62 = 204;\n            _61 = w_b[i32(_62)];\n            _27 = 0;\n            _63 = 0;\n            loop {\n                _64 = (_27 < 12);\n                if (!(bool(_64))) { break; }\n                _65 = (192 + _27);\n                _66 = (w_b[i32(_65)] * _14[i32(_27)]);\n                _67 = (_61 + _66);\n                _61 = _67;\n                _68 = _67;\n                _69 = (_27 + 1);\n                _27 = _69;\n                _70 = _69;\n                continuing {\n                }\n            }\n            _72 = (0.0 - _61);\n            _73 = exp(_72);\n            _74 = (1.0 + _73);\n            _75 = (1.0 / _74);\n            _71 = clamp(_75, 1e-6, 0.999999);\n            _76 = log(_71);\n            _77 = (_24 * _76);\n            _78 = (1.0 - _24);\n            _79 = (1.0 - _71);\n            _80 = log(_79);\n            _81 = (_78 * _80);\n            _82 = (_77 + _81);\n            _83 = (_15 - _82);\n            _15 = _83;\n            _84 = _83;\n            _86 = (_71 - 0.5);\n            _87 = (_24 - 0.5);\n            _88 = (_86 * _87);\n            _89 = (_88 > 0.0);\n            if (bool(_89)) {\n                _85 = 1.0;\n            } else {\n                _85 = 0.0;\n            }\n            _90 = (_16 + _85);\n            _16 = _90;\n            _91 = _90;\n            _92 = (_17 + 1);\n            _17 = _92;\n            _93 = _92;\n            continuing {\n            }\n        }\n        _94 = f32(100);\n        _95 = (_15 / _94);\n        _96 = 0;\n        stats[i32(_96)] = _95;\n        _97 = _95;\n        _98 = f32(100);\n        _99 = (_16 / _98);\n        _100 = 1;\n        stats[i32(_100)] = _99;\n        _101 = _99;\n        _102 = 205;\n        _103 = 2;\n        stats[i32(_103)] = w_b[i32(_102)];\n        _104 = w_b[i32(_102)];\n        return;\n    } else {\n    }\n}\n\n",
+      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\n@group(0) @binding(0) var<storage, read> data: array<f32>;\n@group(0) @binding(1) var<storage, read> w_b: array<f32>;\n@group(0) @binding(2) var<storage, read_write> stats: array<f32>;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_4_1(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: i32 = 0;\n    var _9: i32 = 0;\n    var _10: i32 = 0;\n    var _11: i32 = 0;\n    var _12: bool = false;\n    var<function> _13: array<f32, 12>;\n    var<function> _14: array<f32, 12>;\n    var _15: f32 = 0.0;\n    var _16: f32 = 0.0;\n    var _17: i32 = 0;\n    var _18: bool = false;\n    var _19: f32 = 0.0;\n    var _20: i32 = 0;\n    var _21: f32 = 0.0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: f32 = 0.0;\n    var _25: i32 = 0;\n    var _26: i32 = 0;\n    var _27: i32 = 0;\n    var _28: bool = false;\n    var _29: f32 = 0.0;\n    var _30: i32 = 0;\n    var _31: i32 = 0;\n    var _32: f32 = 0.0;\n    var _33: i32 = 0;\n    var _34: i32 = 0;\n    var _35: i32 = 0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: i32 = 0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: i32 = 0;\n    var _42: i32 = 0;\n    var _43: i32 = 0;\n    var _44: bool = false;\n    var _45: f32 = 0.0;\n    var _46: i32 = 0;\n    var _47: i32 = 0;\n    var _48: bool = false;\n    var _49: i32 = 0;\n    var _50: i32 = 0;\n    var _51: i32 = 0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: f32 = 0.0;\n    var _55: i32 = 0;\n    var _56: i32 = 0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: i32 = 0;\n    var _60: i32 = 0;\n    var _61: f32 = 0.0;\n    var _62: i32 = 0;\n    var _63: i32 = 0;\n    var _64: bool = false;\n    var _65: i32 = 0;\n    var _66: f32 = 0.0;\n    var _67: f32 = 0.0;\n    var _68: f32 = 0.0;\n    var _69: i32 = 0;\n    var _70: i32 = 0;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: f32 = 0.0;\n    var _74: f32 = 0.0;\n    var _75: f32 = 0.0;\n    var _76: f32 = 0.0;\n    var _77: f32 = 0.0;\n    var _78: f32 = 0.0;\n    var _79: f32 = 0.0;\n    var _80: f32 = 0.0;\n    var _81: f32 = 0.0;\n    var _82: f32 = 0.0;\n    var _83: f32 = 0.0;\n    var _84: f32 = 0.0;\n    var _85: f32 = 0.0;\n    var _86: f32 = 0.0;\n    var _87: f32 = 0.0;\n    var _88: f32 = 0.0;\n    var _89: bool = false;\n    var _90: f32 = 0.0;\n    var _91: f32 = 0.0;\n    var _92: i32 = 0;\n    var _93: i32 = 0;\n    var _94: f32 = 0.0;\n    var _95: f32 = 0.0;\n    var _96: i32 = 0;\n    var _97: f32 = 0.0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: i32 = 0;\n    var _101: f32 = 0.0;\n    var _102: i32 = 0;\n    var _103: i32 = 0;\n    var _104: f32 = 0.0;\n    _4 = _local_id.x;\n    _5 = _workgroup_id.x;\n    _6 = 256u;\n    _7 = (_5 * _6);\n    _8 = i32(_4);\n    _9 = i32(_7);\n    _10 = (_8 + _9);\n    _11 = (_10 + 0);\n    _12 = (_11 < 1);\n    if (bool(_12)) {\n        _15 = 0.0;\n        _16 = 0.0;\n        _17 = 0;\n        loop {\n            _18 = (_17 < 100);\n            if (!(bool(_18))) { break; }\n            _20 = _checked_mul__i32(_17, 3);\n            _19 = data[i32(_20)];\n            _22 = _checked_mul__i32(_17, 3);\n            _23 = _checked_add__i32(_22, 1);\n            _21 = data[i32(_23)];\n            _25 = _checked_mul__i32(_17, 3);\n            _26 = _checked_add__i32(_25, 2);\n            _24 = data[i32(_26)];\n            _27 = 0;\n            loop {\n                _28 = (_27 < 12);\n                if (!(bool(_28))) { break; }\n                _30 = _checked_mul__i32(_27, 2);\n                _31 = _checked_add__i32(0, _30);\n                _32 = (w_b[i32(_31)] * _19);\n                _33 = _checked_mul__i32(_27, 2);\n                _34 = _checked_add__i32(0, _33);\n                _35 = _checked_add__i32(_34, 1);\n                _36 = (w_b[i32(_35)] * _21);\n                _37 = (_32 + _36);\n                _38 = _checked_add__i32(24, _27);\n                _29 = (_37 + w_b[i32(_38)]);\n                _39 = tanh(_29);\n                _13[i32(_27)] = _39;\n                _40 = _39;\n                _41 = _checked_add__i32(_27, 1);\n                _27 = _41;\n                _42 = _41;\n                continuing {\n                }\n            }\n            _27 = 0;\n            _43 = 0;\n            loop {\n                _44 = (_27 < 12);\n                if (!(bool(_44))) { break; }\n                _46 = _checked_add__i32(180, _27);\n                _45 = w_b[i32(_46)];\n                _47 = 0;\n                loop {\n                    _48 = (_47 < 12);\n                    if (!(bool(_48))) { break; }\n                    _49 = _checked_mul__i32(_27, 12);\n                    _50 = _checked_add__i32(36, _49);\n                    _51 = _checked_add__i32(_50, _47);\n                    _52 = (w_b[i32(_51)] * _13[i32(_47)]);\n                    _53 = (_45 + _52);\n                    _45 = _53;\n                    _54 = _53;\n                    _55 = _checked_add__i32(_47, 1);\n                    _47 = _55;\n                    _56 = _55;\n                    continuing {\n                    }\n                }\n                _57 = tanh(_45);\n                _14[i32(_27)] = _57;\n                _58 = _57;\n                _59 = _checked_add__i32(_27, 1);\n                _27 = _59;\n                _60 = _59;\n                continuing {\n                }\n            }\n            _62 = 204;\n            _61 = w_b[i32(_62)];\n            _27 = 0;\n            _63 = 0;\n            loop {\n                _64 = (_27 < 12);\n                if (!(bool(_64))) { break; }\n                _65 = _checked_add__i32(192, _27);\n                _66 = (w_b[i32(_65)] * _14[i32(_27)]);\n                _67 = (_61 + _66);\n                _61 = _67;\n                _68 = _67;\n                _69 = _checked_add__i32(_27, 1);\n                _27 = _69;\n                _70 = _69;\n                continuing {\n                }\n            }\n            _72 = (0.0 - _61);\n            _73 = exp(_72);\n            _74 = (1.0 + _73);\n            _75 = (1.0 / _74);\n            _71 = clamp(_75, 1e-6, 0.999999);\n            _76 = log(_71);\n            _77 = (_24 * _76);\n            _78 = (1.0 - _24);\n            _79 = (1.0 - _71);\n            _80 = log(_79);\n            _81 = (_78 * _80);\n            _82 = (_77 + _81);\n            _83 = (_15 - _82);\n            _15 = _83;\n            _84 = _83;\n            _86 = (_71 - 0.5);\n            _87 = (_24 - 0.5);\n            _88 = (_86 * _87);\n            _89 = (_88 > 0.0);\n            if (bool(_89)) {\n                _85 = 1.0;\n            } else {\n                _85 = 0.0;\n            }\n            _90 = (_16 + _85);\n            _16 = _90;\n            _91 = _90;\n            _92 = _checked_add__i32(_17, 1);\n            _17 = _92;\n            _93 = _92;\n            continuing {\n            }\n        }\n        _94 = f32(100);\n        _95 = (_15 / _94);\n        _96 = 0;\n        stats[i32(_96)] = _95;\n        _97 = _95;\n        _98 = f32(100);\n        _99 = (_16 / _98);\n        _100 = 1;\n        stats[i32(_100)] = _99;\n        _101 = _99;\n        _102 = 205;\n        _103 = 2;\n        stats[i32(_103)] = w_b[i32(_102)];\n        _104 = w_b[i32(_102)];\n        return;\n    } else {\n    }\n}\n\n@group(1) @binding(0) var<storage, read_write> miri_fault: atomic<u32>;\n\nfn _checked_add__i32(a: i32, b: i32) -> i32 {\n    let r = a + b;\n    if (((a ^ r) & (b ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_mul__i32(a: i32, b: i32) -> i32 {\n    let r = a * b;\n    if ((a == -2147483648 && b == -1) || (b == -2147483648 && a == -1) || (b != 0 && r / b != a)) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\n",
       "workgroups": [
         1,
         1,
@@ -3304,111 +3304,111 @@
         },
         {
           "wgsl": 96,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 97,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 98,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 99,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 100,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 101,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 102,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 103,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 104,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 105,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 106,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 107,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 108,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 109,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 110,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 111,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 112,
-          "miri": 56
+          "miri": 76
         },
         {
           "wgsl": 113,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 114,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 115,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 116,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 117,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 118,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 119,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 120,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 121,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 122,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 232,
@@ -3958,7 +3958,7 @@
     },
     {
       "entryPoint": "miri_gpu_for_5_2",
-      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read_write> data: array<f32>;\n@group(0) @binding(1) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_5_2(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: bool = false;\n    var _25: i32 = 0;\n    var _26: f32 = 0.0;\n    var _27: f32 = 0.0;\n    var _28: f32 = 0.0;\n    var _29: bool = false;\n    var _30: i32 = 0;\n    var _31: i32 = 0;\n    var _32: i32 = 0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: f32 = 0.0;\n    var _44: f32 = 0.0;\n    var _45: i32 = 0;\n    var _46: i32 = 0;\n    var _47: f32 = 0.0;\n    var _48: f32 = 0.0;\n    var _49: f32 = 0.0;\n    var _50: f32 = 0.0;\n    var _51: f32 = 0.0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: i32 = 0;\n    var _56: f32 = 0.0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: f32 = 0.0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: f32 = 0.0;\n    var _63: bool = false;\n    var _64: bool = false;\n    var _65: i32 = 0;\n    var _66: f32 = 0.0;\n    var _67: i32 = 0;\n    var _68: i32 = 0;\n    var _69: i32 = 0;\n    var _70: f32 = 0.0;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: i32 = 0;\n    var _74: i32 = 0;\n    var _75: i32 = 0;\n    var _76: f32 = 0.0;\n    var _77: f32 = 0.0;\n    var _78: f32 = 0.0;\n    var _79: f32 = 0.0;\n    var _80: i32 = 0;\n    var _81: i32 = 0;\n    var _82: i32 = 0;\n    var _83: f32 = 0.0;\n    var _84: f32 = 0.0;\n    var _85: f32 = 0.0;\n    var _86: f32 = 0.0;\n    var _87: f32 = 0.0;\n    var _88: f32 = 0.0;\n    var _89: f32 = 0.0;\n    var _90: f32 = 0.0;\n    var _91: f32 = 0.0;\n    var _92: f32 = 0.0;\n    var _93: bool = false;\n    var _94: f32 = 0.0;\n    var _95: i32 = 0;\n    var _96: i32 = 0;\n    var _97: i32 = 0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: f32 = 0.0;\n    var _101: f32 = 0.0;\n    var _102: i32 = 0;\n    var _103: i32 = 0;\n    var _104: i32 = 0;\n    var _105: f32 = 0.0;\n    var _106: f32 = 0.0;\n    var _107: f32 = 0.0;\n    var _108: f32 = 0.0;\n    var _109: f32 = 0.0;\n    var _110: f32 = 0.0;\n    var _111: f32 = 0.0;\n    var _112: bool = false;\n    var _113: f32 = 0.0;\n    var _114: i32 = 0;\n    var _115: f32 = 0.0;\n    var _116: i32 = 0;\n    var _117: i32 = 0;\n    var _118: f32 = 0.0;\n    var _119: i32 = 0;\n    var _120: i32 = 0;\n    var _121: f32 = 0.0;\n    _16 = _local_id.x;\n    _17 = _workgroup_id.x;\n    _18 = 256u;\n    _19 = (_17 * _18);\n    _20 = i32(_16);\n    _21 = i32(_19);\n    _22 = (_20 + _21);\n    _23 = (_22 + 0);\n    _24 = (_23 < 100);\n    if (bool(_24)) {\n        _25 = mode_at(_inputs.f0);\n        _26 = 0.0;\n        _27 = 0.0;\n        _28 = 0.0;\n        _29 = (_25 == 0);\n        if (bool(_29)) {\n            _30 = (_23 / 50);\n            _32 = (_30 * 50);\n            _31 = (_23 - _32);\n            _34 = f32(_31);\n            _35 = f32(50);\n            _33 = (_34 / _35);\n            _37 = (0.74 * _33);\n            _36 = (0.13 + _37);\n            _39 = (_33 * 4.4);\n            _40 = f32(_30);\n            _41 = f32(3.1415927);\n            _42 = (_40 * _41);\n            _38 = (_39 + _42);\n            _43 = cos(_38);\n            _44 = (_36 * _43);\n            _45 = (_23 * 2);\n            _46 = (_45 + 1);\n            _47 = rand_unit(_46);\n            _48 = (_47 - 0.5);\n            _49 = (_48 * 0.07);\n            _50 = (_44 + _49);\n            _26 = _50;\n            _51 = _50;\n            _52 = sin(_38);\n            _53 = (_36 * _52);\n            _54 = (_23 * 2);\n            _55 = (_54 + 2);\n            _56 = rand_unit(_55);\n            _57 = (_56 - 0.5);\n            _58 = (_57 * 0.07);\n            _59 = (_53 + _58);\n            _27 = _59;\n            _60 = _59;\n            _61 = f32(_30);\n            _28 = _61;\n            _62 = _61;\n        } else {\n        }\n        _63 = (_25 == 1);\n        if (bool(_63)) {\n            _65 = (_23 * 2);\n            _64 = (_65 < 100);\n            if (bool(_64)) {\n                _67 = (_23 * 3);\n                _68 = (100003 + _67);\n                _69 = (_68 + 1);\n                _70 = rand_unit(_69);\n                _71 = sqrt(_70);\n                _72 = (_71 * 0.34);\n                _66 = _72;\n            } else {\n                _73 = (_23 * 3);\n                _74 = (100003 + _73);\n                _75 = (_74 + 1);\n                _76 = rand_unit(_75);\n                _77 = (_76 * 0.27);\n                _78 = (0.58 + _77);\n                _66 = _78;\n            }\n            _80 = (_23 * 3);\n            _81 = (100003 + _80);\n            _82 = (_81 + 2);\n            _83 = rand_unit(_82);\n            _84 = f32(6.2831855);\n            _79 = (_83 * _84);\n            _85 = cos(_79);\n            _86 = (_66 * _85);\n            _26 = _86;\n            _87 = _86;\n            _88 = sin(_79);\n            _89 = (_66 * _88);\n            _27 = _89;\n            _90 = _89;\n            if (bool(_64)) {\n                _91 = 1.0;\n            } else {\n                _91 = 0.0;\n            }\n            _28 = _91;\n            _92 = _91;\n        } else {\n        }\n        _93 = (_25 == 2);\n        if (bool(_93)) {\n            _95 = (_23 * 3);\n            _96 = (200003 + _95);\n            _97 = (_96 + 1);\n            _98 = rand_unit(_97);\n            _99 = (_98 * 2.0);\n            _100 = (_99 - 1.0);\n            _94 = (_100 * 0.85);\n            _102 = (_23 * 3);\n            _103 = (200003 + _102);\n            _104 = (_103 + 2);\n            _105 = rand_unit(_104);\n            _106 = (_105 * 2.0);\n            _107 = (_106 - 1.0);\n            _101 = (_107 * 0.85);\n            _26 = _94;\n            _108 = _94;\n            _27 = _101;\n            _109 = _101;\n            _111 = (_94 * _101);\n            _112 = (_111 > 0.0);\n            if (bool(_112)) {\n                _110 = 1.0;\n            } else {\n                _110 = 0.0;\n            }\n            _28 = _110;\n            _113 = _110;\n        } else {\n        }\n        _114 = (_23 * 3);\n        data[i32(_114)] = _26;\n        _115 = _26;\n        _116 = (_23 * 3);\n        _117 = (_116 + 1);\n        data[i32(_117)] = _27;\n        _118 = _27;\n        _119 = (_23 * 3);\n        _120 = (_119 + 2);\n        data[i32(_120)] = _28;\n        _121 = _28;\n    }\n}\n\n",
+      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read_write> data: array<f32>;\n@group(0) @binding(1) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_5_2(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: i32 = 0;\n    var _21: i32 = 0;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: bool = false;\n    var _25: i32 = 0;\n    var _26: f32 = 0.0;\n    var _27: f32 = 0.0;\n    var _28: f32 = 0.0;\n    var _29: bool = false;\n    var _30: i32 = 0;\n    var _31: i32 = 0;\n    var _32: i32 = 0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: f32 = 0.0;\n    var _44: f32 = 0.0;\n    var _45: i32 = 0;\n    var _46: i32 = 0;\n    var _47: f32 = 0.0;\n    var _48: f32 = 0.0;\n    var _49: f32 = 0.0;\n    var _50: f32 = 0.0;\n    var _51: f32 = 0.0;\n    var _52: f32 = 0.0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: i32 = 0;\n    var _56: f32 = 0.0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: f32 = 0.0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: f32 = 0.0;\n    var _63: bool = false;\n    var _64: bool = false;\n    var _65: i32 = 0;\n    var _66: f32 = 0.0;\n    var _67: i32 = 0;\n    var _68: i32 = 0;\n    var _69: i32 = 0;\n    var _70: f32 = 0.0;\n    var _71: f32 = 0.0;\n    var _72: f32 = 0.0;\n    var _73: i32 = 0;\n    var _74: i32 = 0;\n    var _75: i32 = 0;\n    var _76: f32 = 0.0;\n    var _77: f32 = 0.0;\n    var _78: f32 = 0.0;\n    var _79: f32 = 0.0;\n    var _80: i32 = 0;\n    var _81: i32 = 0;\n    var _82: i32 = 0;\n    var _83: f32 = 0.0;\n    var _84: f32 = 0.0;\n    var _85: f32 = 0.0;\n    var _86: f32 = 0.0;\n    var _87: f32 = 0.0;\n    var _88: f32 = 0.0;\n    var _89: f32 = 0.0;\n    var _90: f32 = 0.0;\n    var _91: f32 = 0.0;\n    var _92: f32 = 0.0;\n    var _93: bool = false;\n    var _94: f32 = 0.0;\n    var _95: i32 = 0;\n    var _96: i32 = 0;\n    var _97: i32 = 0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: f32 = 0.0;\n    var _101: f32 = 0.0;\n    var _102: i32 = 0;\n    var _103: i32 = 0;\n    var _104: i32 = 0;\n    var _105: f32 = 0.0;\n    var _106: f32 = 0.0;\n    var _107: f32 = 0.0;\n    var _108: f32 = 0.0;\n    var _109: f32 = 0.0;\n    var _110: f32 = 0.0;\n    var _111: f32 = 0.0;\n    var _112: bool = false;\n    var _113: f32 = 0.0;\n    var _114: i32 = 0;\n    var _115: f32 = 0.0;\n    var _116: i32 = 0;\n    var _117: i32 = 0;\n    var _118: f32 = 0.0;\n    var _119: i32 = 0;\n    var _120: i32 = 0;\n    var _121: f32 = 0.0;\n    _16 = _local_id.x;\n    _17 = _workgroup_id.x;\n    _18 = 256u;\n    _19 = (_17 * _18);\n    _20 = i32(_16);\n    _21 = i32(_19);\n    _22 = (_20 + _21);\n    _23 = (_22 + 0);\n    _24 = (_23 < 100);\n    if (bool(_24)) {\n        _25 = mode_at(_inputs.f0);\n        _26 = 0.0;\n        _27 = 0.0;\n        _28 = 0.0;\n        _29 = (_25 == 0);\n        if (bool(_29)) {\n            _30 = (_23 / 50);\n            _32 = _checked_mul__i32(_30, 50);\n            _31 = _checked_sub__i32(_23, _32);\n            _34 = f32(_31);\n            _35 = f32(50);\n            _33 = (_34 / _35);\n            _37 = (0.74 * _33);\n            _36 = (0.13 + _37);\n            _39 = (_33 * 4.4);\n            _40 = f32(_30);\n            _41 = f32(3.1415927);\n            _42 = (_40 * _41);\n            _38 = (_39 + _42);\n            _43 = cos(_38);\n            _44 = (_36 * _43);\n            _45 = _checked_mul__i32(_23, 2);\n            _46 = _checked_add__i32(_45, 1);\n            _47 = rand_unit(_46);\n            _48 = (_47 - 0.5);\n            _49 = (_48 * 0.07);\n            _50 = (_44 + _49);\n            _26 = _50;\n            _51 = _50;\n            _52 = sin(_38);\n            _53 = (_36 * _52);\n            _54 = _checked_mul__i32(_23, 2);\n            _55 = _checked_add__i32(_54, 2);\n            _56 = rand_unit(_55);\n            _57 = (_56 - 0.5);\n            _58 = (_57 * 0.07);\n            _59 = (_53 + _58);\n            _27 = _59;\n            _60 = _59;\n            _61 = f32(_30);\n            _28 = _61;\n            _62 = _61;\n        } else {\n        }\n        _63 = (_25 == 1);\n        if (bool(_63)) {\n            _65 = _checked_mul__i32(_23, 2);\n            _64 = (_65 < 100);\n            if (bool(_64)) {\n                _67 = _checked_mul__i32(_23, 3);\n                _68 = _checked_add__i32(100003, _67);\n                _69 = _checked_add__i32(_68, 1);\n                _70 = rand_unit(_69);\n                _71 = sqrt(_70);\n                _72 = (_71 * 0.34);\n                _66 = _72;\n            } else {\n                _73 = _checked_mul__i32(_23, 3);\n                _74 = _checked_add__i32(100003, _73);\n                _75 = _checked_add__i32(_74, 1);\n                _76 = rand_unit(_75);\n                _77 = (_76 * 0.27);\n                _78 = (0.58 + _77);\n                _66 = _78;\n            }\n            _80 = _checked_mul__i32(_23, 3);\n            _81 = _checked_add__i32(100003, _80);\n            _82 = _checked_add__i32(_81, 2);\n            _83 = rand_unit(_82);\n            _84 = f32(6.2831855);\n            _79 = (_83 * _84);\n            _85 = cos(_79);\n            _86 = (_66 * _85);\n            _26 = _86;\n            _87 = _86;\n            _88 = sin(_79);\n            _89 = (_66 * _88);\n            _27 = _89;\n            _90 = _89;\n            if (bool(_64)) {\n                _91 = 1.0;\n            } else {\n                _91 = 0.0;\n            }\n            _28 = _91;\n            _92 = _91;\n        } else {\n        }\n        _93 = (_25 == 2);\n        if (bool(_93)) {\n            _95 = _checked_mul__i32(_23, 3);\n            _96 = _checked_add__i32(200003, _95);\n            _97 = _checked_add__i32(_96, 1);\n            _98 = rand_unit(_97);\n            _99 = (_98 * 2.0);\n            _100 = (_99 - 1.0);\n            _94 = (_100 * 0.85);\n            _102 = _checked_mul__i32(_23, 3);\n            _103 = _checked_add__i32(200003, _102);\n            _104 = _checked_add__i32(_103, 2);\n            _105 = rand_unit(_104);\n            _106 = (_105 * 2.0);\n            _107 = (_106 - 1.0);\n            _101 = (_107 * 0.85);\n            _26 = _94;\n            _108 = _94;\n            _27 = _101;\n            _109 = _101;\n            _111 = (_94 * _101);\n            _112 = (_111 > 0.0);\n            if (bool(_112)) {\n                _110 = 1.0;\n            } else {\n                _110 = 0.0;\n            }\n            _28 = _110;\n            _113 = _110;\n        } else {\n        }\n        _114 = _checked_mul__i32(_23, 3);\n        data[i32(_114)] = _26;\n        _115 = _26;\n        _116 = _checked_mul__i32(_23, 3);\n        _117 = _checked_add__i32(_116, 1);\n        data[i32(_117)] = _27;\n        _118 = _27;\n        _119 = _checked_mul__i32(_23, 3);\n        _120 = _checked_add__i32(_119, 2);\n        data[i32(_120)] = _28;\n        _121 = _28;\n    }\n}\n\n@group(1) @binding(0) var<storage, read_write> miri_fault: atomic<u32>;\n\nfn _checked_add__i32(a: i32, b: i32) -> i32 {\n    let r = a + b;\n    if (((a ^ r) & (b ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_mul__i32(a: i32, b: i32) -> i32 {\n    let r = a * b;\n    if ((a == -2147483648 && b == -1) || (b == -2147483648 && a == -1) || (b != 0 && r / b != a)) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_sub__i32(a: i32, b: i32) -> i32 {\n    let r = a - b;\n    if (((a ^ b) & (a ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\n",
       "workgroups": [
         1,
         1,
@@ -4207,111 +4207,111 @@
         },
         {
           "wgsl": 96,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 97,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 98,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 99,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 100,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 101,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 102,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 103,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 104,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 105,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 106,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 107,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 108,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 109,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 110,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 111,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 112,
-          "miri": 56
+          "miri": 76
         },
         {
           "wgsl": 113,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 114,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 115,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 116,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 117,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 118,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 119,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 120,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 121,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 122,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 253,
@@ -4885,7 +4885,7 @@
     },
     {
       "entryPoint": "miri_gpu_for_6_3",
-      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read> w_b: array<f32>;\n@group(0) @binding(1) var<storage, read> data: array<f32>;\n@group(0) @binding(2) var<storage, read_write> paint: array<f32>;\n@group(0) @binding(3) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_6_3(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: i32 = 0;\n    var _25: i32 = 0;\n    var _26: bool = false;\n    var _27: i32 = 0;\n    var _28: i32 = 0;\n    var _29: f32 = 0.0;\n    var _30: f32 = 0.0;\n    var _31: f32 = 0.0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: f32 = 0.0;\n    var _44: f32 = 0.0;\n    var _45: f32 = 0.0;\n    var<function> _46: array<f32, 12>;\n    var<function> _47: array<f32, 12>;\n    var _48: i32 = 0;\n    var _49: bool = false;\n    var _50: f32 = 0.0;\n    var _51: i32 = 0;\n    var _52: i32 = 0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: i32 = 0;\n    var _56: i32 = 0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: i32 = 0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: i32 = 0;\n    var _63: i32 = 0;\n    var _64: i32 = 0;\n    var _65: bool = false;\n    var _66: f32 = 0.0;\n    var _67: i32 = 0;\n    var _68: i32 = 0;\n    var _69: bool = false;\n    var _70: i32 = 0;\n    var _71: i32 = 0;\n    var _72: i32 = 0;\n    var _73: f32 = 0.0;\n    var _74: f32 = 0.0;\n    var _75: f32 = 0.0;\n    var _76: i32 = 0;\n    var _77: i32 = 0;\n    var _78: f32 = 0.0;\n    var _79: f32 = 0.0;\n    var _80: i32 = 0;\n    var _81: i32 = 0;\n    var _82: f32 = 0.0;\n    var _83: i32 = 0;\n    var _84: i32 = 0;\n    var _85: bool = false;\n    var _86: i32 = 0;\n    var _87: f32 = 0.0;\n    var _88: f32 = 0.0;\n    var _89: f32 = 0.0;\n    var _90: i32 = 0;\n    var _91: i32 = 0;\n    var _92: f32 = 0.0;\n    var _93: f32 = 0.0;\n    var _94: f32 = 0.0;\n    var _95: f32 = 0.0;\n    var _96: f32 = 0.0;\n    var _97: f32 = 0.0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: bool = false;\n    var _101: f32 = 0.0;\n    var _102: bool = false;\n    var _103: f32 = 0.0;\n    var _104: bool = false;\n    var _105: f32 = 0.0;\n    var _106: f32 = 0.0;\n    var _107: f32 = 0.0;\n    var _108: f32 = 0.0;\n    var _109: f32 = 0.0;\n    var _110: f32 = 0.0;\n    var _111: f32 = 0.0;\n    var _112: f32 = 0.0;\n    var _113: f32 = 0.0;\n    var _114: f32 = 0.0;\n    var _115: f32 = 0.0;\n    var _116: f32 = 0.0;\n    var _117: f32 = 0.0;\n    var _118: f32 = 0.0;\n    var _119: f32 = 0.0;\n    var _120: f32 = 0.0;\n    var _121: f32 = 0.0;\n    var _122: f32 = 0.0;\n    var _123: f32 = 0.0;\n    var _124: f32 = 0.0;\n    var _125: f32 = 0.0;\n    var _126: f32 = 0.0;\n    var _127: f32 = 0.0;\n    var _128: f32 = 0.0;\n    var _129: f32 = 0.0;\n    var _130: f32 = 0.0;\n    var _131: f32 = 0.0;\n    var _132: f32 = 0.0;\n    var _133: f32 = 0.0;\n    var _134: f32 = 0.0;\n    var _135: f32 = 0.0;\n    var _136: f32 = 0.0;\n    var _137: f32 = 0.0;\n    var _138: f32 = 0.0;\n    var _139: f32 = 0.0;\n    var _140: f32 = 0.0;\n    var _141: f32 = 0.0;\n    var _142: f32 = 0.0;\n    var _143: f32 = 0.0;\n    var _144: f32 = 0.0;\n    var _145: f32 = 0.0;\n    var _146: f32 = 0.0;\n    var _147: f32 = 0.0;\n    var _148: f32 = 0.0;\n    var _149: f32 = 0.0;\n    var _150: f32 = 0.0;\n    var _151: f32 = 0.0;\n    var _152: f32 = 0.0;\n    var _153: f32 = 0.0;\n    var _154: f32 = 0.0;\n    var _155: f32 = 0.0;\n    var _156: i32 = 0;\n    var _157: bool = false;\n    var _158: f32 = 0.0;\n    var _159: i32 = 0;\n    var _160: f32 = 0.0;\n    var _161: bool = false;\n    var _162: f32 = 0.0;\n    var _163: i32 = 0;\n    var _164: i32 = 0;\n    var _165: f32 = 0.0;\n    var _166: f32 = 0.0;\n    var _167: f32 = 0.0;\n    var _168: bool = false;\n    var _169: f32 = 0.0;\n    var _170: f32 = 0.0;\n    var _171: i32 = 0;\n    var _172: i32 = 0;\n    var _173: f32 = 0.0;\n    var _174: bool = false;\n    var _175: f32 = 0.0;\n    var _176: bool = false;\n    var _177: f32 = 0.0;\n    var _178: bool = false;\n    var _179: f32 = 0.0;\n    var _180: f32 = 0.0;\n    var _181: f32 = 0.0;\n    var _182: f32 = 0.0;\n    var _183: f32 = 0.0;\n    var _184: f32 = 0.0;\n    var _185: f32 = 0.0;\n    var _186: f32 = 0.0;\n    var _187: f32 = 0.0;\n    var _188: f32 = 0.0;\n    var _189: f32 = 0.0;\n    var _190: f32 = 0.0;\n    var _191: f32 = 0.0;\n    var _192: f32 = 0.0;\n    var _193: f32 = 0.0;\n    var _194: f32 = 0.0;\n    var _195: f32 = 0.0;\n    var _196: f32 = 0.0;\n    var _197: f32 = 0.0;\n    var _198: f32 = 0.0;\n    var _199: f32 = 0.0;\n    var _200: f32 = 0.0;\n    var _201: f32 = 0.0;\n    var _202: f32 = 0.0;\n    var _203: f32 = 0.0;\n    var _204: f32 = 0.0;\n    var _205: f32 = 0.0;\n    var _206: f32 = 0.0;\n    var _207: i32 = 0;\n    var _208: i32 = 0;\n    var _209: i32 = 0;\n    var _210: f32 = 0.0;\n    var _211: i32 = 0;\n    var _212: f32 = 0.0;\n    var _213: i32 = 0;\n    var _214: f32 = 0.0;\n    var _215: i32 = 0;\n    var _216: f32 = 0.0;\n    _18 = _local_id.x;\n    _19 = _workgroup_id.x;\n    _20 = 256u;\n    _21 = (_19 * _20);\n    _22 = i32(_18);\n    _23 = i32(_21);\n    _24 = (_22 + _23);\n    _25 = (_24 + 0);\n    _26 = (_25 < 518400);\n    if (bool(_26)) {\n        _27 = (_25 % 960);\n        _28 = (_25 / 960);\n        _30 = f32(_27);\n        _31 = (_30 + 0.5);\n        _32 = f32(960);\n        _33 = (_31 / _32);\n        _34 = (_33 - 0.5);\n        _35 = (_34 * 2.0);\n        _36 = f32(960);\n        _37 = f32(540);\n        _38 = (_36 / _37);\n        _29 = (_35 * _38);\n        _40 = f32(_28);\n        _41 = (_40 + 0.5);\n        _42 = f32(540);\n        _43 = (_41 / _42);\n        _44 = (0.5 - _43);\n        _45 = f32(2.0);\n        _39 = (_44 * _45);\n        _48 = 0;\n        loop {\n            _49 = (_48 < 12);\n            if (!(bool(_49))) { break; }\n            _51 = (_48 * 2);\n            _52 = (0 + _51);\n            _53 = (w_b[i32(_52)] * _29);\n            _54 = (_48 * 2);\n            _55 = (0 + _54);\n            _56 = (_55 + 1);\n            _57 = (w_b[i32(_56)] * _39);\n            _58 = (_53 + _57);\n            _59 = (24 + _48);\n            _50 = (_58 + w_b[i32(_59)]);\n            _60 = tanh(_50);\n            _46[i32(_48)] = _60;\n            _61 = _60;\n            _62 = (_48 + 1);\n            _48 = _62;\n            _63 = _62;\n            continuing {\n            }\n        }\n        _48 = 0;\n        _64 = 0;\n        loop {\n            _65 = (_48 < 12);\n            if (!(bool(_65))) { break; }\n            _67 = (180 + _48);\n            _66 = w_b[i32(_67)];\n            _68 = 0;\n            loop {\n                _69 = (_68 < 12);\n                if (!(bool(_69))) { break; }\n                _70 = (_48 * 12);\n                _71 = (36 + _70);\n                _72 = (_71 + _68);\n                _73 = (w_b[i32(_72)] * _46[i32(_68)]);\n                _74 = (_66 + _73);\n                _66 = _74;\n                _75 = _74;\n                _76 = (_68 + 1);\n                _68 = _76;\n                _77 = _76;\n                continuing {\n                }\n            }\n            _78 = tanh(_66);\n            _47[i32(_48)] = _78;\n            _79 = _78;\n            _80 = (_48 + 1);\n            _48 = _80;\n            _81 = _80;\n            continuing {\n            }\n        }\n        _83 = 204;\n        _82 = w_b[i32(_83)];\n        _48 = 0;\n        _84 = 0;\n        loop {\n            _85 = (_48 < 12);\n            if (!(bool(_85))) { break; }\n            _86 = (192 + _48);\n            _87 = (w_b[i32(_86)] * _47[i32(_48)]);\n            _88 = (_82 + _87);\n            _82 = _88;\n            _89 = _88;\n            _90 = (_48 + 1);\n            _48 = _90;\n            _91 = _90;\n            continuing {\n            }\n        }\n        _93 = (0.0 - _82);\n        _94 = exp(_93);\n        _95 = (1.0 + _94);\n        _92 = (1.0 / _95);\n        _97 = (_92 - 0.5);\n        _98 = abs(_97);\n        _96 = (_98 * 2.0);\n        _100 = (_92 < 0.5);\n        if (bool(_100)) {\n            _99 = 0.16;\n        } else {\n            _99 = 1.0;\n        }\n        _102 = (_92 < 0.5);\n        if (bool(_102)) {\n            _101 = 0.31;\n        } else {\n            _101 = 0.84;\n        }\n        _104 = (_92 < 0.5);\n        if (bool(_104)) {\n            _103 = 0.82;\n        } else {\n            _103 = 0.24;\n        }\n        _106 = (0.6 * _96);\n        _107 = (_106 * _96);\n        _105 = (0.1 + _107);\n        _109 = (_99 * _105);\n        _108 = (0.012 + _109);\n        _111 = (_101 * _105);\n        _110 = (0.02 + _111);\n        _113 = (_103 * _105);\n        _112 = (0.046 + _113);\n        _115 = (_92 * 9.0);\n        _116 = (_inputs.f0 * 0.25);\n        _117 = (_115 - _116);\n        _118 = fract(_117);\n        _119 = (_118 - 0.5);\n        _114 = abs(_119);\n        _121 = smoothstep(0.44, 0.5, _114);\n        _120 = (_121 * 0.1);\n        _122 = (_99 * _120);\n        _123 = (_108 + _122);\n        _108 = _123;\n        _124 = _123;\n        _125 = (_101 * _120);\n        _126 = (_110 + _125);\n        _110 = _126;\n        _127 = _126;\n        _128 = (_103 * _120);\n        _129 = (_112 + _128);\n        _112 = _129;\n        _130 = _129;\n        _132 = (_92 - 0.5);\n        _133 = abs(_132);\n        _131 = (_133 / 0.035);\n        _135 = (_131 * _131);\n        _136 = (0.0 - _135);\n        _134 = exp(_136);\n        _138 = (_inputs.f0 * 2.4);\n        _139 = sin(_138);\n        _140 = (0.28 * _139);\n        _137 = (0.72 + _140);\n        _141 = (0.9 * _134);\n        _142 = (_141 * 0.55);\n        _143 = (_142 * _137);\n        _144 = (_108 + _143);\n        _108 = _144;\n        _145 = _144;\n        _146 = (0.95 * _134);\n        _147 = (_146 * 0.55);\n        _148 = (_147 * _137);\n        _149 = (_110 + _148);\n        _110 = _149;\n        _150 = _149;\n        _151 = (1.0 * _134);\n        _152 = (_151 * 0.55);\n        _153 = (_152 * _137);\n        _154 = (_112 + _153);\n        _112 = _154;\n        _155 = _154;\n        _156 = 0;\n        loop {\n            _157 = (_156 < 100);\n            if (!(bool(_157))) { break; }\n            _159 = (_156 * 3);\n            _158 = (_29 - data[i32(_159)]);\n            _160 = (_158 * _158);\n            _161 = (_160 < 0.00032);\n            if (bool(_161)) {\n                _163 = (_156 * 3);\n                _164 = (_163 + 1);\n                _162 = (_39 - data[i32(_164)]);\n                _166 = (_158 * _158);\n                _167 = (_162 * _162);\n                _165 = (_166 + _167);\n                _168 = (_165 < 0.00032);\n                if (bool(_168)) {\n                    _169 = sqrt(_165);\n                    _171 = (_156 * 3);\n                    _172 = (_171 + 2);\n                    _170 = data[i32(_172)];\n                    _174 = (_170 < 0.5);\n                    if (bool(_174)) {\n                        _173 = 0.45;\n                    } else {\n                        _173 = 1.0;\n                    }\n                    _176 = (_170 < 0.5);\n                    if (bool(_176)) {\n                        _175 = 0.62;\n                    } else {\n                        _175 = 0.88;\n                    }\n                    _178 = (_170 < 0.5);\n                    if (bool(_178)) {\n                        _177 = 1.0;\n                    } else {\n                        _177 = 0.4;\n                    }\n                    _180 = smoothstep(0.0155, 0.0178, _169);\n                    _179 = (1.0 - _180);\n                    _181 = (0.01 - _108);\n                    _182 = (_181 * _179);\n                    _183 = (_108 + _182);\n                    _108 = _183;\n                    _184 = _183;\n                    _185 = (0.02 - _110);\n                    _186 = (_185 * _179);\n                    _187 = (_110 + _186);\n                    _110 = _187;\n                    _188 = _187;\n                    _189 = (0.05 - _112);\n                    _190 = (_189 * _179);\n                    _191 = (_112 + _190);\n                    _112 = _191;\n                    _192 = _191;\n                    _194 = smoothstep(0.01, 0.0148, _169);\n                    _193 = (1.0 - _194);\n                    _195 = (_173 - _108);\n                    _196 = (_195 * _193);\n                    _197 = (_108 + _196);\n                    _108 = _197;\n                    _198 = _197;\n                    _199 = (_175 - _110);\n                    _200 = (_199 * _193);\n                    _201 = (_110 + _200);\n                    _110 = _201;\n                    _202 = _201;\n                    _203 = (_177 - _112);\n                    _204 = (_203 * _193);\n                    _205 = (_112 + _204);\n                    _112 = _205;\n                    _206 = _205;\n                } else {\n                }\n            } else {\n            }\n            _207 = (_156 + 1);\n            _156 = _207;\n            _208 = _207;\n            continuing {\n            }\n        }\n        _209 = (_25 * 4);\n        paint[i32(_209)] = _108;\n        _210 = _108;\n        _211 = (_209 + 1);\n        paint[i32(_211)] = _110;\n        _212 = _110;\n        _213 = (_209 + 2);\n        paint[i32(_213)] = _112;\n        _214 = _112;\n        _215 = (_209 + 3);\n        paint[i32(_215)] = 1.0;\n        _216 = 1.0;\n        return;\n    } else {\n    }\n}\n\n",
+      "wgsl": "fn rand_unit(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: f32 = 0.0;\n    var _6: f32 = 0.0;\n    _4 = u32(_1);\n    _3 = m__6system4math_hash_u32(_4);\n    _5 = f32(_3);\n    _6 = f32(4294967300.0);\n    _0 = (_5 / _6);\n    return _0;\n}\n\nfn init_scale(_1: i32) -> f32 {\n    var _0: f32 = 0.0;\n    var _3: bool = false;\n    var _4: bool = false;\n    var _5: bool = false;\n    var _6: bool = false;\n    var _7: bool = false;\n    var _8: bool = false;\n    var _9: bool = false;\n    _3 = (_1 < 24);\n    if (bool(_3)) {\n        _0 = 0.65;\n        return _0;\n    } else {\n        _5 = (_1 >= 36);\n        _4 = _5;\n        if (bool(_4)) {\n            _6 = (_1 < 180);\n            _4 = _6;\n        } else {\n            _4 = false;\n        }\n        if (bool(_4)) {\n            _0 = 0.5;\n            return _0;\n        } else {\n            _8 = (_1 >= 192);\n            _7 = _8;\n            if (bool(_7)) {\n                _9 = (_1 < 204);\n                _7 = _9;\n            } else {\n                _7 = false;\n            }\n            if (bool(_7)) {\n                _0 = 0.68;\n                return _0;\n            } else {\n                _0 = 0.0;\n                return _0;\n            }\n        }\n    }\n}\n\nfn mode_at(_1: f32) -> i32 {\n    var _0: i32 = 0;\n    var _3: f32 = 0.0;\n    var _4: f32 = 0.0;\n    var _5: f32 = 0.0;\n    var _6: i32 = 0;\n    _3 = f32(6);\n    _4 = (_1 / _3);\n    _5 = floor(_4);\n    _6 = i32(_5);\n    _0 = (_6 % 3);\n    return _0;\n}\n\nfn m__6system4math_hash_u32(_1: u32) -> u32 {\n    var _0: u32 = 0u;\n    var _3: u32 = 0u;\n    var _4: u32 = 0u;\n    var _5: u32 = 0u;\n    var _6: u32 = 0u;\n    var _7: u32 = 0u;\n    var _8: u32 = 0u;\n    var _9: u32 = 0u;\n    var _10: u32 = 0u;\n    var _11: u32 = 0u;\n    var _12: u32 = 0u;\n    var _13: u32 = 0u;\n    var _14: u32 = 0u;\n    var _15: u32 = 0u;\n    var _16: u32 = 0u;\n    var _17: u32 = 0u;\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: u32 = 0u;\n    _4 = u32(374761393);\n    _3 = (_1 * _4);\n    _5 = u32(65536);\n    _6 = (_3 / _5);\n    _7 = (_3 ^ _6);\n    _3 = _7;\n    _8 = _7;\n    _9 = u32(2246822519);\n    _10 = (_3 * _9);\n    _3 = _10;\n    _11 = _10;\n    _12 = u32(8192);\n    _13 = (_3 / _12);\n    _14 = (_3 ^ _13);\n    _3 = _14;\n    _15 = _14;\n    _16 = u32(3266489917);\n    _17 = (_3 * _16);\n    _3 = _17;\n    _18 = _17;\n    _19 = u32(65536);\n    _20 = (_3 / _19);\n    _21 = (_3 ^ _20);\n    _3 = _21;\n    _22 = _21;\n    _0 = _3;\n    return _0;\n}\n\nstruct _Inputs {\n  f0: f32,\n  f1: f32,\n  f2: i32,\n  f3: f32,\n  f4: f32,\n  f5: u32,\n  f6: f32,\n  f7: f32,\n  f8: f32,\n  f9: u32,\n  f10: u32,\n  f11: f32,\n  f12: f32,\n  f13: u32,\n}\n\n@group(0) @binding(0) var<storage, read> w_b: array<f32>;\n@group(0) @binding(1) var<storage, read> data: array<f32>;\n@group(0) @binding(2) var<storage, read_write> paint: array<f32>;\n@group(0) @binding(3) var<uniform> _inputs: _Inputs;\n\n@compute @workgroup_size(256, 1, 1)\nfn miri_gpu_for_6_3(@builtin(global_invocation_id) _global_id: vec3<u32>, @builtin(local_invocation_id) _local_id: vec3<u32>, @builtin(workgroup_id) _workgroup_id: vec3<u32>, @builtin(num_workgroups) _num_workgroups: vec3<u32>) {\n    var _18: u32 = 0u;\n    var _19: u32 = 0u;\n    var _20: u32 = 0u;\n    var _21: u32 = 0u;\n    var _22: i32 = 0;\n    var _23: i32 = 0;\n    var _24: i32 = 0;\n    var _25: i32 = 0;\n    var _26: bool = false;\n    var _27: i32 = 0;\n    var _28: i32 = 0;\n    var _29: f32 = 0.0;\n    var _30: f32 = 0.0;\n    var _31: f32 = 0.0;\n    var _32: f32 = 0.0;\n    var _33: f32 = 0.0;\n    var _34: f32 = 0.0;\n    var _35: f32 = 0.0;\n    var _36: f32 = 0.0;\n    var _37: f32 = 0.0;\n    var _38: f32 = 0.0;\n    var _39: f32 = 0.0;\n    var _40: f32 = 0.0;\n    var _41: f32 = 0.0;\n    var _42: f32 = 0.0;\n    var _43: f32 = 0.0;\n    var _44: f32 = 0.0;\n    var _45: f32 = 0.0;\n    var<function> _46: array<f32, 12>;\n    var<function> _47: array<f32, 12>;\n    var _48: i32 = 0;\n    var _49: bool = false;\n    var _50: f32 = 0.0;\n    var _51: i32 = 0;\n    var _52: i32 = 0;\n    var _53: f32 = 0.0;\n    var _54: i32 = 0;\n    var _55: i32 = 0;\n    var _56: i32 = 0;\n    var _57: f32 = 0.0;\n    var _58: f32 = 0.0;\n    var _59: i32 = 0;\n    var _60: f32 = 0.0;\n    var _61: f32 = 0.0;\n    var _62: i32 = 0;\n    var _63: i32 = 0;\n    var _64: i32 = 0;\n    var _65: bool = false;\n    var _66: f32 = 0.0;\n    var _67: i32 = 0;\n    var _68: i32 = 0;\n    var _69: bool = false;\n    var _70: i32 = 0;\n    var _71: i32 = 0;\n    var _72: i32 = 0;\n    var _73: f32 = 0.0;\n    var _74: f32 = 0.0;\n    var _75: f32 = 0.0;\n    var _76: i32 = 0;\n    var _77: i32 = 0;\n    var _78: f32 = 0.0;\n    var _79: f32 = 0.0;\n    var _80: i32 = 0;\n    var _81: i32 = 0;\n    var _82: f32 = 0.0;\n    var _83: i32 = 0;\n    var _84: i32 = 0;\n    var _85: bool = false;\n    var _86: i32 = 0;\n    var _87: f32 = 0.0;\n    var _88: f32 = 0.0;\n    var _89: f32 = 0.0;\n    var _90: i32 = 0;\n    var _91: i32 = 0;\n    var _92: f32 = 0.0;\n    var _93: f32 = 0.0;\n    var _94: f32 = 0.0;\n    var _95: f32 = 0.0;\n    var _96: f32 = 0.0;\n    var _97: f32 = 0.0;\n    var _98: f32 = 0.0;\n    var _99: f32 = 0.0;\n    var _100: bool = false;\n    var _101: f32 = 0.0;\n    var _102: bool = false;\n    var _103: f32 = 0.0;\n    var _104: bool = false;\n    var _105: f32 = 0.0;\n    var _106: f32 = 0.0;\n    var _107: f32 = 0.0;\n    var _108: f32 = 0.0;\n    var _109: f32 = 0.0;\n    var _110: f32 = 0.0;\n    var _111: f32 = 0.0;\n    var _112: f32 = 0.0;\n    var _113: f32 = 0.0;\n    var _114: f32 = 0.0;\n    var _115: f32 = 0.0;\n    var _116: f32 = 0.0;\n    var _117: f32 = 0.0;\n    var _118: f32 = 0.0;\n    var _119: f32 = 0.0;\n    var _120: f32 = 0.0;\n    var _121: f32 = 0.0;\n    var _122: f32 = 0.0;\n    var _123: f32 = 0.0;\n    var _124: f32 = 0.0;\n    var _125: f32 = 0.0;\n    var _126: f32 = 0.0;\n    var _127: f32 = 0.0;\n    var _128: f32 = 0.0;\n    var _129: f32 = 0.0;\n    var _130: f32 = 0.0;\n    var _131: f32 = 0.0;\n    var _132: f32 = 0.0;\n    var _133: f32 = 0.0;\n    var _134: f32 = 0.0;\n    var _135: f32 = 0.0;\n    var _136: f32 = 0.0;\n    var _137: f32 = 0.0;\n    var _138: f32 = 0.0;\n    var _139: f32 = 0.0;\n    var _140: f32 = 0.0;\n    var _141: f32 = 0.0;\n    var _142: f32 = 0.0;\n    var _143: f32 = 0.0;\n    var _144: f32 = 0.0;\n    var _145: f32 = 0.0;\n    var _146: f32 = 0.0;\n    var _147: f32 = 0.0;\n    var _148: f32 = 0.0;\n    var _149: f32 = 0.0;\n    var _150: f32 = 0.0;\n    var _151: f32 = 0.0;\n    var _152: f32 = 0.0;\n    var _153: f32 = 0.0;\n    var _154: f32 = 0.0;\n    var _155: f32 = 0.0;\n    var _156: i32 = 0;\n    var _157: bool = false;\n    var _158: f32 = 0.0;\n    var _159: i32 = 0;\n    var _160: f32 = 0.0;\n    var _161: bool = false;\n    var _162: f32 = 0.0;\n    var _163: i32 = 0;\n    var _164: i32 = 0;\n    var _165: f32 = 0.0;\n    var _166: f32 = 0.0;\n    var _167: f32 = 0.0;\n    var _168: bool = false;\n    var _169: f32 = 0.0;\n    var _170: f32 = 0.0;\n    var _171: i32 = 0;\n    var _172: i32 = 0;\n    var _173: f32 = 0.0;\n    var _174: bool = false;\n    var _175: f32 = 0.0;\n    var _176: bool = false;\n    var _177: f32 = 0.0;\n    var _178: bool = false;\n    var _179: f32 = 0.0;\n    var _180: f32 = 0.0;\n    var _181: f32 = 0.0;\n    var _182: f32 = 0.0;\n    var _183: f32 = 0.0;\n    var _184: f32 = 0.0;\n    var _185: f32 = 0.0;\n    var _186: f32 = 0.0;\n    var _187: f32 = 0.0;\n    var _188: f32 = 0.0;\n    var _189: f32 = 0.0;\n    var _190: f32 = 0.0;\n    var _191: f32 = 0.0;\n    var _192: f32 = 0.0;\n    var _193: f32 = 0.0;\n    var _194: f32 = 0.0;\n    var _195: f32 = 0.0;\n    var _196: f32 = 0.0;\n    var _197: f32 = 0.0;\n    var _198: f32 = 0.0;\n    var _199: f32 = 0.0;\n    var _200: f32 = 0.0;\n    var _201: f32 = 0.0;\n    var _202: f32 = 0.0;\n    var _203: f32 = 0.0;\n    var _204: f32 = 0.0;\n    var _205: f32 = 0.0;\n    var _206: f32 = 0.0;\n    var _207: i32 = 0;\n    var _208: i32 = 0;\n    var _209: i32 = 0;\n    var _210: f32 = 0.0;\n    var _211: i32 = 0;\n    var _212: f32 = 0.0;\n    var _213: i32 = 0;\n    var _214: f32 = 0.0;\n    var _215: i32 = 0;\n    var _216: f32 = 0.0;\n    _18 = _local_id.x;\n    _19 = _workgroup_id.x;\n    _20 = 256u;\n    _21 = (_19 * _20);\n    _22 = i32(_18);\n    _23 = i32(_21);\n    _24 = (_22 + _23);\n    _25 = (_24 + 0);\n    _26 = (_25 < 518400);\n    if (bool(_26)) {\n        _27 = (_25 % 960);\n        _28 = (_25 / 960);\n        _30 = f32(_27);\n        _31 = (_30 + 0.5);\n        _32 = f32(960);\n        _33 = (_31 / _32);\n        _34 = (_33 - 0.5);\n        _35 = (_34 * 2.0);\n        _36 = f32(960);\n        _37 = f32(540);\n        _38 = (_36 / _37);\n        _29 = (_35 * _38);\n        _40 = f32(_28);\n        _41 = (_40 + 0.5);\n        _42 = f32(540);\n        _43 = (_41 / _42);\n        _44 = (0.5 - _43);\n        _45 = f32(2.0);\n        _39 = (_44 * _45);\n        _48 = 0;\n        loop {\n            _49 = (_48 < 12);\n            if (!(bool(_49))) { break; }\n            _51 = _checked_mul__i32(_48, 2);\n            _52 = _checked_add__i32(0, _51);\n            _53 = (w_b[i32(_52)] * _29);\n            _54 = _checked_mul__i32(_48, 2);\n            _55 = _checked_add__i32(0, _54);\n            _56 = _checked_add__i32(_55, 1);\n            _57 = (w_b[i32(_56)] * _39);\n            _58 = (_53 + _57);\n            _59 = _checked_add__i32(24, _48);\n            _50 = (_58 + w_b[i32(_59)]);\n            _60 = tanh(_50);\n            _46[i32(_48)] = _60;\n            _61 = _60;\n            _62 = _checked_add__i32(_48, 1);\n            _48 = _62;\n            _63 = _62;\n            continuing {\n            }\n        }\n        _48 = 0;\n        _64 = 0;\n        loop {\n            _65 = (_48 < 12);\n            if (!(bool(_65))) { break; }\n            _67 = _checked_add__i32(180, _48);\n            _66 = w_b[i32(_67)];\n            _68 = 0;\n            loop {\n                _69 = (_68 < 12);\n                if (!(bool(_69))) { break; }\n                _70 = _checked_mul__i32(_48, 12);\n                _71 = _checked_add__i32(36, _70);\n                _72 = _checked_add__i32(_71, _68);\n                _73 = (w_b[i32(_72)] * _46[i32(_68)]);\n                _74 = (_66 + _73);\n                _66 = _74;\n                _75 = _74;\n                _76 = _checked_add__i32(_68, 1);\n                _68 = _76;\n                _77 = _76;\n                continuing {\n                }\n            }\n            _78 = tanh(_66);\n            _47[i32(_48)] = _78;\n            _79 = _78;\n            _80 = _checked_add__i32(_48, 1);\n            _48 = _80;\n            _81 = _80;\n            continuing {\n            }\n        }\n        _83 = 204;\n        _82 = w_b[i32(_83)];\n        _48 = 0;\n        _84 = 0;\n        loop {\n            _85 = (_48 < 12);\n            if (!(bool(_85))) { break; }\n            _86 = _checked_add__i32(192, _48);\n            _87 = (w_b[i32(_86)] * _47[i32(_48)]);\n            _88 = (_82 + _87);\n            _82 = _88;\n            _89 = _88;\n            _90 = _checked_add__i32(_48, 1);\n            _48 = _90;\n            _91 = _90;\n            continuing {\n            }\n        }\n        _93 = (0.0 - _82);\n        _94 = exp(_93);\n        _95 = (1.0 + _94);\n        _92 = (1.0 / _95);\n        _97 = (_92 - 0.5);\n        _98 = abs(_97);\n        _96 = (_98 * 2.0);\n        _100 = (_92 < 0.5);\n        if (bool(_100)) {\n            _99 = 0.16;\n        } else {\n            _99 = 1.0;\n        }\n        _102 = (_92 < 0.5);\n        if (bool(_102)) {\n            _101 = 0.31;\n        } else {\n            _101 = 0.84;\n        }\n        _104 = (_92 < 0.5);\n        if (bool(_104)) {\n            _103 = 0.82;\n        } else {\n            _103 = 0.24;\n        }\n        _106 = (0.6 * _96);\n        _107 = (_106 * _96);\n        _105 = (0.1 + _107);\n        _109 = (_99 * _105);\n        _108 = (0.012 + _109);\n        _111 = (_101 * _105);\n        _110 = (0.02 + _111);\n        _113 = (_103 * _105);\n        _112 = (0.046 + _113);\n        _115 = (_92 * 9.0);\n        _116 = (_inputs.f0 * 0.25);\n        _117 = (_115 - _116);\n        _118 = fract(_117);\n        _119 = (_118 - 0.5);\n        _114 = abs(_119);\n        _121 = smoothstep(0.44, 0.5, _114);\n        _120 = (_121 * 0.1);\n        _122 = (_99 * _120);\n        _123 = (_108 + _122);\n        _108 = _123;\n        _124 = _123;\n        _125 = (_101 * _120);\n        _126 = (_110 + _125);\n        _110 = _126;\n        _127 = _126;\n        _128 = (_103 * _120);\n        _129 = (_112 + _128);\n        _112 = _129;\n        _130 = _129;\n        _132 = (_92 - 0.5);\n        _133 = abs(_132);\n        _131 = (_133 / 0.035);\n        _135 = (_131 * _131);\n        _136 = (0.0 - _135);\n        _134 = exp(_136);\n        _138 = (_inputs.f0 * 2.4);\n        _139 = sin(_138);\n        _140 = (0.28 * _139);\n        _137 = (0.72 + _140);\n        _141 = (0.9 * _134);\n        _142 = (_141 * 0.55);\n        _143 = (_142 * _137);\n        _144 = (_108 + _143);\n        _108 = _144;\n        _145 = _144;\n        _146 = (0.95 * _134);\n        _147 = (_146 * 0.55);\n        _148 = (_147 * _137);\n        _149 = (_110 + _148);\n        _110 = _149;\n        _150 = _149;\n        _151 = (1.0 * _134);\n        _152 = (_151 * 0.55);\n        _153 = (_152 * _137);\n        _154 = (_112 + _153);\n        _112 = _154;\n        _155 = _154;\n        _156 = 0;\n        loop {\n            _157 = (_156 < 100);\n            if (!(bool(_157))) { break; }\n            _159 = _checked_mul__i32(_156, 3);\n            _158 = (_29 - data[i32(_159)]);\n            _160 = (_158 * _158);\n            _161 = (_160 < 0.00032);\n            if (bool(_161)) {\n                _163 = _checked_mul__i32(_156, 3);\n                _164 = _checked_add__i32(_163, 1);\n                _162 = (_39 - data[i32(_164)]);\n                _166 = (_158 * _158);\n                _167 = (_162 * _162);\n                _165 = (_166 + _167);\n                _168 = (_165 < 0.00032);\n                if (bool(_168)) {\n                    _169 = sqrt(_165);\n                    _171 = _checked_mul__i32(_156, 3);\n                    _172 = _checked_add__i32(_171, 2);\n                    _170 = data[i32(_172)];\n                    _174 = (_170 < 0.5);\n                    if (bool(_174)) {\n                        _173 = 0.45;\n                    } else {\n                        _173 = 1.0;\n                    }\n                    _176 = (_170 < 0.5);\n                    if (bool(_176)) {\n                        _175 = 0.62;\n                    } else {\n                        _175 = 0.88;\n                    }\n                    _178 = (_170 < 0.5);\n                    if (bool(_178)) {\n                        _177 = 1.0;\n                    } else {\n                        _177 = 0.4;\n                    }\n                    _180 = smoothstep(0.0155, 0.0178, _169);\n                    _179 = (1.0 - _180);\n                    _181 = (0.01 - _108);\n                    _182 = (_181 * _179);\n                    _183 = (_108 + _182);\n                    _108 = _183;\n                    _184 = _183;\n                    _185 = (0.02 - _110);\n                    _186 = (_185 * _179);\n                    _187 = (_110 + _186);\n                    _110 = _187;\n                    _188 = _187;\n                    _189 = (0.05 - _112);\n                    _190 = (_189 * _179);\n                    _191 = (_112 + _190);\n                    _112 = _191;\n                    _192 = _191;\n                    _194 = smoothstep(0.01, 0.0148, _169);\n                    _193 = (1.0 - _194);\n                    _195 = (_173 - _108);\n                    _196 = (_195 * _193);\n                    _197 = (_108 + _196);\n                    _108 = _197;\n                    _198 = _197;\n                    _199 = (_175 - _110);\n                    _200 = (_199 * _193);\n                    _201 = (_110 + _200);\n                    _110 = _201;\n                    _202 = _201;\n                    _203 = (_177 - _112);\n                    _204 = (_203 * _193);\n                    _205 = (_112 + _204);\n                    _112 = _205;\n                    _206 = _205;\n                } else {\n                }\n            } else {\n            }\n            _207 = _checked_add__i32(_156, 1);\n            _156 = _207;\n            _208 = _207;\n            continuing {\n            }\n        }\n        _209 = _checked_mul__i32(_25, 4);\n        paint[i32(_209)] = _108;\n        _210 = _108;\n        _211 = _checked_add__i32(_209, 1);\n        paint[i32(_211)] = _110;\n        _212 = _110;\n        _213 = _checked_add__i32(_209, 2);\n        paint[i32(_213)] = _112;\n        _214 = _112;\n        _215 = _checked_add__i32(_209, 3);\n        paint[i32(_215)] = 1.0;\n        _216 = 1.0;\n        return;\n    } else {\n    }\n}\n\n@group(1) @binding(0) var<storage, read_write> miri_fault: atomic<u32>;\n\nfn _checked_add__i32(a: i32, b: i32) -> i32 {\n    let r = a + b;\n    if (((a ^ r) & (b ^ r)) < 0) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\nfn _checked_mul__i32(a: i32, b: i32) -> i32 {\n    let r = a * b;\n    if ((a == -2147483648 && b == -1) || (b == -2147483648 && a == -1) || (b != 0 && r / b != a)) {\n        atomicOr(&miri_fault, 1u);\n    }\n    return r;\n}\n\n",
       "workgroups": [
         2025,
         1,
@@ -5145,111 +5145,111 @@
         },
         {
           "wgsl": 96,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 97,
-          "miri": 52
+          "miri": 73
         },
         {
           "wgsl": 98,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 99,
-          "miri": 54
+          "miri": 73
         },
         {
           "wgsl": 100,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 101,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 102,
-          "miri": 53
+          "miri": 73
         },
         {
           "wgsl": 103,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 104,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 105,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 106,
-          "miri": 54
+          "miri": 74
         },
         {
           "wgsl": 107,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 108,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 109,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 110,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 111,
-          "miri": 56
+          "miri": 74
         },
         {
           "wgsl": 112,
-          "miri": 56
+          "miri": 76
         },
         {
           "wgsl": 113,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 114,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 115,
-          "miri": 56
+          "miri": 75
         },
         {
           "wgsl": 116,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 117,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 118,
-          "miri": 57
+          "miri": 77
         },
         {
           "wgsl": 119,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 120,
-          "miri": 57
+          "miri": 76
         },
         {
           "wgsl": 121,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 122,
-          "miri": 58
+          "miri": 77
         },
         {
           "wgsl": 348,

@@ -2,42 +2,42 @@
   "generatedBy": "tools/gen_demo_bundles.py",
   "compiledFrom": "assets/demos/<name>.mi",
   "compiler": {
-    "commit": "aafbc7a9cf56f41605270886658ebb51b0844782",
+    "commit": "96f1fb19665704b1be497cdf90bc68333b05b7a6",
     "dirty": true
   },
-  "runtimeJsBytes": 43517,
+  "runtimeJsBytes": 49826,
   "demos": {
     "mandelbrot": {
-      "raw": 62145,
-      "gzip": 4602
+      "raw": 63313,
+      "gzip": 4930
     },
     "game_of_life": {
-      "raw": 56041,
-      "gzip": 4504
+      "raw": 60463,
+      "gzip": 4892
     },
     "particles": {
-      "raw": 129880,
-      "gzip": 7551
+      "raw": 132768,
+      "gzip": 7915
     },
     "fluid": {
-      "raw": 249258,
-      "gzip": 10192
+      "raw": 273494,
+      "gzip": 10759
     },
     "raymarch": {
-      "raw": 120418,
-      "gzip": 9583
+      "raw": 122084,
+      "gzip": 9929
     },
     "neural": {
-      "raw": 176716,
-      "gzip": 15251
+      "raw": 182553,
+      "gzip": 16187
     },
     "blackhole": {
-      "raw": 149149,
-      "gzip": 12277
+      "raw": 150815,
+      "gzip": 12636
     },
     "wormhole": {
-      "raw": 144904,
-      "gzip": 11933
+      "raw": 146570,
+      "gzip": 12286
     }
   }
 }
