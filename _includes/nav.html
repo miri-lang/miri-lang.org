@@ -12,7 +12,8 @@
       <a href="{{ '/#features' | relative_url }}">features</a>
       <a href="{{ '/#examples' | relative_url }}">examples</a>
       <a class="{% if p contains '/gpu-demos' %}active{% endif %}" href="{{ '/gpu-demos/' | relative_url }}">gpu demos</a>
-      <a class="{% if p contains '/docs' %}active{% endif %}" href="{{ '/docs/' | relative_url }}">docs</a>
+      <a class="{% if p contains '/docs' %}{% unless p contains '/docs/agents' %}active{% endunless %}{% endif %}" href="{{ '/docs/' | relative_url }}">docs</a>
+      <a class="{% if p contains '/docs/agents' %}active{% endif %}" href="{{ '/docs/agents/' | relative_url }}">for agents</a>
       <a class="nav-cta" href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub ↗</a>
     </nav>
   </div>

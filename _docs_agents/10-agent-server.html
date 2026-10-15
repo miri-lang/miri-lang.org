@@ -1,0 +1,37 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: agent-server
+order: 10
+nav_title: For Editors — miri agent
+title: For Editors — miri agent — Miri Programming Language
+description: An agent with a shell should use the commands above.
+og_image: /assets/og/docs.png
+permalink: /docs/agents/agent-server/
+pager_prev:
+  title: Scoped Edits — miri patch
+  url: /docs/agents/patch/
+pager_next:
+  title: The Skill Packs
+  url: /docs/agents/skill-packs/
+---
+
+<h1>For Editors — <code>miri agent</code></h1>
+<p>An agent with a shell should use the commands above. <code>miri agent</code> is for tools that want to keep one
+  compiler running instead of starting it for every command — an editor plugin, or a service with no shell. It
+  speaks JSON-RPC 2.0 over standard input and output, framed with a <code>Content-Length</code> header the way a
+  language server is:</p>
+<pre><code>→ {"jsonrpc":"2.0","id":1,"method":"check","params":{"path":"main.mi"}}
+← {"jsonrpc":"2.0","id":1,"result":{"schemaVersion":1,"ok":false,"command":"check","diagnostics":[…]}}
+
+→ {"jsonrpc":"2.0","id":2,"method":"fixApply","params":{"path":"main.mi"}}
+← {"jsonrpc":"2.0","id":2,"result":{"schemaVersion":1,"ok":true,"command":"fix","diagnostics":[…]}}</code></pre>
+<p>Each method answers with exactly the JSON its command prints. The methods are <code>initialize</code>,
+  <code>check</code>, <code>explain</code>, <code>fixApply</code>, <code>view</code>, <code>patch</code> and
+  <code>skillsGet</code>, and <code>$/cancelRequest</code> cancels one in flight. The full protocol is in
+  <a href="https://github.com/miri-lang/miri/blob/main/docs/agent-protocol.md" target="_blank" rel="noopener">docs/agent-protocol.md</a>,
+  and <a href="https://github.com/miri-lang/miri/blob/main/tools/agent_client.py" target="_blank" rel="noopener">tools/agent_client.py</a>
+  is a small working client in Python.</p>
+
+<!-- The Skill Packs -->

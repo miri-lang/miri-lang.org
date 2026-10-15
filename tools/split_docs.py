@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Generate one Jekyll collection doc per <h2> topic from a guide's aggregate page.
 
-The two aggregate pages (docs/getting-started/index.html, docs/gpu/index.html) stay
-the single source of truth for guide content — this script never reads or writes
+The aggregate pages (docs/getting-started/index.html, docs/gpu/index.html,
+docs/agents/index.html) stay the single source of truth for guide content — this script never reads or writes
 them for content, only for their `sidebar` front matter (id/title/group/order) and
 their <h2 id="...">...</h2> sections. Re-run after any edit to either aggregate
 page's <h2> sections or its `sidebar` list; do not hand-edit files under
-_docs_getting_started/ or _docs_gpu/, they are overwritten wholesale on each run.
+_docs_getting_started/, _docs_gpu/ or _docs_agents/, they are overwritten wholesale on each run.
 
 Usage: python3 tools/split_docs.py
 """
@@ -35,6 +35,14 @@ GUIDES = [
         "out_dir": ROOT / "_docs_gpu",
         "first_prev": {"title": "Getting Started", "url": "/docs/getting-started/"},
         "last_next": {"title": "GPU Playground", "url": "/gpu-demos/"},
+    },
+    {
+        "slug": "agents",
+        "title": "Miri for Agents",
+        "source": ROOT / "docs/agents/index.html",
+        "out_dir": ROOT / "_docs_agents",
+        "first_prev": {"title": "Documentation", "url": "/docs/"},
+        "last_next": {"title": "Getting Started", "url": "/docs/getting-started/"},
     },
 ]
 

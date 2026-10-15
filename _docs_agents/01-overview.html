@@ -1,0 +1,47 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: overview
+order: 1
+nav_title: What Agents Get
+title: What Agents Get — Miri Programming Language
+description: An agent writing code does best when it can try something, see exactly what went wrong, and fix it without guessing.
+og_image: /assets/og/docs.png
+permalink: /docs/agents/overview/
+pager_prev:
+  title: Documentation
+  url: /docs/
+pager_next:
+  title: Set Up in Two Commands
+  url: /docs/agents/setup/
+group: Start Here
+---
+
+<h1>What Agents Get</h1>
+<p>An agent writing code does best when it can try something, see exactly what went wrong, and fix it without
+  guessing. Miri gives it these tools, all in the <code>miri</code> command:</p>
+
+<table>
+  <thead><tr><th>Tool</th><th>What it does for the agent</th></tr></thead>
+  <tbody>
+    <tr><td><a href="{{ '/docs/agents/loop/' | relative_url }}">The loop</a></td><td>One short routine — check, fix, test — that the agent repeats until the code is clean.</td></tr>
+    <tr><td><a href="{{ '/docs/agents/diagnostics/' | relative_url }}"><code>miri check --format json</code></a></td><td>Every error and warning as JSON: a stable code, the exact place, a one-line <em>help</em>, and often a ready-made repair.</td></tr>
+    <tr><td><a href="{{ '/docs/agents/repairs/' | relative_url }}"><code>miri fix</code></a></td><td>Applies those repairs to the file in one call.</td></tr>
+    <tr><td><a href="{{ '/docs/agents/explain/' | relative_url }}"><code>miri explain</code></a></td><td>Describes the rule behind any error code, with a before-and-after example.</td></tr>
+    <tr><td><a href="{{ '/docs/agents/view/' | relative_url }}"><code>miri view</code></a></td><td>Answers “what can I call on this type?” and “what does this module offer?” from the real standard library.</td></tr>
+    <tr><td><a href="{{ '/docs/agents/tests/' | relative_url }}"><code>miri test</code></a></td><td>Runs <code>@test</code> functions and reports each failure with the expected and actual values.</td></tr>
+    <tr><td><a href="{{ '/docs/agents/patch/' | relative_url }}"><code>miri patch</code></a></td><td>Edits inside one function and refuses the edit if the file would stop compiling.</td></tr>
+    <tr><td><a href="{{ '/docs/agents/skill-packs/' | relative_url }}">Skill packs</a></td><td>Short guides the agent reads before writing Miri: the syntax, the traps, and the loop.</td></tr>
+  </tbody>
+</table>
+
+{% include agents/counts.html %}
+
+<div class="note">
+  <p><strong>Why this matters:</strong> an agent that has to guess pays for every wrong guess with another round
+    trip. When the compiler names the rule, points at the spot and offers the edit, most mistakes cost one step to
+    fix.</p>
+</div>
+
+<!-- Set Up in Two Commands -->

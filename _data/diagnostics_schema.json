@@ -1,0 +1,854 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Miri Diagnostics Envelope",
+  "description": "JSON envelope emitted by Miri compiler commands (check, build, run, test, explain) when --format json is specified. All diagnostic messages include a stable code for tooling integration.",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "description": "Version of this schema. Currently 1. A version gains optional fields and new `command` values as commands land, so a consumer must ignore members it does not recognise; the number changes only when an existing field changes shape or meaning.",
+      "minimum": 1
+    },
+    "ok": {
+      "type": "boolean",
+      "description": "Whether the command did what was asked. Semantics are per-command; see the per-command table in agent-protocol.md."
+    },
+    "command": {
+      "type": "string",
+      "description": "The command that produced this envelope: 'check', 'build', 'run', 'test', 'explain', 'fix', 'determinism', 'view', 'patch', or 'skill'.",
+      "enum": [
+        "check",
+        "build",
+        "run",
+        "test",
+        "explain",
+        "fix",
+        "determinism",
+        "view",
+        "patch",
+        "skill"
+      ]
+    },
+    "diagnostics": {
+      "type": "array",
+      "description": "Array of diagnostic messages (errors, warnings, notes).",
+      "items": {
+        "$ref": "#/$defs/JsonDiagnostic"
+      }
+    },
+    "artifact": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Path to the build artifact (for build/run commands only). Absent or null if no artifact was produced."
+    },
+    "exitCode": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Process exit code. Semantics vary by command: for run, this is the program's exit status; for other commands, 0 means ok, non-zero means failed. See the per-command table in agent-protocol.md."
+    },
+    "signal": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Signal number if the process was killed by a signal (for run/test commands on Unix only). Absent or null if the process exited normally or on non-Unix platforms."
+    },
+    "stdoutTail": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Last N bytes of the program's stdout (for run/test commands only). Absent or null if not captured."
+    },
+    "stderrTail": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Last N bytes of the program's stderr (for run/test commands only). Absent or null if not captured."
+    },
+    "stdoutTruncated": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "True if stdoutTail was truncated; false if complete. Absent or null if stdout was not captured."
+    },
+    "stderrTruncated": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "True if stderrTail was truncated; false if complete. Absent or null if stderr was not captured."
+    },
+    "durationMs": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Elapsed time in milliseconds for the command execution. Absent or null if not measured."
+    },
+    "tests": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Test summary (for test command only). Absent or null for other commands.",
+      "$ref": "#/$defs/JsonTestSummary"
+    },
+    "explanation": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Documentation for one diagnostic code (for explain command only). Absent or null for other commands.",
+      "$ref": "#/$defs/JsonExplanation"
+    },
+    "view": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The canonical source a scoped read returned (view command only). Absent or null for other commands.",
+      "$ref": "#/$defs/JsonView"
+    },
+    "patch": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Patch results: applied edits and revalidation count (patch command only). Absent or null for other commands.",
+      "$ref": "#/$defs/JsonPatch"
+    },
+    "skills": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Skills from the embedded catalogue (skill command only). Absent or null for other commands.",
+      "items": {
+        "$ref": "#/$defs/JsonSkill"
+      }
+    },
+    "codes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Diagnostic code registry (explain list command only). Absent or null for other commands.",
+      "items": {
+        "$ref": "#/$defs/JsonCode"
+      }
+    },
+    "gpu": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "What the run's GPU work cost (run command only). Absent for a program that never reached the GPU runtime, which is what distinguishes no GPU work from GPU work that cost nothing.",
+      "$ref": "#/$defs/JsonGpuTelemetry"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "ok",
+    "command",
+    "diagnostics"
+  ],
+  "$defs": {
+    "JsonDiagnostic": {
+      "type": "object",
+      "description": "A single diagnostic message (error, warning, or note).",
+      "properties": {
+        "severity": {
+          "type": "string",
+          "description": "Severity level of the diagnostic.",
+          "enum": [
+            "error",
+            "warning",
+            "note"
+          ]
+        },
+        "code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Stable diagnostic code (e.g., 'MER_TYP_010') for documentation and tooling. Absent or null for some synthetic diagnostics."
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable diagnostic message."
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Source file path where the issue occurred. Absent or null for diagnostics without a source location."
+        },
+        "line": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1-indexed line number in source where the issue occurred. Absent or null if no source location."
+        },
+        "column": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1-indexed column number in source where the issue occurred. Absent or null if no source location."
+        },
+        "length": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Length in bytes of the error span. Absent or null if no source location."
+        },
+        "expected": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Expected type/value for type mismatch errors. Populated for explicitly-typed error variants (TypeMismatch, ArityMismatch, etc) and selectively for family-coded errors (e.g., MER_TYP_002). Absence does not imply types are unknown; some families do not yet carry structured type information."
+        },
+        "actual": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Actual type/value for type mismatch errors. Populated for explicitly-typed error variants (TypeMismatch, ArityMismatch, etc) and selectively for family-coded errors (e.g., MER_TYP_002). Absence does not imply types are unknown; some families do not yet carry structured type information."
+        },
+        "help": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Actionable help text explaining how to resolve the issue. Absent or null if no help is available."
+        },
+        "fixSafety": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Fix-safety level of this diagnostic's repair, if the diagnostic carries a repair. One of: 'format-only', 'behavior-preserving', 'local-edit', 'api-changing', 'target-changing', or 'requires-human-review'. It classifies the risk of the edit, not whether one exists — the presence of the 'repair' member is what says that. Absent or null if the diagnostic carries no repair.",
+          "enum": [
+            "format-only",
+            "behavior-preserving",
+            "local-edit",
+            "api-changing",
+            "target-changing",
+            "requires-human-review"
+          ]
+        },
+        "repair": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Always absent in schema version 1; reserved for the repair-plan surface in future versions.",
+          "$ref": "#/$defs/JsonRepair"
+        },
+        "related": {
+          "type": "array",
+          "description": "Related diagnostics (notes, additional context). Empty if no related diagnostics.",
+          "items": {
+            "$ref": "#/$defs/JsonRelated"
+          }
+        },
+        "preexisting": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "True if this diagnostic existed in the pre-edited version (patch command only). False if the edit introduced it. Absent or null for commands other than patch, for a patch command's own refusal notice (e.g., MER_BLD_011), or for a warning, which is never partitioned against the pre-edited version."
+        }
+      },
+      "required": [
+        "severity",
+        "message",
+        "related"
+      ]
+    },
+    "JsonRepair": {
+      "type": "object",
+      "description": "A repair the compiler determined for this diagnostic, with the edits that carry it out.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Stable identifier for the repair shape, such as 'let-to-var' or 'add-import'. `miri explain --list --format json` names the repairs each code can offer."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Human-readable summary of the repair."
+        },
+        "edits": {
+          "type": "array",
+          "description": "The edits that carry out this repair, in source order. Never empty: a repair exists only when the compiler determined the edit.",
+          "items": {
+            "$ref": "#/$defs/JsonEdit"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "summary",
+        "edits"
+      ]
+    },
+    "JsonEdit": {
+      "type": "object",
+      "description": "A single edit to apply as part of a repair.",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "File path (absolute or relative) to edit."
+        },
+        "start": {
+          "type": "integer",
+          "description": "Start byte offset (inclusive)."
+        },
+        "end": {
+          "type": "integer",
+          "description": "End byte offset (exclusive)."
+        },
+        "replacement": {
+          "type": "string",
+          "description": "Text replacing the range. Empty to delete the range; the range may be empty to insert."
+        }
+      },
+      "required": [
+        "path",
+        "start",
+        "end",
+        "replacement"
+      ]
+    },
+    "JsonRelated": {
+      "type": "object",
+      "description": "A related diagnostic (typically a note providing additional context).",
+      "properties": {
+        "severity": {
+          "type": "string",
+          "description": "Severity level of the related diagnostic.",
+          "enum": [
+            "error",
+            "warning",
+            "note"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable message for the related diagnostic."
+        },
+        "code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Diagnostic code if applicable. Absent or null if no code."
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Source file path. Absent or null if no source location."
+        },
+        "line": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1-indexed line number in source. Absent or null if no source location."
+        },
+        "column": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1-indexed column number in source. Absent or null if no source location."
+        }
+      },
+      "required": [
+        "severity",
+        "message"
+      ]
+    },
+    "JsonTestSummary": {
+      "type": "object",
+      "description": "Summary of test results (test command only).",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "description": "Total number of tests run (including passed, failed, ignored, etc)."
+        },
+        "passed": {
+          "type": "integer",
+          "description": "Number of tests that passed."
+        },
+        "failed": {
+          "type": "integer",
+          "description": "Number of tests that failed."
+        },
+        "ignored": {
+          "type": "integer",
+          "description": "Number of tests that were ignored."
+        },
+        "results": {
+          "type": "array",
+          "description": "Individual test results.",
+          "items": {
+            "$ref": "#/$defs/JsonTestResult"
+          }
+        },
+        "rejectedFiles": {
+          "type": "array",
+          "description": "Files that were rejected from the test run (e.g., unparseable or declaring main).",
+          "items": {
+            "$ref": "#/$defs/JsonRejectedFile"
+          }
+        },
+        "filesRead": {
+          "type": "integer",
+          "description": "Number of .mi files discovery opened and read, whether or not they declared a test. With total 0 it separates 'read files, none declared a test' from 'read no files at all'."
+        }
+      },
+      "required": [
+        "total",
+        "passed",
+        "failed",
+        "ignored",
+        "results",
+        "rejectedFiles",
+        "filesRead"
+      ]
+    },
+    "JsonTestResult": {
+      "type": "object",
+      "description": "Result of a single test.",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Path to the test file."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the test."
+        },
+        "outcome": {
+          "type": "string",
+          "description": "Outcome of the test.",
+          "enum": [
+            "passed",
+            "failed",
+            "ignored",
+            "expected_failure",
+            "unexpected_pass",
+            "crashed",
+            "runner_fault"
+          ]
+        },
+        "detail": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Additional detail about the test result (e.g., error message or timing). Absent or null if no detail."
+        },
+        "code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Diagnostic code for assertion failures (e.g., \"MER_RT_005\"). Absent or null if no failure."
+        },
+        "line": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1-indexed line number where the assertion failed. Absent or null if not applicable."
+        },
+        "column": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "1-indexed column number where the assertion failed. Absent or null if not applicable."
+        },
+        "expected": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "For assert_eq, the expected value; for assert_panics, the expected message. Absent or null if not applicable."
+        },
+        "actual": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "For assert_eq, the actual value; for assert_panics, the caught message. Absent or null if not applicable."
+        },
+        "expression": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The expression text for bare assert, or null/absent for other assertions."
+        },
+        "message": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Optional user-provided message for the assertion."
+        }
+      },
+      "required": [
+        "path",
+        "name",
+        "outcome"
+      ]
+    },
+    "JsonRejectedFile": {
+      "type": "object",
+      "description": "A file that was rejected from the test run.",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Path to the rejected file."
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason the file was rejected.",
+          "enum": [
+            "unparseable",
+            "declares_main",
+            "top_level_statements"
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "reason"
+      ]
+    },
+    "JsonExplanation": {
+      "type": "object",
+      "description": "A diagnostic code's documentation. Code, title, severity and reserved status come from the code registry; the remaining fields are parsed from the documentation file embedded for that code.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Wire string of the code being explained, e.g. 'MER_TYP_030'."
+        },
+        "title": {
+          "type": "string",
+          "description": "Short title of the code, from the registry."
+        },
+        "severity": {
+          "type": "string",
+          "description": "Severity of the code: 'error', 'warning', or 'note'."
+        },
+        "reserved": {
+          "type": "boolean",
+          "description": "True when the code is retired and no longer emitted by any check."
+        },
+        "rule": {
+          "type": "string",
+          "description": "The rule the check enforces."
+        },
+        "exampleBefore": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Source showing the problem. Absent for a reserved code, which has no reproduction."
+        },
+        "exampleAfter": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The same source, repaired. Absent for a reserved code."
+        },
+        "reference": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Relative path to the reference page covering this area."
+        },
+        "referenceTitle": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Title of the referenced page (from its # Heading). Absent or null if the page has no title or reference is absent."
+        },
+        "referenceSummary": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Lead paragraph of the referenced page, before the first ## section heading. Absent or null if the page has no lead paragraph or reference is absent."
+        }
+      },
+      "required": [
+        "code",
+        "title",
+        "severity",
+        "reserved",
+        "rule"
+      ]
+    },
+    "JsonView": {
+      "type": "object",
+      "description": "Canonical source read back by the view command, with the position of each declaration inside it.",
+      "properties": {
+        "shape": {
+          "type": "string",
+          "description": "Which shape was asked for: 'fn', 'outline', or 'around'.",
+          "enum": [
+            "fn",
+            "outline",
+            "around"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "description": "The canonical source. Every span below indexes these bytes, not the bytes of the file on disk."
+        },
+        "spans": {
+          "type": "array",
+          "description": "Where each declaration sits within `text`.",
+          "items": {
+            "$ref": "#/$defs/JsonViewSpan"
+          }
+        }
+      },
+      "required": [
+        "shape",
+        "text"
+      ]
+    },
+    "JsonViewSpan": {
+      "type": "object",
+      "description": "One declaration's byte range within a view's text.",
+      "properties": {
+        "start": {
+          "type": "integer",
+          "description": "Byte offset into the rendered text where the declaration starts."
+        },
+        "end": {
+          "type": "integer",
+          "description": "Byte offset into the rendered text one past the declaration's last byte."
+        },
+        "kind": {
+          "type": "string",
+          "description": "What kind of declaration this is, such as 'function', 'class', 'struct', 'enum', 'trait', 'type' or 'use'. The value 'block' marks the region an '--around' read narrowed to, which is not a declaration and is produced by the view rather than found in the source."
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The declared name, when the declaration has one."
+        },
+        "line": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "First line of the declaration in the source file, 1-based."
+        },
+        "endLine": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Last line of the declaration in the source file, 1-based and inclusive."
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "kind"
+      ]
+    },
+    "JsonPatch": {
+      "type": "object",
+      "description": "Results of a patch command: applied edits and metadata.",
+      "properties": {
+        "edits": {
+          "type": "array",
+          "description": "Individual edits applied in the patch (each with raw byte range and replacement).",
+          "items": {
+            "$ref": "#/$defs/JsonPatchEdit"
+          }
+        },
+        "revalidations": {
+          "type": "integer",
+          "description": "Number of revalidations performed."
+        },
+        "fileWritten": {
+          "type": "boolean",
+          "description": "Whether the file was written to disk."
+        }
+      },
+      "required": [
+        "revalidations",
+        "fileWritten"
+      ]
+    },
+    "JsonPatchEdit": {
+      "type": "object",
+      "description": "A single edit applied by the patch command.",
+      "properties": {
+        "start": {
+          "type": "integer",
+          "description": "Byte offset where the replacement starts in the raw source."
+        },
+        "end": {
+          "type": "integer",
+          "description": "Byte offset one past the last replaced byte."
+        },
+        "replacement": {
+          "type": "string",
+          "description": "The replacement text."
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "replacement"
+      ]
+    },
+    "JsonSkill": {
+      "type": "object",
+      "description": "A skill from the embedded catalogue.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Skill name."
+        },
+        "description": {
+          "type": "string",
+          "description": "One-line description of the skill."
+        },
+        "compilerVersion": {
+          "type": "string",
+          "description": "Compiler version stamped into the skill."
+        },
+        "installedPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Path where the skill was installed (install command only). Absent or null for list command."
+        },
+        "unchanged": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "True when the target file already held exactly this text and was not rewritten (install command only). Absent or null for the list command."
+        },
+        "body": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The skill's markdown body, without its header (the skillsGet agent method only). Absent or null for the list and install commands."
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "compilerVersion"
+      ]
+    },
+    "JsonCode": {
+      "type": "object",
+      "description": "One diagnostic code in the registry.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The code identifier (e.g., MER_TYP_010)."
+        },
+        "title": {
+          "type": "string",
+          "description": "The short title of the code."
+        },
+        "severity": {
+          "type": "string",
+          "description": "The severity level (error, warning, note).",
+          "enum": [
+            "error",
+            "warning",
+            "note"
+          ]
+        },
+        "area": {
+          "type": "string",
+          "description": "The area this code belongs to."
+        },
+        "retired": {
+          "type": "boolean",
+          "description": "Whether this code is retired."
+        },
+        "fixSafety": {
+          "type": "string",
+          "description": "The risk floor for repairing this condition, recorded whether or not a repair exists: it classifies the shape of the edit a repair would make, not whether one is available. Read 'repairs' for availability."
+        },
+        "repairs": {
+          "type": "array",
+          "description": "Wire identifiers of the repairs reachable from this code, in declaration order. Empty when no repair exists, which is how a tool tells an automatically fixable condition from one it has to act on itself. A code covers every condition it is raised for and a repair covers one of them, so a listed repair is reachable from some of a code's diagnostics rather than all of them: a code listed here may still raise a diagnostic that carries no repair. For a particular diagnostic, read its own 'repair' field.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "title",
+        "severity",
+        "area",
+        "retired",
+        "fixSafety",
+        "repairs"
+      ]
+    },
+    "JsonGpuTelemetry": {
+      "type": "object",
+      "description": "Residency cost counters for a run that used the GPU. A non-zero launch count beside a readback count of zero says the values the program printed were never transferred back from the device.",
+      "properties": {
+        "uploads": {
+          "type": "integer",
+          "description": "Host buffers copied to the device."
+        },
+        "launches": {
+          "type": "integer",
+          "description": "Kernel dispatches."
+        },
+        "readbacks": {
+          "type": "integer",
+          "description": "Device buffers copied back to the host."
+        }
+      },
+      "required": [
+        "uploads",
+        "launches",
+        "readbacks"
+      ]
+    }
+  }
+}

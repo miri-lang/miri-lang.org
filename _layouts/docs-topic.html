@@ -46,6 +46,8 @@ layout: default
       <a href="{{ guide_url | relative_url }}" class="docs-side-full">↑ {{ page.guide_title }} — full guide</a>
       {%- if page.guide == 'gpu' -%}
         {%- assign topics = site.docs_gpu | sort: 'order' -%}
+      {%- elsif page.guide == 'agents' -%}
+        {%- assign topics = site.docs_agents | sort: 'order' -%}
       {%- else -%}
         {%- assign topics = site.docs_getting_started | sort: 'order' -%}
       {%- endif -%}

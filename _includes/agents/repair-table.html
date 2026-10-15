@@ -1,0 +1,25 @@
+{%- comment -%}
+  Every repair `miri fix --apply` writes on its own: the id and description
+  from the miri-lang pack's generated list (itself checked against the
+  compiler's registry), and the codes that raise it from
+  `miri explain --list --format json`. Both are vendored by
+  tools/gen_agent_docs.py.
+{%- endcomment -%}
+{%- capture nl %}
+{% endcapture -%}
+{%- assign listing = site.data.agent_sources.skills["miri-lang"] | split: "The auto-applicable repairs are:" | last | split: nl -%}
+<table class="agent-fields">
+  <thead><tr><th>Repair</th><th>What it does</th><th>Offered with</th></tr></thead>
+  <tbody>
+  {%- for item in listing -%}
+    {%- unless item contains "- `" -%}{%- continue -%}{%- endunless -%}
+    {%- assign parts = item | split: "`" -%}
+    {%- assign repair_id = parts[1] -%}
+    {%- assign prefix = "- `" | append: repair_id | append: "`: " -%}
+    {%- assign what = item | remove_first: prefix %}
+    <tr><td><code>{{ repair_id }}</code></td><td>{{ what | markdownify | remove: "<p>" | remove: "</p>" | strip }}</td><td>
+      {%- for c in site.data.agent_codes.codes -%}{%- if c.repairs contains repair_id -%}<code>{{ c.code }}</code> {% endif -%}{%- endfor -%}
+    </td></tr>
+  {%- endfor %}
+  </tbody>
+</table>

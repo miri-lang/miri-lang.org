@@ -1,0 +1,33 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: view
+order: 7
+nav_title: Lookups — miri view
+title: Lookups — miri view — Miri Programming Language
+description: 'Agents often guess method names from other languages: .len(), .to_string(), .keys().'
+og_image: /assets/og/docs.png
+permalink: /docs/agents/view/
+pager_prev:
+  title: Rules — miri explain
+  url: /docs/agents/explain/
+pager_next:
+  title: Tests — miri test
+  url: /docs/agents/tests/
+---
+
+<h1>Lookups — <code>miri view</code></h1>
+<p>Agents often guess method names from other languages: <code>.len()</code>, <code>.to_string()</code>,
+  <code>.keys()</code>. <code>miri view</code> answers from the real standard library instead, so one lookup replaces
+  a string of wrong guesses.</p>
+<p><strong>What can I call on a type?</strong> Members a type gets from its traits are listed too:</p>
+{% include agents/run.html session="view" step=0 %}
+<p><strong>What does a module offer?</strong></p>
+{% include agents/run.html session="view" step=1 %}
+<p><strong>Show me one function</strong>, from a module or from a file of your own:</p>
+{% include agents/run.html session="view" step=2 %}
+<p><code>miri view --stdlib-root</code> prints where the standard library is searched for. Set
+  <code>MIRI_STDLIB_PATH</code> if the compiler cannot find it.</p>
+
+<!-- Tests -->

@@ -1,0 +1,26 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: explain
+order: 6
+nav_title: Rules — miri explain
+title: Rules — miri explain — Miri Programming Language
+description: 'Every code has a page that says what the rule is, why it exists and how a fixed program looks:'
+og_image: /assets/og/docs.png
+permalink: /docs/agents/explain/
+pager_prev:
+  title: Repairs — miri fix
+  url: /docs/agents/repairs/
+pager_next:
+  title: Lookups — miri view
+  url: /docs/agents/view/
+---
+
+<h1>Rules — <code>miri explain</code></h1>
+<p>Every code has a page that says what the rule is, why it exists and how a fixed program looks:</p>
+{% include agents/run.html session="explain" step=0 %}
+<p><code>miri explain --list</code> lists every code. Add <code>--format json</code> to get each code's title,
+  severity, safety level and repairs as data.</p>
+
+<!-- View -->

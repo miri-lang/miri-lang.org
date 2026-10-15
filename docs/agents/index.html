@@ -1,0 +1,345 @@
+---
+layout: docs
+og_image: /assets/og/docs.png
+title: "Miri for Agents — Miri Programming Language"
+description: "Set up a coding agent to write Miri: install the compiler and the skill packs in two commands, then let the agent check, repair, look up and test its own code through JSON."
+sidebar:
+  - id: overview
+    title: What Agents Get
+    group: Start Here
+  - id: setup
+    title: Set Up in Two Commands
+  - id: loop
+    title: The Loop
+  - id: diagnostics
+    title: Reading Diagnostics
+    group: The Tools
+  - id: repairs
+    title: Repairs — miri fix
+  - id: explain
+    title: Rules — miri explain
+  - id: view
+    title: Lookups — miri view
+  - id: tests
+    title: Tests — miri test
+  - id: patch
+    title: Scoped Edits — miri patch
+  - id: agent-server
+    title: For Editors — miri agent
+  - id: skill-packs
+    title: The Skill Packs
+    group: Reference
+  - id: traps
+    title: Traps &amp; Differences
+  - id: json-reference
+    title: JSON Reference
+breadcrumb: agents
+# Human-readable form of `breadcrumb`, used by the BreadcrumbList JSON-LD in
+# _layouts/docs.html — the visible trail keeps the lowercase path-style slug.
+breadcrumb_title: Miri for Agents
+pager_prev:
+  title: Documentation
+  url: /docs/
+pager_next:
+  title: Getting Started
+  url: /docs/getting-started/
+---
+{%- comment -%}
+  Everything quoted from the compiler on this page — command output, counts,
+  skill-pack sections, the repair table and the JSON field tables — comes from
+  _data/agent_*.json and _data/diagnostics_schema.json, which
+  tools/gen_agent_docs.py vendors from the compiler repo. Do not paste
+  compiler output here by hand; add the command to examples/agents/runs.toml
+  in the compiler repo and include it with agents/run.html.
+{%- endcomment -%}
+<h1>Miri for Agents</h1>
+<p>Miri is built to be written by coding agents — Claude Code, Cursor, Codex and the like — with a person
+  reviewing the result. The compiler explains every mistake in words an agent can act on, often hands it the exact
+  fix, and answers lookup questions so the agent never has to guess a name. This guide shows how to set that up and
+  how each tool works, with real output from the current compiler.</p>
+
+<!-- What Agents Get -->
+<h2 id="overview">What Agents Get</h2>
+<p>An agent writing code does best when it can try something, see exactly what went wrong, and fix it without
+  guessing. Miri gives it these tools, all in the <code>miri</code> command:</p>
+
+<table>
+  <thead><tr><th>Tool</th><th>What it does for the agent</th></tr></thead>
+  <tbody>
+    <tr><td><a href="#loop">The loop</a></td><td>One short routine — check, fix, test — that the agent repeats until the code is clean.</td></tr>
+    <tr><td><a href="#diagnostics"><code>miri check --format json</code></a></td><td>Every error and warning as JSON: a stable code, the exact place, a one-line <em>help</em>, and often a ready-made repair.</td></tr>
+    <tr><td><a href="#repairs"><code>miri fix</code></a></td><td>Applies those repairs to the file in one call.</td></tr>
+    <tr><td><a href="#explain"><code>miri explain</code></a></td><td>Describes the rule behind any error code, with a before-and-after example.</td></tr>
+    <tr><td><a href="#view"><code>miri view</code></a></td><td>Answers “what can I call on this type?” and “what does this module offer?” from the real standard library.</td></tr>
+    <tr><td><a href="#tests"><code>miri test</code></a></td><td>Runs <code>@test</code> functions and reports each failure with the expected and actual values.</td></tr>
+    <tr><td><a href="#patch"><code>miri patch</code></a></td><td>Edits inside one function and refuses the edit if the file would stop compiling.</td></tr>
+    <tr><td><a href="#skill-packs">Skill packs</a></td><td>Short guides the agent reads before writing Miri: the syntax, the traps, and the loop.</td></tr>
+  </tbody>
+</table>
+
+{% include agents/counts.html %}
+
+<div class="note">
+  <p><strong>Why this matters:</strong> an agent that has to guess pays for every wrong guess with another round
+    trip. When the compiler names the rule, points at the spot and offers the edit, most mistakes cost one step to
+    fix.</p>
+</div>
+
+<!-- Set Up in Two Commands -->
+<h2 id="setup">Set Up in Two Commands</h2>
+
+<h3 id="setup-compiler">1. Install the compiler</h3>
+<p>You need the <a href="https://rustup.rs" target="_blank" rel="noopener">Rust toolchain</a> and a C compiler
+  (<code>cc</code>; on macOS run <code>xcode-select --install</code>, on Debian or Ubuntu
+  <code>apt install build-essential</code>). Then:</p>
+<pre><code>git clone https://github.com/miri-lang/miri.git
+cd miri
+make install</code></pre>
+<p><code>make install</code> builds the compiler and puts a <code>miri</code> link in <code>~/.local/bin</code>. If that
+  directory is not on your <code>PATH</code> yet, the command prints the line to add. Keep the clone where it is: the
+  link points into it. To install somewhere else, pass <code>BINDIR</code>, for example
+  <code>make install BINDIR=/usr/local/bin</code>.</p>
+
+<h3 id="setup-skills">2. Give your agent the skill packs</h3>
+<p>In the project your agent works on, run:</p>
+{% include agents/run.html session="setup" step=0 %}
+<p>That is all for Claude Code: it finds skills in <code>.claude/skills</code> and opens the
+  <code>miri-lang</code> pack whenever it works on <code>.mi</code> files. Other agents read a different folder, so
+  name yours with <code>--agent</code>:</p>
+<table>
+  <thead><tr><th>Your agent</th><th>Command</th><th>Writes to</th></tr></thead>
+  <tbody>
+    <tr><td>Claude Code</td><td><code>miri skill install</code></td><td><code>.claude/skills/</code></td></tr>
+    <tr><td>Cursor, Codex, OpenCode, Windsurf, Gemini CLI</td><td><code>miri skill install --agent agents</code></td><td><code>.agents/skills/</code></td></tr>
+    <tr><td>Anything else</td><td><code>miri skill install --agent generic</code></td><td><code>skills/</code></td></tr>
+  </tbody>
+</table>
+{% include agents/run.html session="setup" step=1 %}
+<p>To see which packs this compiler carries:</p>
+{% include agents/run.html session="setup" step=2 %}
+
+<h3 id="setup-check">3. Check it works</h3>
+<p>Ask your agent for something small, like “write a Miri program that prints the sum of a list”. A set-up agent
+  writes the file, runs <code>miri check</code> on it, and fixes what the compiler reports, without being told how.</p>
+
+<div class="note">
+  <p><strong>Agent without skills support?</strong> Add one line to the instructions file it reads
+    (<code>AGENTS.md</code>, <code>CLAUDE.md</code>, a rules file): “This project is written in Miri. Read
+    <code>skills/miri-lang/SKILL.md</code> before editing <code>.mi</code> files, and run
+    <code>miri check FILE --format json</code> after every edit.” Then install with <code>--agent generic</code>.</p>
+</div>
+
+<h3 id="setup-update">Updating</h3>
+<p>Pull, rebuild and refresh the packs:</p>
+<pre><code>cd miri &amp;&amp; git pull &amp;&amp; make install
+cd your-project &amp;&amp; miri skill install</code></pre>
+<p>Each installed pack records which compiler wrote it and a fingerprint of its text. A pack nobody has edited is
+  updated in place. A pack you edited is left alone and reported (code <code>MER_BLD_014</code>); add
+  <code>--force</code> to replace it anyway.</p>
+
+<h3 id="setup-manual">Without the compiler on hand</h3>
+<p>The packs are plain Markdown files in the compiler repository, so you can also copy one directly:</p>
+<pre><code>mkdir -p .claude/skills/miri-lang
+curl -o .claude/skills/miri-lang/SKILL.md \
+  https://raw.githubusercontent.com/miri-lang/miri/main/skills/miri-lang/SKILL.md</code></pre>
+<p>The agent still needs <code>miri</code> on its <code>PATH</code> to run the loop.</p>
+
+<!-- The Loop -->
+<h2 id="loop">The Loop</h2>
+<p>There is one routine to follow, and the <code>miri-lang</code> pack gives it to the agent word for word. This is
+  that section of the pack:</p>
+<div class="agent-pack-quote">
+{% include agents/pack-section.html pack="miri-lang" heading="Verification Loop" until="The auto-applicable repairs are:" %}
+</div>
+
+<h3 id="loop-example">The loop, step by step</h3>
+<p>Here is a small program with two mistakes an agent coming from another language might make: <code>&amp;&amp;</code>
+  instead of <code>and</code>, and changing a value declared with <code>let</code>.</p>
+{% include agents/example.html file="tally.mi" %}
+
+<p><strong>Check.</strong> The compiler reports the first problem as JSON. Look for <code>code</code>,
+  <code>help</code> and <code>repair</code>:</p>
+{% include agents/run.html session="loop" step=0 %}
+
+<p><strong>Fix.</strong> The diagnostic carries a repair, so <code>miri fix</code> can write it:</p>
+{% include agents/run.html session="loop" step=1 %}
+
+<p><strong>Check again.</strong> With the syntax fixed, the compiler can now see the next mistake, and it has a
+  repair too:</p>
+{% include agents/run.html session="loop" step=2 %}
+
+<p><strong>Fix, check, run.</strong></p>
+{% include agents/run.html session="loop" step=3 %}
+{% include agents/run.html session="loop" step=4 %}
+{% include agents/run.html session="loop" step=5 %}
+
+<p>Some problems hide others: a syntax error stops the compiler before it checks types. That is why the loop
+  is a loop. Fix what is reported, check again, and stop when <code>ok</code> is <code>true</code>.</p>
+
+<!-- Reading Diagnostics -->
+<h2 id="diagnostics">Reading Diagnostics</h2>
+<p>Without <code>--format json</code>, <code>miri check</code> prints errors for people:</p>
+{% include agents/run.html session="check-pretty" step=0 %}
+<p>With <code>--format json</code> it prints the same information as one JSON object on standard output. Every
+  command that takes <code>--format json</code> — <code>check</code>, <code>build</code>, <code>run</code>,
+  <code>test</code>, <code>fix</code>, <code>explain</code>, <code>view</code>, <code>patch</code>, <code>skill</code> —
+  answers in this same shape, so an agent only learns to read it once.</p>
+
+<p>The fields an agent needs most:</p>
+<ul>
+  <li><code>ok</code> — whether the command did what was asked. Warnings never make it <code>false</code>.</li>
+  <li><code>exitCode</code> — the same number the process exits with.</li>
+  <li><code>diagnostics</code> — one entry per problem, each with:
+    <ul>
+      <li><code>code</code> — a stable name such as <code>MER_TYP_042</code>. Pass it to <a href="#explain"><code>miri explain</code></a> for the full rule.</li>
+      <li><code>line</code>, <code>column</code> and <code>length</code> — where the problem is, counted in characters from 1.</li>
+      <li><code>help</code> — one sentence on what to do instead.</li>
+      <li><code>repair</code> — when present, the exact edits that fix it: byte offsets <code>start</code> and <code>end</code> in the file, and the <code>replacement</code> text. <code>miri fix</code> applies them for you, or an agent can apply them itself.</li>
+      <li><code>fixSafety</code> — how safe the fix is to apply without a person looking (see <a href="#repairs">Repairs</a>).</li>
+    </ul>
+  </li>
+</ul>
+<p>Every field is listed in the <a href="#json-reference">JSON reference</a>.</p>
+
+<!-- Repairs -->
+<h2 id="repairs">Repairs — <code>miri fix</code></h2>
+<p>A <em>repair</em> is an edit the compiler is sure of. When a diagnostic carries one, <code>miri fix</code> can
+  write it. Without <code>--apply</code> it only shows what it would do:</p>
+{% include agents/run.html session="fix-preview" step=0 %}
+<p><code>miri fix FILE --apply --yes</code> writes every repair in the file in one go. (<code>--yes</code> confirms
+  the write when there is no terminal to ask at, which is always the case for an agent.)</p>
+
+<h3 id="repairs-safety">How safe is a repair?</h3>
+<p>Every diagnostic code has a <code>fixSafety</code> level. <code>miri fix --apply</code> writes the first three on
+  its own and refuses the rest unless you add <code>--allow-risky</code>:</p>
+<table>
+  <thead><tr><th>Level</th><th>Meaning</th><th>Applied by default</th></tr></thead>
+  <tbody>
+    <tr><td><code>format-only</code></td><td>Changes layout only.</td><td>yes</td></tr>
+    <tr><td><code>behavior-preserving</code></td><td>Changes the text, not what the program does.</td><td>yes</td></tr>
+    <tr><td><code>local-edit</code></td><td>Changes one spot, and nothing outside it can notice.</td><td>yes</td></tr>
+    <tr><td><code>api-changing</code></td><td>Changes something other code relies on, such as a parameter name callers can pass by name.</td><td>no</td></tr>
+    <tr><td><code>target-changing</code></td><td>Changes where or how the program runs, such as moving data to the GPU or narrowing a number.</td><td>no</td></tr>
+    <tr><td><code>requires-human-review</code></td><td>Plausible, but a person should look first.</td><td>no</td></tr>
+  </tbody>
+</table>
+
+<h3 id="repairs-list">Every repair</h3>
+<p>The list the <code>miri-lang</code> pack carries, with the diagnostic codes that can offer each repair:</p>
+{% include agents/repair-table.html %}
+
+<!-- Explain -->
+<h2 id="explain">Rules — <code>miri explain</code></h2>
+<p>Every code has a page that says what the rule is, why it exists and how a fixed program looks:</p>
+{% include agents/run.html session="explain" step=0 %}
+<p><code>miri explain --list</code> lists every code. Add <code>--format json</code> to get each code's title,
+  severity, safety level and repairs as data.</p>
+
+<!-- View -->
+<h2 id="view">Lookups — <code>miri view</code></h2>
+<p>Agents often guess method names from other languages: <code>.len()</code>, <code>.to_string()</code>,
+  <code>.keys()</code>. <code>miri view</code> answers from the real standard library instead, so one lookup replaces
+  a string of wrong guesses.</p>
+<p><strong>What can I call on a type?</strong> Members a type gets from its traits are listed too:</p>
+{% include agents/run.html session="view" step=0 %}
+<p><strong>What does a module offer?</strong></p>
+{% include agents/run.html session="view" step=1 %}
+<p><strong>Show me one function</strong>, from a module or from a file of your own:</p>
+{% include agents/run.html session="view" step=2 %}
+<p><code>miri view --stdlib-root</code> prints where the standard library is searched for. Set
+  <code>MIRI_STDLIB_PATH</code> if the compiler cannot find it.</p>
+
+<!-- Tests -->
+<h2 id="tests">Tests — <code>miri test</code></h2>
+<p>Mark a function with <code>@test</code> and <code>miri test</code> finds and runs it. Each test runs in its own
+  process, so a crash fails one test instead of the whole run. Here is a file with a deliberately wrong expectation in
+  its second test:</p>
+{% include agents/example.html file="scores.mi" %}
+{% include agents/run.html session="test" step=0 %}
+<p>With <code>--format json</code>, each failure carries the code, the line and the <code>expected</code> and
+  <code>actual</code> values, ready for the agent to compare:</p>
+{% include agents/run.html session="test" step=1 %}
+<p>The exit status says what happened: <code>0</code> all passed, <code>1</code> a test failed, <code>2</code> no
+  test ran at all (a file did not compile, or there were no tests). An agent can trust a <code>0</code>: a run that
+  found nothing to test is never reported as a pass. The <code>miri-testing</code> pack covers assertions and test
+  attributes.</p>
+
+<!-- Patch -->
+<h2 id="patch">Scoped Edits — <code>miri patch</code></h2>
+<p><code>miri patch</code> replaces text inside one named function, then checks the whole file before saving. A
+  good edit is written:</p>
+{% include agents/run.html session="patch" step=0 %}
+<p>An edit that would break the file is refused, and the file is left exactly as it was:</p>
+{% include agents/run.html session="patch" step=1 %}
+<p>The text to replace must appear exactly once inside the function. <code>patch</code> works on files in Miri's
+  standard layout, so run <code>miri fmt FILE</code> first if the file was written by hand. Ordinary file edits work
+  just as well; <code>patch</code> is there for when you want the check before anything is saved.</p>
+
+<!-- miri agent -->
+<h2 id="agent-server">For Editors — <code>miri agent</code></h2>
+<p>An agent with a shell should use the commands above. <code>miri agent</code> is for tools that want to keep one
+  compiler running instead of starting it for every command — an editor plugin, or a service with no shell. It
+  speaks JSON-RPC 2.0 over standard input and output, framed with a <code>Content-Length</code> header the way a
+  language server is:</p>
+<pre><code>→ {"jsonrpc":"2.0","id":1,"method":"check","params":{"path":"main.mi"}}
+← {"jsonrpc":"2.0","id":1,"result":{"schemaVersion":1,"ok":false,"command":"check","diagnostics":[…]}}
+
+→ {"jsonrpc":"2.0","id":2,"method":"fixApply","params":{"path":"main.mi"}}
+← {"jsonrpc":"2.0","id":2,"result":{"schemaVersion":1,"ok":true,"command":"fix","diagnostics":[…]}}</code></pre>
+<p>Each method answers with exactly the JSON its command prints. The methods are <code>initialize</code>,
+  <code>check</code>, <code>explain</code>, <code>fixApply</code>, <code>view</code>, <code>patch</code> and
+  <code>skillsGet</code>, and <code>$/cancelRequest</code> cancels one in flight. The full protocol is in
+  <a href="https://github.com/miri-lang/miri/blob/main/docs/agent-protocol.md" target="_blank" rel="noopener">docs/agent-protocol.md</a>,
+  and <a href="https://github.com/miri-lang/miri/blob/main/tools/agent_client.py" target="_blank" rel="noopener">tools/agent_client.py</a>
+  is a small working client in Python.</p>
+
+<!-- The Skill Packs -->
+<h2 id="skill-packs">The Skill Packs</h2>
+<p>A skill pack is a short Markdown file in the <a href="https://agentskills.io" target="_blank" rel="noopener">Agent
+  Skills</a> format: a name, a one-line description that tells the agent when to open it, and the guide itself. They
+  ship inside the compiler, so the packs you install always match the compiler you run. Below is the full text of
+  each, exactly as an agent reads it.</p>
+{%- assign pack_order = "miri-lang,miri-testing,miri-gpu" | split: "," -%}
+{%- for pack in pack_order %}
+{%- assign pack_text = site.data.agent_sources.skills[pack] -%}
+{%- assign pack_description = pack_text | split: "description:" | slice: 1 | first | split: "
+" | first | strip %}
+<h3 id="pack-{{ pack }}"><code>{{ pack }}</code></h3>
+<p>{{ pack_description }}. <a href="https://github.com/miri-lang/miri/blob/main/skills/{{ pack }}/SKILL.md" target="_blank" rel="noopener">View on GitHub ↗</a></p>
+<details class="agent-pack">
+  <summary>Show the full pack</summary>
+  <pre><code>{{ pack_text | escape }}</code></pre>
+</details>
+{%- endfor %}
+
+<!-- Traps -->
+<h2 id="traps">Traps &amp; Differences</h2>
+<p>These are the mistakes that cost agents the most in our trials. They are in the <code>miri-lang</code> pack, and
+  are worth a read before you review Miri code an agent wrote.</p>
+<h3 id="traps-differs">Where Miri differs</h3>
+<div class="agent-pack-quote">
+{% include agents/pack-section.html pack="miri-lang" heading="Where Miri Differs" until="```" %}
+</div>
+<h3 id="traps-list">Traps</h3>
+<div class="agent-pack-quote">
+{% include agents/pack-section.html pack="miri-lang" heading="Traps" %}
+</div>
+
+<!-- JSON Reference -->
+<h2 id="json-reference">JSON Reference</h2>
+<p>Every <code>--format json</code> answer follows one schema,
+  <a href="https://github.com/miri-lang/miri/blob/main/docs/diagnostics-schema.json" target="_blank" rel="noopener">diagnostics-schema.json</a>.
+  New fields may appear over time, so ignore any you do not know; <code>schemaVersion</code> changes only when an
+  existing field changes meaning. Fields marked <em>always</em> are present in every answer.</p>
+<h3 id="json-envelope">The answer</h3>
+{% include agents/schema-table.html %}
+<h3 id="json-diagnostic">A diagnostic</h3>
+{% include agents/schema-table.html def="JsonDiagnostic" %}
+<h3 id="json-repair">A repair</h3>
+{% include agents/schema-table.html def="JsonRepair" %}
+<h3 id="json-edit">An edit</h3>
+{% include agents/schema-table.html def="JsonEdit" %}
+<h3 id="json-tests">A test run</h3>
+{% include agents/schema-table.html def="JsonTestSummary" %}
+<h3 id="json-test-result">One test</h3>
+{% include agents/schema-table.html def="JsonTestResult" %}

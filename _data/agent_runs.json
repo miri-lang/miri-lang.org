@@ -1,0 +1,221 @@
+{
+  "setup": [
+    {
+      "args": [
+        "skill",
+        "install"
+      ],
+      "exit": 0,
+      "stdout": "wrote ./.claude/skills/miri-lang/SKILL.md\nwrote ./.claude/skills/miri-gpu/SKILL.md\nwrote ./.claude/skills/miri-testing/SKILL.md\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "skill",
+        "install",
+        "--agent",
+        "agents"
+      ],
+      "exit": 0,
+      "stdout": "wrote ./.agents/skills/miri-lang/SKILL.md\nwrote ./.agents/skills/miri-gpu/SKILL.md\nwrote ./.agents/skills/miri-testing/SKILL.md\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "skill",
+        "list"
+      ],
+      "exit": 0,
+      "stdout": "miri-lang  Writing Miri source files — syntax, type system, and iteration workflow\nmiri-gpu  GPU kernels, forall loops, gpu fn, residency, and gpu frame blocks\nmiri-testing  Writing Miri tests — miri test runner, test attributes, and assertion functions\n",
+      "stderr": ""
+    }
+  ],
+  "loop": [
+    {
+      "args": [
+        "check",
+        "tally.mi",
+        "--format",
+        "json"
+      ],
+      "exit": 1,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": false,\n  \"command\": \"check\",\n  \"diagnostics\": [\n    {\n      \"severity\": \"error\",\n      \"code\": \"MER_PAR_020\",\n      \"message\": \"'&&' is not a valid operator in Miri\",\n      \"path\": \"tally.mi\",\n      \"line\": 9,\n      \"column\": 18,\n      \"length\": 2,\n      \"help\": \"Miri spells logical and as the word `and`: `if a and b`.\",\n      \"fixSafety\": \"local-edit\",\n      \"repair\": {\n        \"id\": \"word-operator\",\n        \"summary\": \"Write `&&` as `and`.\",\n        \"edits\": [\n          {\n            \"path\": \"tally.mi\",\n            \"start\": 219,\n            \"end\": 221,\n            \"replacement\": \"and\"\n          }\n        ]\n      },\n      \"related\": []\n    }\n  ],\n  \"exitCode\": 1,\n  \"durationMs\": 0\n}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "fix",
+        "tally.mi",
+        "--apply",
+        "--yes"
+      ],
+      "exit": 0,
+      "stdout": "Applied repairs to tally.mi\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "check",
+        "tally.mi",
+        "--format",
+        "json"
+      ],
+      "exit": 1,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": false,\n  \"command\": \"check\",\n  \"diagnostics\": [\n    {\n      \"severity\": \"error\",\n      \"code\": \"MER_TYP_042\",\n      \"message\": \"Cannot assign to immutable variable 'total'\",\n      \"path\": \"tally.mi\",\n      \"line\": 10,\n      \"column\": 13,\n      \"length\": 17,\n      \"fixSafety\": \"local-edit\",\n      \"repair\": {\n        \"id\": \"let-to-var\",\n        \"summary\": \"Declare the variable with `var` so it can be reassigned.\",\n        \"edits\": [\n          {\n            \"path\": \"tally.mi\",\n            \"start\": 135,\n            \"end\": 138,\n            \"replacement\": \"var\"\n          }\n        ]\n      },\n      \"related\": []\n    }\n  ],\n  \"exitCode\": 1,\n  \"durationMs\": 23\n}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "fix",
+        "tally.mi",
+        "--apply",
+        "--yes"
+      ],
+      "exit": 0,
+      "stdout": "Applied repairs to tally.mi\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "check",
+        "tally.mi",
+        "--format",
+        "json"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": true,\n  \"command\": \"check\",\n  \"diagnostics\": [],\n  \"exitCode\": 0,\n  \"durationMs\": 18\n}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "run",
+        "tally.mi"
+      ],
+      "exit": 0,
+      "stdout": "total 16\n",
+      "stderr": ""
+    }
+  ],
+  "check-pretty": [
+    {
+      "args": [
+        "check",
+        "tally.mi"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "error[MER_PAR_020]: Unsupported C-Style Operator\n--> tally.mi:9:18\n   |\n 9 |         if s > 5 && s < 10\n   |                  ^^ '&&' is not a valid operator in Miri\n   |\n  = help: Miri spells logical and as the word `and`: `if a and b`.\n   |\n\n"
+    }
+  ],
+  "fix-preview": [
+    {
+      "args": [
+        "fix",
+        "tally.mi"
+      ],
+      "exit": 0,
+      "stdout": "tally.mi:9:18 [MER_PAR_020]\n  '&&' is not a valid operator in Miri\n  repair word-operator: Write `&&` as `and`.\n    replace `&&` with `and` at 219\n\n",
+      "stderr": ""
+    }
+  ],
+  "explain": [
+    {
+      "args": [
+        "explain",
+        "MER_PAR_020"
+      ],
+      "exit": 0,
+      "stdout": "MER_PAR_020 Unsupported C-Style Operator\nerror\n\nRule\nA logical operator has been spelled with symbols. Miri spells logical and as the word `and` and logical or as the word `or`; `&&` and `||` are not operators. `miri fix` rewrites them (`word-operator`).\n\nBefore\nlet a = true\nlet b = false\nlet both = a && b\n\nAfter\nlet a = true\nlet b = false\nlet both = a and b\n\nReference\nParser (docs/reference/parser.md)\n\nThe parser consumes a token stream and produces an abstract syntax tree (AST). It enforces syntactic structure: balanced parentheses and braces, well-formed declarations and expressions, and correct statement ordering. The parser is indentation-sensitive and requires expressions and statements to respect Miri's syntax rules.\n\n",
+      "stderr": ""
+    }
+  ],
+  "view": [
+    {
+      "args": [
+        "view",
+        "--type",
+        "String",
+        "--public"
+      ],
+      "exit": 0,
+      "stdout": "class String implements Equatable, Hashable, Comparable, Addable, Multiplicable, Iterable, Cloneable\n    fn clone() String\n    fn code_at(index int) int?\n    fn compare(other String) int\n    fn concat(other String) String\n    fn contains(needle String) bool\n    fn element_at(index int) String\n    fn ends_with(suffix String) bool\n    fn equals(other String) bool\n    static fn from_code_point(code int) String?\n    fn hash() int\n    fn init() String\n    fn is_empty() bool\n    fn join(parts [String]) String\n    fn length() int\n    fn repeat(count int) String\n    fn replace(old String, to String) String\n    fn size() int\n    fn split(separator String) [String]\n    fn starts_with(prefix String) bool\n    fn substring(start int, end int) String\n    fn to_float() float?\n    fn to_int() int?\n    fn to_lower() String\n    fn to_upper() String\n    fn trim() String\n    fn trim_end() String\n    fn trim_start() String\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "view",
+        "system.fs",
+        "--outline",
+        "--public"
+      ],
+      "exit": 0,
+      "stdout": "use system.result\nuse system.string\n// Represents a filesystem operation error.\n@non_exhaustive\npublic enum FsError\n    NotFound(String)\n    PermissionDenied(String)\n    AlreadyExists(String)\n    NotADirectory(String)\n    InvalidData(String)\n    Other(String)\n// Filesystem capability class. Acquire a handle with `let fs = Fs()` to access filesystem operations.\npublic class Fs\n    // Checks whether a file or directory exists at the given path.\n    public fn exists(path String) bool\n    // Reads the entire contents of a file into a string.\n    public fn read_file(path String) Result<String, FsError>\n    // Writes the given contents to a file, truncating if it exists.\n    public fn write_file(path String, contents String) Result<int, FsError>\n    // Appends the given contents to a file, creating it if it doesn't exist.\n    public fn append_file(path String, contents String) Result<int, FsError>\n    // Lists the entries (file and directory names) in a directory.\n    public fn list_dir(path String) Result<[String], FsError>\n    // Creates a directory at the given path, creating missing parents as needed.\n    public fn create_dir(path String) Result<bool, FsError>\n    // Deletes a regular file at the given path.\n    public fn delete(path String) Result<bool, FsError>\n    // Returns the current working directory as an absolute path.\n    public fn cwd() Result<String, FsError>\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "view",
+        "scores.mi",
+        "--fn",
+        "total_of_passing"
+      ],
+      "exit": 0,
+      "stdout": "fn total_of_passing(scores [int]) int\n    var total = 0\n    for s in scores\n        if s >= 5: total = total + s\n    total\n",
+      "stderr": ""
+    }
+  ],
+  "test": [
+    {
+      "args": [
+        "test",
+        "scores.mi"
+      ],
+      "exit": 1,
+      "stdout": "running 2 tests\ntest scores.mi::counts_scores_from_five_up ... ok\ntest scores.mi::empty_list_totals_zero ... FAILED\n\nfailures:\n\n---- scores.mi::empty_list_totals_zero ----\nRuntime error: assertion failed at scores.mi:16:5: expected 1, got 0\n\ntest result: FAILED. 1 passed; 1 failed; 0 ignored\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "test",
+        "scores.mi",
+        "--format",
+        "json"
+      ],
+      "exit": 1,
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": false,\n  \"command\": \"test\",\n  \"diagnostics\": [],\n  \"exitCode\": 1,\n  \"durationMs\": 422,\n  \"tests\": {\n    \"total\": 2,\n    \"passed\": 1,\n    \"failed\": 1,\n    \"ignored\": 0,\n    \"results\": [\n      {\n        \"path\": \"scores.mi\",\n        \"name\": \"counts_scores_from_five_up\",\n        \"outcome\": \"passed\"\n      },\n      {\n        \"path\": \"scores.mi\",\n        \"name\": \"empty_list_totals_zero\",\n        \"outcome\": \"failed\",\n        \"detail\": \"Runtime error: assertion failed at scores.mi:16:5: expected 1, got 0\\n\",\n        \"code\": \"MER_RT_005\",\n        \"line\": 16,\n        \"column\": 5,\n        \"expected\": \"1\",\n        \"actual\": \"0\"\n      }\n    ],\n    \"rejectedFiles\": [],\n    \"filesRead\": 1\n  }\n}\n",
+      "stderr": ""
+    }
+  ],
+  "patch": [
+    {
+      "args": [
+        "patch",
+        "scores.mi",
+        "--replace-in-fn",
+        "total_of_passing",
+        "--old",
+        "s >= 5",
+        "--new",
+        "s > 5"
+      ],
+      "exit": 0,
+      "stdout": "Applied 1 edit(s). The edited program checks.\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "patch",
+        "scores.mi",
+        "--replace-in-fn",
+        "total_of_passing",
+        "--old",
+        "total + s",
+        "--new",
+        "total + s +"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "error[MER_PAR_001]: Unexpected Token\n--> scores.mi:10:3\n    |\n 10 |     total\n    |   ^ Expected an expression, but found end of expression\n    |\n"
+    }
+  ]
+}

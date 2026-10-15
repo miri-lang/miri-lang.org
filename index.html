@@ -27,7 +27,7 @@ title: "Miri: GPU-first programming language"
     <div class="btn-row">
       <a class="btn btn-primary" href="{{ '/docs/getting-started/' | relative_url }}">Get Started</a>
       <a class="btn btn-ghost" href="{{ '/gpu-demos/' | relative_url }}">▶ Live GPU Demos</a>
-      <a class="btn btn-ghost" href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn btn-ghost" href="{{ '/docs/agents/setup/' | relative_url }}">Set Up Your Coding Agent</a>
     </div>
   </div>
   <div class="hero-scroll">SCROLL ▾</div>
@@ -288,34 +288,15 @@ fn main()
 
     <div class="features-grid">
       <div class="feature-card reveal">
-        <div class="pix" data-px="1110000000011100000000111"></div>
-        <h3>Clean Syntax</h3>
-        <p>Indentation-based blocks, no braces or semicolons. Balanced readability, expressiveness, and safety.</p>
+        <div class="pix blue" data-px="1101111011000001101111011"></div>
+        <h3>GPU-First Programming</h3>
+        <p>GPU kernels live alongside CPU code in the same language — no shader files, no FFI. Mark a binding <code>gpu</code>, launch with <code>forall</code>, and every upload, launch, and readback is visible in the source. Runs natively and in the browser via WebGPU.</p>
       </div>
       <div class="feature-card reveal">
         <div class="pix" data-px="0010001110111110111000100"></div>
         <h3>AI-Assisted Development</h3>
-        <p>Designed with clear, consistent semantics that make AI code generation and assistance highly effective.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="pix" data-px="0000100010101000100001000"></div>
-        <h3>Static Typing &amp; Type Inference</h3>
-        <p>Catch errors at compile time with a powerful type system that stays out of your way. Types are inferred where possible.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="pix" data-px="0100000100000100010001000"></div>
-        <h3>Native Compilation</h3>
-        <p>Compiles to native machine code via Cranelift. Fast compilation, fast execution, small binaries.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="pix" data-px="1000101010001000101010001"></div>
-        <h3>Pattern Matching</h3>
-        <p>Exhaustive pattern matching with destructuring across enums, structs, tuples, and literals. Guard clauses included.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="pix" data-px="1111110001101011000111111"></div>
-        <h3>Option Types &amp; Null Safety</h3>
-        <p>The <code>?</code> type suffix marks values that may be absent. The compiler prevents use without checking — no null pointer errors.</p>
+        <p>Diagnostics come as JSON with a stable code and a <code>help</code> line, and <code>miri fix</code> applies the recorded repairs for you. Your coding agent reads the error and knows exactly what to change.
+          <a href="{{ '/docs/agents/' | relative_url }}">Miri for agents →</a></p>
       </div>
       <div class="feature-card reveal">
         <div class="pix" data-px="0111001010111111101111111"></div>
@@ -323,49 +304,91 @@ fn main()
         <p>Invisible ownership with optimized reference counting. Copy-on-Write collections give value semantics with reference-pass speed. The only memory keyword you ever write is <code>out</code>.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="pix" data-px="1111100000111110000011111"></div>
-        <h3>Classes &amp; Inheritance</h3>
-        <p>Full OOP with constructors, visibility modifiers, single inheritance, abstract classes, super calls, and runtime virtual dispatch via vtables.</p>
+        <div class="pix" data-px="0100000100000100010001000"></div>
+        <h3>Native Compilation</h3>
+        <p>Compiles to native machine code via Cranelift. Fast compilation, fast execution, small binaries.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="pix" data-px="0010001010100010101000100"></div>
-        <h3>Traits &amp; Generics</h3>
-        <p>Trait interfaces with default methods and inheritance chains. Generic functions, structs, and classes monomorphized at compile time.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="pix" data-px="1000001000001000101010001"></div>
-        <h3>First-Class Closures</h3>
-        <p>Lambdas that capture variables by value. Pass them as arguments, store in variables, return from functions. Compiled to native fat pointers.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="pix blue" data-px="1101111011000001101111011"></div>
-        <h3>GPU-First Programming</h3>
-        <p>GPU kernels live alongside CPU code in the same language — no shader files, no FFI. Mark a binding <code>gpu</code>, launch with <code>forall</code>, and every upload, launch, and readback is visible in the source. Runs natively and in the browser via WebGPU.</p>
-      </div>
-      <div class="feature-card reveal">
-        <div class="pix" data-px="1111110000111111000011111"></div>
-        <h3>Batteries-Included Standard Library</h3>
-        <p>Files, the environment, time, regular expressions and JSON, alongside the collection types. Access to the outside world is a capability you pass in, so a function that cannot touch the disk says so in its signature. Nothing panics, and nothing hands back a sentinel.</p>
+        <div class="pix" data-px="0000100010101000100001000"></div>
+        <h3>Static Typing &amp; Type Inference</h3>
+        <p>Catch errors at compile time with a powerful type system that stays out of your way. Types are inferred where possible.</p>
       </div>
       <div class="feature-card reveal">
         <div class="pix" data-px="0000100010101000100000000"></div>
         <h3>Testing Built In</h3>
         <p>Mark a function <code>@test</code> and run <code>miri test</code> — each test runs in its own subprocess, so a crash is a failure rather than a lost run. Attributes are a closed set, so a typo is a compile error, never a test that silently never runs.</p>
       </div>
-      <div class="feature-card reveal">
-        <span class="soon-tag">COMING SOON</span>
-        <div class="pix blue" data-px="0101010101000000101010101"></div>
-        <h3>Async &amp; Parallelism</h3>
-        <p>First-class async/await and parallel primitives make concurrent programming intuitive and safe.</p>
-      </div>
+    </div>
+
+    <div class="also reveal">
+      <h3 class="also-title">And everything else a modern language owes you</h3>
+      <ul class="also-list">
+        <li><strong>Clean syntax</strong> — indentation-based blocks, no braces, no semicolons.</li>
+        <li><strong>Pattern matching</strong> — exhaustive, with destructuring and guard clauses.</li>
+        <li><strong>Null safety</strong> — <code>T?</code> marks a value that may be absent, and the compiler makes you check it.</li>
+        <li><strong>Traits &amp; generics</strong> — default methods, monomorphized at compile time.</li>
+        <li><strong>Classes &amp; inheritance</strong> — constructors, visibility, abstract classes, virtual dispatch.</li>
+        <li><strong>First-class closures</strong> — capture by value; pass, store and return them.</li>
+        <li><strong>Batteries-included standard library</strong> — files, time, regex and JSON. Disk access is a capability you pass in, and nothing panics.</li>
+        <li><strong>Async &amp; parallelism</strong> <span class="soon-inline">coming soon</span> — async/await and parallel primitives.</li>
+      </ul>
     </div>
   </div>
 </section>
 
+<!-- ================= FOR CODING AGENTS ================= -->
+{%- comment -%}
+  The setup in two commands, and the way into the "Miri for agents" guide. The
+  commands are the ones docs/agents/index.html walks through; keep them the
+  same if either changes.
+{%- endcomment -%}
+<section class="section-pad agents-section" id="agents">
+  <div class="wrap">
+    <div class="kicker reveal">03 / FOR CODING AGENTS</div>
+    <h2 class="section-title reveal">Let your agent write it</h2>
+    <p class="section-sub reveal">Claude Code, Cursor, Codex and friends can write Miri from day one. The compiler
+      tells them exactly what went wrong and how to fix it, and skill packs teach them the language.</p>
+
+    <div class="agents-grid">
+      <div class="code-window reveal">
+        <div class="code-titlebar">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-filename">terminal</span>
+        </div>
+        <div class="code-body">
+<pre><span class="tok-com"># once: build the compiler and put it on PATH</span>
+git clone https://github.com/miri-lang/miri.git
+cd miri &amp;&amp; make install
+
+<span class="tok-com"># in your project: give your agent the skill packs</span>
+miri skill install</pre>
+        </div>
+      </div>
+
+      <ul class="agents-points reveal">
+        <li><strong>Errors an agent can act on.</strong> <code>miri check --format json</code> gives every problem
+          a stable code, its exact place, a one-line fix hint and often the edit itself.</li>
+        <li><strong>Fixes in one call.</strong> <code>miri fix --apply</code> writes the edits the compiler is sure
+          of.</li>
+        <li><strong>No guessing names.</strong> <code>miri view --type List</code> lists what a type really
+          offers.</li>
+        <li><strong>Tests it can read.</strong> <code>miri test --format json</code> reports expected and actual
+          values for every failure.</li>
+      </ul>
+    </div>
+
+    <div class="btn-row agents-cta reveal">
+      <a class="btn btn-primary" href="{{ '/docs/agents/setup/' | relative_url }}">Set up your agent →</a>
+      <a class="btn btn-ghost" href="{{ '/docs/agents/loop/' | relative_url }}">See the loop in action</a>
+    </div>
+  </div>
+</section>
+
+
 <!-- ================= GPU DEMOS ================= -->
 <section class="section-pad demos-section" id="gpu-demos">
   <div class="wrap">
-    <div class="kicker reveal">03 / GPU PLAYGROUND</div>
+    <div class="kicker reveal">04 / GPU PLAYGROUND</div>
     <h2 class="section-title reveal">Running on your GPU. <span style="color: var(--yellow);">Right now.</span></h2>
     <p class="section-sub reveal">These aren't videos. Every tile below is computed live on your graphics card, and each one is a real, CI-tested Miri program that compiles to WebGPU. Click any demo to play with it and read its source.</p>
 
@@ -485,7 +508,7 @@ fn main()
 {%- endcomment -%}
 <section class="section-pad answer" id="what-is-miri">
   <div class="wrap">
-    <div class="kicker reveal">04 / OVERVIEW</div>
+    <div class="kicker reveal">05 / OVERVIEW</div>
     <h2 class="section-title reveal">What is Miri?</h2>
     <p class="answer-lead reveal">Miri is a statically typed, natively compiled programming language with first-class
       GPU programming built into the language rather than bolted on through a library. You mark data <code>gpu</code>

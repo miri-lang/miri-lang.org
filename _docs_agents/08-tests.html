@@ -1,0 +1,34 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: tests
+order: 8
+nav_title: Tests — miri test
+title: Tests — miri test — Miri Programming Language
+description: Mark a function with @test and miri test finds and runs it.
+og_image: /assets/og/docs.png
+permalink: /docs/agents/tests/
+pager_prev:
+  title: Lookups — miri view
+  url: /docs/agents/view/
+pager_next:
+  title: Scoped Edits — miri patch
+  url: /docs/agents/patch/
+---
+
+<h1>Tests — <code>miri test</code></h1>
+<p>Mark a function with <code>@test</code> and <code>miri test</code> finds and runs it. Each test runs in its own
+  process, so a crash fails one test instead of the whole run. Here is a file with a deliberately wrong expectation in
+  its second test:</p>
+{% include agents/example.html file="scores.mi" %}
+{% include agents/run.html session="test" step=0 %}
+<p>With <code>--format json</code>, each failure carries the code, the line and the <code>expected</code> and
+  <code>actual</code> values, ready for the agent to compare:</p>
+{% include agents/run.html session="test" step=1 %}
+<p>The exit status says what happened: <code>0</code> all passed, <code>1</code> a test failed, <code>2</code> no
+  test ran at all (a file did not compile, or there were no tests). An agent can trust a <code>0</code>: a run that
+  found nothing to test is never reported as a pass. The <code>miri-testing</code> pack covers assertions and test
+  attributes.</p>
+
+<!-- Patch -->

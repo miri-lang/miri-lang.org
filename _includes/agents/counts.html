@@ -1,0 +1,12 @@
+{%- comment -%}
+  The registry counts, computed from `miri explain --list --format json`
+  (vendored to _data/agent_codes.json by tools/gen_agent_docs.py).
+{%- endcomment -%}
+{%- assign live_codes = site.data.agent_codes.codes | where: "retired", false -%}
+{%- assign repaired_codes = live_codes | where_exp: "c", "c.repairs.size > 0" -%}
+{%- assign repair_ids = "" | split: "" -%}
+{%- for c in live_codes -%}{%- assign repair_ids = repair_ids | concat: c.repairs -%}{%- endfor -%}
+{%- assign repair_ids = repair_ids | uniq -%}
+<p>Today the compiler knows <strong>{{ live_codes | size }}</strong> diagnostic codes. <strong>{{ repaired_codes | size }}</strong>
+  of them can come with an automatic repair, drawn from <strong>{{ repair_ids | size }}</strong> kinds of repair. A code
+  covers several situations and only some of them have a repair, so read those numbers as “at least”.</p>

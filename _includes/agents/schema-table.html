@@ -1,0 +1,20 @@
+{%- comment -%}
+  The fields of one object in docs/diagnostics-schema.json (the compiler's
+  JSON contract), vendored by tools/gen_agent_docs.py.
+  Usage: {% include agents/schema-table.html def="JsonDiagnostic" %}
+  Without `def`, the top-level envelope.
+{%- endcomment -%}
+{%- assign schema = site.data.diagnostics_schema -%}
+{%- if include.def -%}{%- assign object = schema["$defs"][include.def] -%}{%- else -%}{%- assign object = schema -%}{%- endif -%}
+<table class="agent-fields">
+  <thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead>
+  <tbody>
+  {%- for field in object.properties %}
+    {%- assign spec = field[1] -%}
+    {%- if spec["$ref"] -%}{%- assign type = spec["$ref"] | split: "/" | last -%}
+    {%- elsif spec.type == "array" and spec.items["$ref"] -%}{%- assign type = spec.items["$ref"] | split: "/" | last | prepend: "array of " -%}
+    {%- else -%}{%- assign type = spec.type | join: " or " | default: spec.type -%}{%- endif %}
+    <tr><td><code>{{ field[0] }}</code>{% if object.required contains field[0] %} <span class="agent-req">always</span>{% endif %}</td><td>{{ type }}</td><td>{{ spec.description | markdownify | remove: "<p>" | remove: "</p>" }}</td></tr>
+  {%- endfor %}
+  </tbody>
+</table>

@@ -18,7 +18,7 @@ The GPU demos need a browser with WebGPU enabled. They degrade to a poster image
 
 ```text
 index.html            Homepage — hero, examples switcher, feature cards, demo previews
-docs/                 Documentation hub, the language guide, the GPU guide
+docs/                 Documentation hub, the language guide, the GPU guide, the guide for coding agents
 gpu-demos.html        The playground — all eight demos on one page
 _layouts/             default (head, nav, footer, JSON-LD), docs, legal
 _includes/            nav, footer, schema.html (the entity graph), email/address helpers
@@ -39,6 +39,8 @@ datenschutz.html      German legal pages, gated on the address in _config.yml
 ## Things that will bite you if you don't know them
 
 **The demos are generated, not hand-written.** `tools/gen_displayed_demos.py` pulls each demo's source verbatim from `examples/gpu/web/<name>.mi` in the [compiler repo](https://github.com/miri-lang/miri) into `assets/demos/<name>.mi` and into the code block on the page; `tools/gen_demo_bundles.py` then compiles exactly those bytes with `miri build --target web-gpu` and vendors the emitted manifest to `assets/demos/bundles/<name>.json` plus the runtime driver to `assets/js/miri-gpu.js`. The site runs the compiler's own WGSL output, never a hand-written renderer — so edit the demo in the compiler repo and regenerate, never the vendored artifacts here.
+
+**The "Miri for agents" guide quotes the compiler, and the quotes are generated.** The prose lives in `docs/agents/index.html` (split into `_docs_agents/` by `tools/split_docs.py`, like the other guides), but every command output, count, skill-pack section, repair and JSON field it shows comes from `_data/agent_*.json` and `_data/diagnostics_schema.json`. `tools/gen_agent_docs.py` writes those from the compiler repo: the skill packs, the example programs in `examples/agents/`, `miri explain --list --format json`, the schema, and the output of every command listed in `examples/agents/runs.toml`. The compiler repo's `agent_docs` tests replay those commands and fail when this copy is stale — so to show a new command, add it to `runs.toml` there, regenerate here, and include it with `agents/run.html`.
 
 **Fonts are self-hosted on purpose.** Space Grotesk and JetBrains Mono are served from this origin, not from `fonts.googleapis.com`, because that request would transmit every visitor's IP to a third party before any consent exists — and `/datenschutz/` states that this site makes no third-party requests. Regenerate with `tools/fetch-fonts.rb`. Keep it that way.
 

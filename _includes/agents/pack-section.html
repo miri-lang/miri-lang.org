@@ -1,0 +1,15 @@
+{%- comment -%}
+  One `## ` section of a skill pack, rendered from the pack's own text so the
+  guide says exactly what an installed pack tells an agent.
+  Usage: {% include agents/pack-section.html pack="miri-lang" heading="Traps" %}
+  `until` (optional) ends it before the first occurrence of that text.
+{%- endcomment -%}
+{%- capture nl %}
+{% endcapture -%}
+{%- assign pack_text = site.data.agent_sources.skills[include.pack] -%}
+{%- assign start = "## " | append: include.heading | append: nl -%}
+{%- assign after = pack_text | split: start | last -%}
+{%- assign stop = nl | append: "## " -%}
+{%- assign section = after | split: stop | first -%}
+{%- if include.until -%}{%- assign section = section | split: include.until | first -%}{%- endif -%}
+{{ section | markdownify }}

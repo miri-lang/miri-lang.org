@@ -1,0 +1,51 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: loop
+order: 3
+nav_title: The Loop
+title: The Loop — Miri Programming Language
+description: There is one routine to follow, and the miri-lang pack gives it to the agent word for word.
+og_image: /assets/og/docs.png
+permalink: /docs/agents/loop/
+pager_prev:
+  title: Set Up in Two Commands
+  url: /docs/agents/setup/
+pager_next:
+  title: Reading Diagnostics
+  url: /docs/agents/diagnostics/
+---
+
+<h1>The Loop</h1>
+<p>There is one routine to follow, and the <code>miri-lang</code> pack gives it to the agent word for word. This is
+  that section of the pack:</p>
+<div class="agent-pack-quote">
+{% include agents/pack-section.html pack="miri-lang" heading="Verification Loop" until="The auto-applicable repairs are:" %}
+</div>
+
+<h3 id="loop-example">The loop, step by step</h3>
+<p>Here is a small program with two mistakes an agent coming from another language might make: <code>&amp;&amp;</code>
+  instead of <code>and</code>, and changing a value declared with <code>let</code>.</p>
+{% include agents/example.html file="tally.mi" %}
+
+<p><strong>Check.</strong> The compiler reports the first problem as JSON. Look for <code>code</code>,
+  <code>help</code> and <code>repair</code>:</p>
+{% include agents/run.html session="loop" step=0 %}
+
+<p><strong>Fix.</strong> The diagnostic carries a repair, so <code>miri fix</code> can write it:</p>
+{% include agents/run.html session="loop" step=1 %}
+
+<p><strong>Check again.</strong> With the syntax fixed, the compiler can now see the next mistake, and it has a
+  repair too:</p>
+{% include agents/run.html session="loop" step=2 %}
+
+<p><strong>Fix, check, run.</strong></p>
+{% include agents/run.html session="loop" step=3 %}
+{% include agents/run.html session="loop" step=4 %}
+{% include agents/run.html session="loop" step=5 %}
+
+<p>Some problems hide others: a syntax error stops the compiler before it checks types. That is why the loop
+  is a loop. Fix what is reported, check again, and stop when <code>ok</code> is <code>true</code>.</p>
+
+<!-- Reading Diagnostics -->

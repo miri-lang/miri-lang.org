@@ -1,0 +1,1914 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "explain",
+  "diagnostics": [],
+  "exitCode": 0,
+  "codes": [
+    {
+      "code": "MER_LEX_001",
+      "title": "Invalid Token",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "println-bang",
+        "word-operator"
+      ]
+    },
+    {
+      "code": "MER_LEX_002",
+      "title": "Unclosed Multiline Comment",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_003",
+      "title": "Indentation Mismatch",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_004",
+      "title": "Unclosed String Literal",
+      "severity": "error",
+      "area": "LEX",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_005",
+      "title": "Invalid Binary Literal",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_006",
+      "title": "Invalid Octal Literal",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_007",
+      "title": "Invalid Hex Literal",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_008",
+      "title": "Invalid Number Literal",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_009",
+      "title": "Invalid Regex Literal",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_010",
+      "title": "Invalid Formatted String",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_011",
+      "title": "Backslash in Format String",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_LEX_012",
+      "title": "Invalid Formatted String Expression",
+      "severity": "error",
+      "area": "LEX",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "interpolation-quotes"
+      ]
+    },
+    {
+      "code": "MER_LEX_013",
+      "title": "Integer Literal Overflow",
+      "severity": "error",
+      "area": "LEX",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_001",
+      "title": "Unexpected Token",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "colon-annotation",
+        "arrow-return-type",
+        "let-mut-to-var",
+        "if-colon"
+      ]
+    },
+    {
+      "code": "MER_PAR_002",
+      "title": "Unexpected End of File",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_003",
+      "title": "Invalid Type Declaration",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_004",
+      "title": "Invalid Left-Hand Side Expression",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_005",
+      "title": "Invalid Integer Literal",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_006",
+      "title": "Invalid Float Literal",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_007",
+      "title": "Invalid String Literal",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_008",
+      "title": "Invalid Boolean Literal",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_009",
+      "title": "Invalid Inheritance Identifier",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_010",
+      "title": "Duplicate Match Pattern",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_011",
+      "title": "Missing Match Branches",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_012",
+      "title": "Missing Struct Member Type",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_013",
+      "title": "Missing Struct Members",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_014",
+      "title": "Missing Enum Members",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_015",
+      "title": "Missing Type Expression",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_016",
+      "title": "Missing Constant Initializer",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_017",
+      "title": "Invalid Modifier Combination",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_018",
+      "title": "Unknown Runtime",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_019",
+      "title": "Unsupported Attribute Target",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_020",
+      "title": "Unsupported C-Style Operator",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "word-operator"
+      ]
+    },
+    {
+      "code": "MER_PAR_021",
+      "title": "Recursion Limit Exceeded",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_022",
+      "title": "Invalid Assignment Target",
+      "severity": "error",
+      "area": "PAR",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_PAR_023",
+      "title": "Unexpected Operator",
+      "severity": "error",
+      "area": "PAR",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_NAM_001",
+      "title": "Deprecated Kernel Context Identifier",
+      "severity": "warning",
+      "area": "NAM",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_NAM_002",
+      "title": "Module Not Found",
+      "severity": "error",
+      "area": "NAM",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_NAM_003",
+      "title": "Invalid Import Path",
+      "severity": "error",
+      "area": "NAM",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_IMP_001",
+      "title": "Circular Import",
+      "severity": "error",
+      "area": "IMP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_IMP_002",
+      "title": "Imported Name Conflict",
+      "severity": "error",
+      "area": "IMP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_IMP_003",
+      "title": "Name Not Found in Module",
+      "severity": "error",
+      "area": "IMP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "rename-to-suggestion"
+      ]
+    },
+    {
+      "code": "MER_IMP_004",
+      "title": "Duplicate Import",
+      "severity": "warning",
+      "area": "IMP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_IMP_005",
+      "title": "Unused Import",
+      "severity": "warning",
+      "area": "IMP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "remove-unused-import"
+      ]
+    },
+    {
+      "code": "MER_TYP_001",
+      "title": "Undefined Variable",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_002",
+      "title": "Type Mismatch",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "concat-to-formatted-string",
+        "cast-to-slot-type"
+      ]
+    },
+    {
+      "code": "MER_TYP_003",
+      "title": "Unknown Type",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_004",
+      "title": "Missing Field",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_005",
+      "title": "Missing Variant",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_006",
+      "title": "Incompatible Types",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_007",
+      "title": "Immutable Assignment",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_008",
+      "title": "Missing Return",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_009",
+      "title": "Invalid Call",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_010",
+      "title": "Arity Mismatch",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_011",
+      "title": "Non-Exhaustive Enum Match",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_012",
+      "title": "Unknown Attribute",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_013",
+      "title": "Attribute Not Valid",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_014",
+      "title": "Attribute Argument Missing",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_015",
+      "title": "Attribute Argument Extra",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_016",
+      "title": "Invalid Regex Literal",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_017",
+      "title": "Invalid Test Function Signature",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_018",
+      "title": "Missing Required Attribute",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_019",
+      "title": "GPU Launch Block Dimensions Invalid",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_020",
+      "title": "GPU Slice Range Not Bounded",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_021",
+      "title": "GPU Function Host Buffer Mismatch",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_022",
+      "title": "GPU Launch Block Size Not Literal",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_023",
+      "title": "Unnecessary Double Negation",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_024",
+      "title": "Decrement Operator Not Supported",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_025",
+      "title": "Unnecessary Optional Declaration",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_026",
+      "title": "Deprecated Attribute Spelling",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_027",
+      "title": "@deprecated Attribute",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_028",
+      "title": "Custom Error",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_029",
+      "title": "Atomic Buffer Type Mismatch",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_030",
+      "title": "Argument Count Mismatch",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "drop-extra-arguments"
+      ]
+    },
+    {
+      "code": "MER_TYP_031",
+      "title": "Argument Order Error",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_032",
+      "title": "Not Callable",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_033",
+      "title": "Field Not Found",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "drop-iterator-accessor",
+        "rename-to-suggestion"
+      ]
+    },
+    {
+      "code": "MER_TYP_034",
+      "title": "Undefined Name",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "add-import",
+        "null-to-none",
+        "rename-to-suggestion"
+      ]
+    },
+    {
+      "code": "MER_TYP_035",
+      "title": "Name Not Visible",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_036",
+      "title": "Generic Argument Count Mismatch",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_037",
+      "title": "Invalid Generic Type Structure",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_038",
+      "title": "Invalid Enum Variant",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "qualify-variant-pattern",
+        "rename-to-suggestion"
+      ]
+    },
+    {
+      "code": "MER_TYP_039",
+      "title": "Invalid Collection Element Type",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_040",
+      "title": "Invalid Index Operation",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_041",
+      "title": "Invalid Slice Operation",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_042",
+      "title": "Immutability Violation",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "let-to-var"
+      ]
+    },
+    {
+      "code": "MER_TYP_043",
+      "title": "Type Not Found",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "add-import",
+        "rename-to-suggestion"
+      ]
+    },
+    {
+      "code": "MER_TYP_044",
+      "title": "Type Already Defined",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_045",
+      "title": "Variable Already Defined",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_046",
+      "title": "Keyword Used in Invalid Context",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_047",
+      "title": "Invalid Class Inheritance",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_048",
+      "title": "Type Inference Failure",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_049",
+      "title": "Invalid Shared Variable",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_050",
+      "title": "Invalid Loop Control Flow",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_051",
+      "title": "Range Type Mismatch",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_052",
+      "title": "Invalid Builtin Constructor",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_053",
+      "title": "Invalid Vector Builtin",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_054",
+      "title": "Invalid Function Signature",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_055",
+      "title": "Static Method Restriction",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_056",
+      "title": "Invalid Class Definition",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_057",
+      "title": "Invalid Trait Definition",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_058",
+      "title": "Invalid Struct Definition",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_059",
+      "title": "Invalid Enum Definition",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_060",
+      "title": "Invalid Async or Await Usage",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_061",
+      "title": "Type Not Inheritable",
+      "severity": "error",
+      "area": "TYP",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_062",
+      "title": "Invalid Pattern Match",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_063",
+      "title": "Invalid Cast",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_064",
+      "title": "Shadowing Not Allowed",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_065",
+      "title": "Invalid Constant Arithmetic",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_066",
+      "title": "Out Parameter Misuse",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_067",
+      "title": "Type Not Valid in String Interpolation",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_068",
+      "title": "Integer Literal Out of Range",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_069",
+      "title": "Top-Level Statement Beside Main",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "move-into-main"
+      ]
+    },
+    {
+      "code": "MER_TYP_070",
+      "title": "Function Already Declared",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_071",
+      "title": "Unused Local",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": [
+        "underscore-unread-binding"
+      ]
+    },
+    {
+      "code": "MER_TYP_072",
+      "title": "Unused Parameter",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "api-changing",
+      "repairs": [
+        "underscore-unread-binding"
+      ]
+    },
+    {
+      "code": "MER_TYP_073",
+      "title": "Unused Private Declaration",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_074",
+      "title": "Unreachable Statement",
+      "severity": "warning",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_075",
+      "title": "Type Has No Ordering",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_076",
+      "title": "Non-Constant Value Argument",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_077",
+      "title": "Non-Positive Value Argument",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_078",
+      "title": "Method Used As A Value",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_079",
+      "title": "Type Has No Hash",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_080",
+      "title": "Type Set Used As A Value Type",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_081",
+      "title": "Store Makes A Reference Cycle",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_082",
+      "title": "Invalid Format Spec",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_OWN_001",
+      "title": "Resource Not Consumed at Scope Exit",
+      "severity": "warning",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_OWN_002",
+      "title": "Linear Variable Not Consumed",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_OWN_003",
+      "title": "Use of Moved Value",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_OWN_004",
+      "title": "Unused Value",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_OWN_005",
+      "title": "Drop of a Borrowed Value",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_001",
+      "title": "Unsupported Expression",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_002",
+      "title": "Unsupported Statement",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_003",
+      "title": "Undefined Variable",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_004",
+      "title": "Type Not Found",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_005",
+      "title": "Break Outside Loop",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_006",
+      "title": "Continue Outside Loop",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_007",
+      "title": "Unsupported Left-Hand Side",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_008",
+      "title": "Unsupported Operator",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_009",
+      "title": "Unsupported Range Type",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_010",
+      "title": "Invalid GPU Launch Arguments",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_011",
+      "title": "Unsupported Type",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_012",
+      "title": "Missing Struct Field",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_013",
+      "title": "GPU Launch Metadata Mismatch",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_014",
+      "title": "MIR Validation Failed",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_015",
+      "title": "Custom Lowering Error",
+      "severity": "error",
+      "area": "MIR",
+      "retired": true,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_016",
+      "title": "Polymorphic Recursion",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_017",
+      "title": "Invalid Instantiation Argument",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_MIR_018",
+      "title": "Symbol Name Collision",
+      "severity": "error",
+      "area": "MIR",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_001",
+      "title": "Target ISA Error",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_002",
+      "title": "Module Creation Error",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_003",
+      "title": "Function Declaration Error",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_004",
+      "title": "Function Definition Error",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_005",
+      "title": "Translation Error",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_006",
+      "title": "Emit Error",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_007",
+      "title": "Backend Not Supported",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_CG_008",
+      "title": "Internal Codegen Error",
+      "severity": "error",
+      "area": "CG",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_001",
+      "title": "Division by Zero",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_002",
+      "title": "Remainder by Zero",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_003",
+      "title": "Integer Overflow",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_004",
+      "title": "Invalid Operand",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_005",
+      "title": "Assertion Failure",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_006",
+      "title": "Segmentation Fault",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_007",
+      "title": "Bus Error",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_008",
+      "title": "Illegal Instruction",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_009",
+      "title": "Abort",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_010",
+      "title": "Signal Terminated",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_011",
+      "title": "Index Out of Bounds",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_012",
+      "title": "Explicit Panic",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_013",
+      "title": "GPU Launch Failed",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_014",
+      "title": "Method Not Checked at Instance",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_001",
+      "title": "Shuffle Offset Exceeds Subgroup Size",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_002",
+      "title": "Unsupported Operation in GPU Code",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_003",
+      "title": "GPU Division or Modulo Range",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_004",
+      "title": "Invalid GPU Barrier Control",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_005",
+      "title": "Invalid GPU Parallel Construct",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_006",
+      "title": "GPU Residency Violation",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_007",
+      "title": "Type Not Accelerable",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_008",
+      "title": "GPU-Incompatible Function Signature",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_009",
+      "title": "Value Out of Range for GPU Storage",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_TAR_010",
+      "title": "Not Expressible in a Web GPU Bundle",
+      "severity": "error",
+      "area": "TAR",
+      "retired": false,
+      "fixSafety": "target-changing",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_001",
+      "title": "Unknown Diagnostic Code",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_002",
+      "title": "Refused: Repairs Require Human Review",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_003",
+      "title": "Non-Deterministic Artifact",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_004",
+      "title": "Function Not Found",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_005",
+      "title": "Ambiguous Function Name",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_006",
+      "title": "Anchor Text Not Found",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_007",
+      "title": "Anchor Text Not Unique",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_008",
+      "title": "Input Not Readable",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_009",
+      "title": "Stale Hash Mismatch",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_010",
+      "title": "Source Not Anchorable",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_011",
+      "title": "Edit Rejected: File Unchanged",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_012",
+      "title": "Malformed Edit Request",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_013",
+      "title": "Unknown Skill",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_014",
+      "title": "Refused: Skill File Locally Modified",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_015",
+      "title": "Output Not Writable",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_016",
+      "title": "Skill Source Malformed",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_017",
+      "title": "Declaration Already Exists",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_018",
+      "title": "Formatter Not Idempotent",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_019",
+      "title": "Formatting Would Lose Content",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_020",
+      "title": "No Repairs Applied",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_021",
+      "title": "Nothing to Run",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_022",
+      "title": "Type Not In Scope",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_023",
+      "title": "Read Could Not Be Narrowed",
+      "severity": "warning",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_024",
+      "title": "Message Not Framed",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_025",
+      "title": "No Tests Discovered",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_026",
+      "title": "Test File Built",
+      "severity": "note",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    }
+  ]
+}

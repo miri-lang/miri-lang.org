@@ -4,7 +4,7 @@ nav_static: true
 og_image: /assets/og/docs.png
 og_image_alt: "The Miri documentation — the language guide and the GPU guide"
 title: "Documentation — Miri Programming Language"
-description: "Learn Miri: a 5-minute quickstart, the full language guide, and the GPU programming guide — everything from your first program to device-resident kernels."
+description: "Learn Miri: a 5-minute quickstart, the full language guide, the GPU programming guide, and how to set up a coding agent to write Miri."
 ---
 
 <section class="docs-home">
@@ -59,6 +59,17 @@ description: "Learn Miri: a 5-minute quickstart, the full language guide, and th
         <p>See Miri GPU programs running live in your browser — Mandelbrot, fluid, particles, a black hole, and more,
           each compiled to WebGPU from Miri source.</p>
         <span class="path-go">Open the playground →</span>
+      </a>
+
+      <a class="path-card path-wide reveal" href="{{ '/docs/agents/' | relative_url }}">
+        <div class="path-top">
+          <span class="path-icon">⌘</span>
+          <span class="path-tag">AGENTS</span>
+        </div>
+        <h3>Miri for Agents</h3>
+        <p>Set up Claude Code, Cursor or Codex to write Miri in two commands, then see how the agent checks, repairs,
+          looks up and tests its own code.</p>
+        <span class="path-go">Set up your agent →</span>
       </a>
     </div>
 
@@ -122,6 +133,15 @@ description: "Learn Miri: a 5-minute quickstart, the full language guide, and th
         <a href="{{ '/docs/getting-started/test-runner/' | relative_url }}">The miri test runner</a>
         <a href="{{ '/docs/getting-started/diagnostics/' | relative_url }}">Memory diagnostics</a>
         <a href="{{ '/docs/getting-started/multi-file-projects/' | relative_url }}">Multi-file projects</a>
+      </div>
+
+      <div class="topic-col reveal">
+        <div class="topic-label">Coding agents</div>
+        <a href="{{ '/docs/agents/setup/' | relative_url }}">Set up in two commands</a>
+        <a href="{{ '/docs/agents/loop/' | relative_url }}">The check → fix → test loop</a>
+        <a href="{{ '/docs/agents/repairs/' | relative_url }}">Repairs — miri fix</a>
+        <a href="{{ '/docs/agents/view/' | relative_url }}">Lookups — miri view</a>
+        <a href="{{ '/docs/agents/json-reference/' | relative_url }}">JSON reference</a>
       </div>
 
       <div class="topic-col reveal">

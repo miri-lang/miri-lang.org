@@ -109,6 +109,11 @@ collections:
     output: true
   docs_gpu:
     output: true
+  # The "Miri for agents" guide, split the same way from docs/agents/index.html.
+  # Its compiler output, counts and skill-pack text are vendored into _data/ by
+  # tools/gen_agent_docs.py; see that script before editing the guide.
+  docs_agents:
+    output: true
   # P1-2 — one page per GPU demo, split out of gpu-demos.html so each demo has
   # its own title/description/OG image/source instead of sharing the gallery's.
   # gpu-demos.html itself became the slim gallery (grid of preview cards); each

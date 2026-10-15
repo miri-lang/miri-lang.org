@@ -1,0 +1,36 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: json-reference
+order: 13
+nav_title: JSON Reference
+title: JSON Reference — Miri Programming Language
+description: Every --format json answer follows one schema, diagnostics-schema.json.
+og_image: /assets/og/docs.png
+permalink: /docs/agents/json-reference/
+pager_prev:
+  title: Traps &amp; Differences
+  url: /docs/agents/traps/
+pager_next:
+  title: Getting Started
+  url: /docs/getting-started/
+---
+
+<h1>JSON Reference</h1>
+<p>Every <code>--format json</code> answer follows one schema,
+  <a href="https://github.com/miri-lang/miri/blob/main/docs/diagnostics-schema.json" target="_blank" rel="noopener">diagnostics-schema.json</a>.
+  New fields may appear over time, so ignore any you do not know; <code>schemaVersion</code> changes only when an
+  existing field changes meaning. Fields marked <em>always</em> are present in every answer.</p>
+<h3 id="json-envelope">The answer</h3>
+{% include agents/schema-table.html %}
+<h3 id="json-diagnostic">A diagnostic</h3>
+{% include agents/schema-table.html def="JsonDiagnostic" %}
+<h3 id="json-repair">A repair</h3>
+{% include agents/schema-table.html def="JsonRepair" %}
+<h3 id="json-edit">An edit</h3>
+{% include agents/schema-table.html def="JsonEdit" %}
+<h3 id="json-tests">A test run</h3>
+{% include agents/schema-table.html def="JsonTestSummary" %}
+<h3 id="json-test-result">One test</h3>
+{% include agents/schema-table.html def="JsonTestResult" %}

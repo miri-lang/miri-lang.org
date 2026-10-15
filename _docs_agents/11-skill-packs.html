@@ -1,0 +1,39 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: skill-packs
+order: 11
+nav_title: The Skill Packs
+title: The Skill Packs — Miri Programming Language
+description: 'A skill pack is a short Markdown file in the Agent Skills format: a name, a one-line description that tells the agent when to open it, and the guide itself.'
+og_image: /assets/og/docs.png
+permalink: /docs/agents/skill-packs/
+pager_prev:
+  title: For Editors — miri agent
+  url: /docs/agents/agent-server/
+pager_next:
+  title: Traps &amp; Differences
+  url: /docs/agents/traps/
+group: Reference
+---
+
+<h1>The Skill Packs</h1>
+<p>A skill pack is a short Markdown file in the <a href="https://agentskills.io" target="_blank" rel="noopener">Agent
+  Skills</a> format: a name, a one-line description that tells the agent when to open it, and the guide itself. They
+  ship inside the compiler, so the packs you install always match the compiler you run. Below is the full text of
+  each, exactly as an agent reads it.</p>
+{%- assign pack_order = "miri-lang,miri-testing,miri-gpu" | split: "," -%}
+{%- for pack in pack_order %}
+{%- assign pack_text = site.data.agent_sources.skills[pack] -%}
+{%- assign pack_description = pack_text | split: "description:" | slice: 1 | first | split: "
+" | first | strip %}
+<h3 id="pack-{{ pack }}"><code>{{ pack }}</code></h3>
+<p>{{ pack_description }}. <a href="https://github.com/miri-lang/miri/blob/main/skills/{{ pack }}/SKILL.md" target="_blank" rel="noopener">View on GitHub ↗</a></p>
+<details class="agent-pack">
+  <summary>Show the full pack</summary>
+  <pre><code>{{ pack_text | escape }}</code></pre>
+</details>
+{%- endfor %}
+
+<!-- Traps -->

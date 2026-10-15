@@ -1,0 +1,11 @@
+{%- comment -%}
+  One recorded command from examples/agents/runs.toml in the compiler repo:
+  the command line, what it printed, and its exit status. The output is
+  vendored by tools/gen_agent_docs.py and replayed by the compiler repo's
+  agent_docs tests, so it is what the compiler prints today.
+  Usage: {% include agents/run.html session="loop" step=0 %}
+{%- endcomment -%}
+{%- assign run_step = site.data.agent_runs[include.session][include.step] -%}
+<pre class="agent-run"><code><span class="agent-prompt">$ miri{% for a in run_step.args %} {% if a contains " " %}'{{ a | escape }}'{% else %}{{ a | escape }}{% endif %}{% endfor %}</span>
+{{ run_step.stdout | append: run_step.stderr | rstrip | escape }}
+<span class="agent-exit">exit status {{ run_step.exit }}</span></code></pre>

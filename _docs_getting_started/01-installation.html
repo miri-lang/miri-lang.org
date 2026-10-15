@@ -27,7 +27,9 @@ group: Quickstart
 cd miri
 make build</code></pre>
 
-<p>The compiler binary will be at <code>target/debug/miri</code>. For optimized builds, use <code>make release</code> (binary at <code>target/release/miri</code>). You can add it to your PATH or run it directly.</p>
+<p>The compiler binary will be at <code>target/debug/miri</code>. For optimized builds, use <code>make release</code> (binary at <code>target/release/miri</code>). To put an optimized <code>miri</code> on your <code>PATH</code>, run <code>make install</code>: it builds the release compiler and links it into <code>~/.local/bin</code>.</p>
+
+<p>Writing Miri with a coding agent such as Claude Code, Cursor or Codex? <a href="{{ '/docs/agents/setup/' | relative_url }}">Set it up</a> with one more command.</p>
 
 <div class="note">
   <p><strong>Note:</strong> Miri is under active development. Build from the <code>main</code> branch for the

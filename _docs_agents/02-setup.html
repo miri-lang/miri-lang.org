@@ -1,0 +1,78 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: setup
+order: 2
+nav_title: Set Up in Two Commands
+title: Set Up in Two Commands — Miri Programming Language
+description: You need the Rust toolchain and a C compiler (cc; on macOS run xcode-select --install, on Debian or Ubuntu apt install build-essential).
+og_image: /assets/og/docs.png
+permalink: /docs/agents/setup/
+pager_prev:
+  title: What Agents Get
+  url: /docs/agents/overview/
+pager_next:
+  title: The Loop
+  url: /docs/agents/loop/
+---
+
+<h1>Set Up in Two Commands</h1>
+
+<h3 id="setup-compiler">1. Install the compiler</h3>
+<p>You need the <a href="https://rustup.rs" target="_blank" rel="noopener">Rust toolchain</a> and a C compiler
+  (<code>cc</code>; on macOS run <code>xcode-select --install</code>, on Debian or Ubuntu
+  <code>apt install build-essential</code>). Then:</p>
+<pre><code>git clone https://github.com/miri-lang/miri.git
+cd miri
+make install</code></pre>
+<p><code>make install</code> builds the compiler and puts a <code>miri</code> link in <code>~/.local/bin</code>. If that
+  directory is not on your <code>PATH</code> yet, the command prints the line to add. Keep the clone where it is: the
+  link points into it. To install somewhere else, pass <code>BINDIR</code>, for example
+  <code>make install BINDIR=/usr/local/bin</code>.</p>
+
+<h3 id="setup-skills">2. Give your agent the skill packs</h3>
+<p>In the project your agent works on, run:</p>
+{% include agents/run.html session="setup" step=0 %}
+<p>That is all for Claude Code: it finds skills in <code>.claude/skills</code> and opens the
+  <code>miri-lang</code> pack whenever it works on <code>.mi</code> files. Other agents read a different folder, so
+  name yours with <code>--agent</code>:</p>
+<table>
+  <thead><tr><th>Your agent</th><th>Command</th><th>Writes to</th></tr></thead>
+  <tbody>
+    <tr><td>Claude Code</td><td><code>miri skill install</code></td><td><code>.claude/skills/</code></td></tr>
+    <tr><td>Cursor, Codex, OpenCode, Windsurf, Gemini CLI</td><td><code>miri skill install --agent agents</code></td><td><code>.agents/skills/</code></td></tr>
+    <tr><td>Anything else</td><td><code>miri skill install --agent generic</code></td><td><code>skills/</code></td></tr>
+  </tbody>
+</table>
+{% include agents/run.html session="setup" step=1 %}
+<p>To see which packs this compiler carries:</p>
+{% include agents/run.html session="setup" step=2 %}
+
+<h3 id="setup-check">3. Check it works</h3>
+<p>Ask your agent for something small, like “write a Miri program that prints the sum of a list”. A set-up agent
+  writes the file, runs <code>miri check</code> on it, and fixes what the compiler reports, without being told how.</p>
+
+<div class="note">
+  <p><strong>Agent without skills support?</strong> Add one line to the instructions file it reads
+    (<code>AGENTS.md</code>, <code>CLAUDE.md</code>, a rules file): “This project is written in Miri. Read
+    <code>skills/miri-lang/SKILL.md</code> before editing <code>.mi</code> files, and run
+    <code>miri check FILE --format json</code> after every edit.” Then install with <code>--agent generic</code>.</p>
+</div>
+
+<h3 id="setup-update">Updating</h3>
+<p>Pull, rebuild and refresh the packs:</p>
+<pre><code>cd miri &amp;&amp; git pull &amp;&amp; make install
+cd your-project &amp;&amp; miri skill install</code></pre>
+<p>Each installed pack records which compiler wrote it and a fingerprint of its text. A pack nobody has edited is
+  updated in place. A pack you edited is left alone and reported (code <code>MER_BLD_014</code>); add
+  <code>--force</code> to replace it anyway.</p>
+
+<h3 id="setup-manual">Without the compiler on hand</h3>
+<p>The packs are plain Markdown files in the compiler repository, so you can also copy one directly:</p>
+<pre><code>mkdir -p .claude/skills/miri-lang
+curl -o .claude/skills/miri-lang/SKILL.md \
+  https://raw.githubusercontent.com/miri-lang/miri/main/skills/miri-lang/SKILL.md</code></pre>
+<p>The agent still needs <code>miri</code> on its <code>PATH</code> to run the loop.</p>
+
+<!-- The Loop -->

@@ -1,0 +1,30 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: patch
+order: 9
+nav_title: Scoped Edits — miri patch
+title: Scoped Edits — miri patch — Miri Programming Language
+description: miri patch replaces text inside one named function, then checks the whole file before saving.
+og_image: /assets/og/docs.png
+permalink: /docs/agents/patch/
+pager_prev:
+  title: Tests — miri test
+  url: /docs/agents/tests/
+pager_next:
+  title: For Editors — miri agent
+  url: /docs/agents/agent-server/
+---
+
+<h1>Scoped Edits — <code>miri patch</code></h1>
+<p><code>miri patch</code> replaces text inside one named function, then checks the whole file before saving. A
+  good edit is written:</p>
+{% include agents/run.html session="patch" step=0 %}
+<p>An edit that would break the file is refused, and the file is left exactly as it was:</p>
+{% include agents/run.html session="patch" step=1 %}
+<p>The text to replace must appear exactly once inside the function. <code>patch</code> works on files in Miri's
+  standard layout, so run <code>miri fmt FILE</code> first if the file was written by hand. Ordinary file edits work
+  just as well; <code>patch</code> is there for when you want the check before anything is saved.</p>
+
+<!-- miri agent -->

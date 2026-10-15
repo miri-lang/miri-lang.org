@@ -1,0 +1,45 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: diagnostics
+order: 4
+nav_title: Reading Diagnostics
+title: Reading Diagnostics — Miri Programming Language
+description: 'Without --format json, miri check prints errors for people:'
+og_image: /assets/og/docs.png
+permalink: /docs/agents/diagnostics/
+pager_prev:
+  title: The Loop
+  url: /docs/agents/loop/
+pager_next:
+  title: Repairs — miri fix
+  url: /docs/agents/repairs/
+group: The Tools
+---
+
+<h1>Reading Diagnostics</h1>
+<p>Without <code>--format json</code>, <code>miri check</code> prints errors for people:</p>
+{% include agents/run.html session="check-pretty" step=0 %}
+<p>With <code>--format json</code> it prints the same information as one JSON object on standard output. Every
+  command that takes <code>--format json</code> — <code>check</code>, <code>build</code>, <code>run</code>,
+  <code>test</code>, <code>fix</code>, <code>explain</code>, <code>view</code>, <code>patch</code>, <code>skill</code> —
+  answers in this same shape, so an agent only learns to read it once.</p>
+
+<p>The fields an agent needs most:</p>
+<ul>
+  <li><code>ok</code> — whether the command did what was asked. Warnings never make it <code>false</code>.</li>
+  <li><code>exitCode</code> — the same number the process exits with.</li>
+  <li><code>diagnostics</code> — one entry per problem, each with:
+    <ul>
+      <li><code>code</code> — a stable name such as <code>MER_TYP_042</code>. Pass it to <a href="{{ '/docs/agents/explain/' | relative_url }}"><code>miri explain</code></a> for the full rule.</li>
+      <li><code>line</code>, <code>column</code> and <code>length</code> — where the problem is, counted in characters from 1.</li>
+      <li><code>help</code> — one sentence on what to do instead.</li>
+      <li><code>repair</code> — when present, the exact edits that fix it: byte offsets <code>start</code> and <code>end</code> in the file, and the <code>replacement</code> text. <code>miri fix</code> applies them for you, or an agent can apply them itself.</li>
+      <li><code>fixSafety</code> — how safe the fix is to apply without a person looking (see <a href="{{ '/docs/agents/repairs/' | relative_url }}">Repairs</a>).</li>
+    </ul>
+  </li>
+</ul>
+<p>Every field is listed in the <a href="{{ '/docs/agents/json-reference/' | relative_url }}">JSON reference</a>.</p>
+
+<!-- Repairs -->

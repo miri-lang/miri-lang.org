@@ -1,0 +1,46 @@
+---
+layout: docs-topic
+guide: agents
+guide_title: Miri for Agents
+topic_id: repairs
+order: 5
+nav_title: Repairs — miri fix
+title: Repairs — miri fix — Miri Programming Language
+description: A repair is an edit the compiler is sure of.
+og_image: /assets/og/docs.png
+permalink: /docs/agents/repairs/
+pager_prev:
+  title: Reading Diagnostics
+  url: /docs/agents/diagnostics/
+pager_next:
+  title: Rules — miri explain
+  url: /docs/agents/explain/
+---
+
+<h1>Repairs — <code>miri fix</code></h1>
+<p>A <em>repair</em> is an edit the compiler is sure of. When a diagnostic carries one, <code>miri fix</code> can
+  write it. Without <code>--apply</code> it only shows what it would do:</p>
+{% include agents/run.html session="fix-preview" step=0 %}
+<p><code>miri fix FILE --apply --yes</code> writes every repair in the file in one go. (<code>--yes</code> confirms
+  the write when there is no terminal to ask at, which is always the case for an agent.)</p>
+
+<h3 id="repairs-safety">How safe is a repair?</h3>
+<p>Every diagnostic code has a <code>fixSafety</code> level. <code>miri fix --apply</code> writes the first three on
+  its own and refuses the rest unless you add <code>--allow-risky</code>:</p>
+<table>
+  <thead><tr><th>Level</th><th>Meaning</th><th>Applied by default</th></tr></thead>
+  <tbody>
+    <tr><td><code>format-only</code></td><td>Changes layout only.</td><td>yes</td></tr>
+    <tr><td><code>behavior-preserving</code></td><td>Changes the text, not what the program does.</td><td>yes</td></tr>
+    <tr><td><code>local-edit</code></td><td>Changes one spot, and nothing outside it can notice.</td><td>yes</td></tr>
+    <tr><td><code>api-changing</code></td><td>Changes something other code relies on, such as a parameter name callers can pass by name.</td><td>no</td></tr>
+    <tr><td><code>target-changing</code></td><td>Changes where or how the program runs, such as moving data to the GPU or narrowing a number.</td><td>no</td></tr>
+    <tr><td><code>requires-human-review</code></td><td>Plausible, but a person should look first.</td><td>no</td></tr>
+  </tbody>
+</table>
+
+<h3 id="repairs-list">Every repair</h3>
+<p>The list the <code>miri-lang</code> pack carries, with the diagnostic codes that can offer each repair:</p>
+{% include agents/repair-table.html %}
+
+<!-- Explain -->

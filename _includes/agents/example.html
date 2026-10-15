@@ -1,0 +1,6 @@
+{%- comment -%}
+  An example program from examples/agents/ in the compiler repo, vendored by
+  tools/gen_agent_docs.py. Usage: {% include agents/example.html file="tally.mi" %}
+{%- endcomment -%}
+<div class="agent-file">{{ include.file }}</div>
+<pre><code class="language-miri">{{ site.data.agent_sources.examples[include.file] | strip | escape }}</code></pre>
