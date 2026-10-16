@@ -14,6 +14,13 @@
       <a class="{% if p contains '/gpu-demos' %}active{% endif %}" href="{{ '/gpu-demos/' | relative_url }}">gpu demos</a>
       <a class="{% if p contains '/docs' %}{% unless p contains '/docs/agents' %}active{% endunless %}{% endif %}" href="{{ '/docs/' | relative_url }}">docs</a>
       <a class="{% if p contains '/docs/agents' %}active{% endif %}" href="{{ '/docs/agents/' | relative_url }}">for agents</a>
+      {%- include gates.html %}
+      {%- if bench_ready %}
+      <a class="{% if p contains '/benchmarks' %}active{% endif %}" href="{{ '/benchmarks/' | relative_url }}">benchmarks</a>
+      {%- endif %}
+      {%- if blog_ready %}
+      <a class="{% if p contains '/blog' %}active{% endif %}" href="{{ '/blog/' | relative_url }}">blog</a>
+      {%- endif %}
       <a class="nav-cta" href="{{ site.github_url }}" target="_blank" rel="noopener">GitHub ↗</a>
     </nav>
   </div>

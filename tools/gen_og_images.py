@@ -139,6 +139,18 @@ CARDS = {
         sub="What it is, who it is for, whether it is production ready, which GPUs it "
             "runs on, and what does not work yet — answered short and straight.",
     ),
+    "benchmarks.png": card(
+        kicker="benchmarks",
+        headline='How fast is <span class="hl">Miri</span>?',
+        sub="Speed and peak memory next to C, C++, Rust, Go, Python and TypeScript on "
+            "the same programs, with every loss named and its mechanism found.",
+    ),
+    "blog.png": card(
+        kicker="blog",
+        headline='Writing about <span class="hl">Miri</span>',
+        sub="Measurements, design notes and release write-ups from the people "
+            "building the language.",
+    ),
     # The demos card sits on the real poster frames — those are the compiler's
     # own WGSL output, which is the whole claim the page makes.
     "gpu-demos.jpg": card(

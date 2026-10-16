@@ -12,7 +12,12 @@ layout: null
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% for page in site.html_pages %}
   {% unless page.url contains '404' %}
-  {% unless page.noindex_when_incomplete and legal_ready == false %}
+  {%- include gates.html -%}
+  {%- assign gate_closed = false -%}
+  {%- if page.gate == 'blog' and blog_ready == false -%}{%- assign gate_closed = true -%}{%- endif -%}
+  {%- if page.gate == 'bench' and bench_ready == false -%}{%- assign gate_closed = true -%}{%- endif -%}
+  {%- if page.noindex_when_incomplete and legal_ready == false -%}{%- assign gate_closed = true -%}{%- endif -%}
+  {% unless gate_closed %}
   <url>
     <loc>{{ page.url | absolute_url }}</loc>
     <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
@@ -50,6 +55,12 @@ layout: null
   <url>
     <loc>{{ doc.url | absolute_url }}</loc>
     <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </url>
+  {% endfor %}
+  {% for post in site.posts %}
+  <url>
+    <loc>{{ post.url | absolute_url }}</loc>
+    <lastmod>{{ post.last_modified_at | default: post.date | date_to_xmlschema }}</lastmod>
   </url>
   {% endfor %}
 </urlset>

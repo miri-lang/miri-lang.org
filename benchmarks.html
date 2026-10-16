@@ -1,0 +1,165 @@
+---
+layout: default
+permalink: /benchmarks/
+nav_static: true
+og_image: /assets/og/benchmarks.png
+og_image_alt: "Miri benchmarks: speed and memory next to six other languages"
+gate: bench
+title: "Benchmarks — Miri Programming Language"
+description: "How fast Miri is, and how much memory it uses, next to C, C++, Rust, Go, Python and TypeScript on the same programs on the same machine — with every loss named."
+---
+
+{%- comment -%}
+  Every number on this page is rendered from _data/bench/latest.json, which
+  bench/export_site.py in the compiler repo writes from a committed publication
+  run, together with the charts under assets/bench/<version>/. Never edit
+  either by hand: the compiler repo's site-identity test compares them with a
+  fresh export. Until the first publication run is exported the page says so,
+  carries noindex and is linked from nowhere (see `gate: bench`).
+{%- endcomment -%}
+{%- assign run = site.data.bench.latest -%}
+{%- assign languages = "miri,c,cpp,rust,go,python,typescript" | split: "," -%}
+
+<section class="bench-page">
+  <div class="wrap">
+    <div class="kicker reveal">Benchmarks</div>
+    <h1 class="faq-title reveal">How fast is Miri, and how much memory does it use?</h1>
+    <p class="faq-sub reveal">The same programs in seven languages, built the way each language
+      ships, run on one machine under rules that were written and committed before the
+      first measured run. Where Miri loses, the loss is listed with the compiler mechanism
+      responsible.</p>
+
+    {%- unless run %}
+    <p class="bench-empty">No publication run has been exported yet.</p>
+    {%- else %}
+    {%- assign version = run.miri_version -%}
+    {%- assign base = '/assets/bench/' | append: version | append: '/' -%}
+
+    <h2 class="bench-h2">The rules</h2>
+    <ul class="bench-rules">
+      <li>Every port computes the same thing from the same input bytes and prints the same checksum; a port that prints anything else is not a data point.</li>
+      <li>Each port is idiomatic, single-threaded code with the language's standard containers: no SIMD intrinsics, no <code>unsafe</code>, no arenas or hand-rolled hashes.</li>
+      <li>Each language is built with its default optimized build; the exact command lines and toolchain versions are recorded with every run.</li>
+      <li>Two times are reported: the whole process, start-up included, and the hot kernel after a warm-up, so neither start-up nor a JIT's warm-up can hide.</li>
+      <li>Memory is peak resident memory, shown beside each toolchain's own floor so a runtime's fixed cost is not folded into the workload.</li>
+    </ul>
+    <p class="bench-note">The full rules are the
+      <a href="{{ site.github_url }}/blob/main/bench/CHARTER.md">benchmark charter</a>
+      (version {{ run.charter_version }}); the programs, the runner and the raw records are in
+      <a href="{{ site.github_url }}/tree/main/bench">bench/</a>.</p>
+
+    {%- assign headline = run.aggregates | where: "tag", "all" | where: "mode", "cold" | where: "variant", "default" -%}
+    {%- assign sizes = headline | map: "size" | uniq -%}
+    {%- assign size = sizes | first -%}
+    {%- if sizes contains "m" %}{% assign size = "m" %}{% endif -%}
+    {%- assign headline = headline | where: "size", size -%}
+    {%- capture time_alt -%}
+      Bar chart of wall time per workload as a multiple of C, size {{ size | upcase }}.
+      {%- for lang in languages %}{% assign row = headline | where: "language", lang | first %}{% if row %} {{ lang }}: geometric mean {{ row.geomean_vs_c | round: 2 }}× C over {{ row.coverage }} workloads.{% endif %}{% endfor %}
+    {%- endcapture -%}
+    {%- capture memory_alt -%}
+      Bar chart of peak memory per workload as a multiple of C, size {{ size | upcase }}.
+      {%- for lang in languages %}{% assign row = headline | where: "language", lang | first %}{% if row and row.geomean_max_rss_vs_c %} {{ lang }}: geometric mean {{ row.geomean_max_rss_vs_c | round: 2 }}× C.{% endif %}{% endfor %}
+    {%- endcapture -%}
+
+    <h2 class="bench-h2">Time and memory against C</h2>
+    <figure class="bench-figure">
+      <a href="{{ base | append: 'time-vs-c.svg' | relative_url }}"><img src="{{ base | append: 'time-vs-c.svg' | relative_url }}" alt="{{ time_alt | strip | escape }}" loading="lazy"></a>
+      <figcaption>Wall time and hot time, as a multiple of C (log scale; below 1 is faster than C). Open the chart for full size.</figcaption>
+    </figure>
+    <figure class="bench-figure">
+      <a href="{{ base | append: 'memory-vs-c.svg' | relative_url }}"><img src="{{ base | append: 'memory-vs-c.svg' | relative_url }}" alt="{{ memory_alt | strip | escape }}" loading="lazy"></a>
+      <figcaption>Peak memory as a multiple of C, and memory above each runtime's floor as a multiple of Rust.</figcaption>
+    </figure>
+    <figure class="bench-figure bench-figure-narrow">
+      <a href="{{ base | append: 'time-memory-scatter.svg' | relative_url }}"><img src="{{ base | append: 'time-memory-scatter.svg' | relative_url }}" alt="Scatter of each language's geometric-mean time against its geometric-mean memory, both as multiples of C; the numbers are in the table below." loading="lazy"></a>
+      <figcaption>Each language's geometric-mean time against its geometric-mean memory.</figcaption>
+    </figure>
+
+    {%- assign history_path = base | append: 'miri-history.svg' -%}
+    {%- assign history = site.static_files | where: "path", history_path | first -%}
+    {%- if history %}
+    <figure class="bench-figure">
+      <a href="{{ history_path | relative_url }}"><img src="{{ history_path | relative_url }}" alt="Line chart of Miri's wall time as a multiple of C per workload, one point per released version." loading="lazy"></a>
+      <figcaption>Miri against C, version by version.</figcaption>
+    </figure>
+    {%- endif %}
+
+    <h2 class="bench-h2">Geometric means, size {{ size | upcase }}</h2>
+    <div class="bench-table-wrap">
+      <table class="bench-table">
+        <thead><tr><th scope="col">Language</th><th scope="col">Time × C</th><th scope="col">Peak memory × C</th><th scope="col">Workloads</th></tr></thead>
+        <tbody>
+          {%- for lang in languages %}{% assign row = headline | where: "language", lang | first %}{% if row %}
+          <tr><th scope="row">{{ lang }}</th><td>{{ row.geomean_vs_c | round: 2 }}</td><td>{% if row.geomean_max_rss_vs_c %}{{ row.geomean_max_rss_vs_c | round: 2 }}{% else %}—{% endif %}</td><td>{{ row.coverage }}</td></tr>
+          {%- endif %}{% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="bench-h2">Every workload</h2>
+    <p class="bench-note">Wall time as a multiple of C. A cell without a number says why: the port
+      does not exist yet (<em>unsupported</em>), printed the wrong checksum (<em>mismatch</em>),
+      ran out of time (<em>timeout</em>), or did not build. A <em>noisy</em> cell varied more
+      than the charter allows and is shown for reference only.</p>
+    {%- for sz in sizes %}
+    {%- assign cells = run.cells | where: "size", sz | where: "mode", "cold" | where: "variant", "default" -%}
+    {%- assign workloads = cells | map: "workload" | uniq | sort -%}
+    <details class="bench-details"{% if sz == size %} open{% endif %}>
+      <summary>Size {{ sz | upcase }}</summary>
+      <div class="bench-table-wrap">
+        <table class="bench-table">
+          <thead><tr><th scope="col">Workload</th>{% for lang in languages %}<th scope="col">{{ lang }}</th>{% endfor %}</tr></thead>
+          <tbody>
+            {%- for w in workloads %}
+            <tr><th scope="row">{{ w }}</th>
+              {%- for lang in languages %}{% assign cell = cells | where: "workload", w | where: "language", lang | first %}
+              <td{% if cell and cell.status != "ok" %} class="bench-status"{% endif %}>{% if cell == nil %}—{% elsif cell.vs_c.time and cell.status == "ok" %}{{ cell.vs_c.time | round: 2 }}{% elsif cell.vs_c.time %}{{ cell.vs_c.time | round: 2 }} <span>{{ cell.status }}</span>{% else %}<span>{{ cell.status }}</span>{% endif %}</td>
+              {%- endfor %}
+            </tr>
+            {%- endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {%- endfor %}
+
+    <h2 class="bench-h2">Where Miri lost, and why</h2>
+    {%- if run.lost.size > 0 %}
+    <div class="bench-table-wrap">
+      <table class="bench-table">
+        <thead><tr><th scope="col">Workload</th><th scope="col">Size</th><th scope="col">Mode</th><th scope="col">Time × C</th><th scope="col">Net memory × Rust</th><th scope="col">Mechanism</th><th scope="col">Work</th></tr></thead>
+        <tbody>
+          {%- for row in run.lost %}
+          <tr><th scope="row">{{ row.workload }}</th><td>{{ row.size | upcase }}</td><td>{{ row.mode }}</td><td>{% if row.time_vs_c %}{{ row.time_vs_c | round: 2 }}{% else %}—{% endif %}</td><td>{% if row.net_rss_vs_rust %}{{ row.net_rss_vs_rust | round: 2 }}{% else %}—{% endif %}</td><td>{{ row.mechanism }}</td><td>{% if row.task contains "http" %}<a href="{{ row.task }}">issue</a>{% else %}{{ row.task }}{% endif %}</td></tr>
+          {%- endfor %}
+        </tbody>
+      </table>
+    </div>
+    {%- else %}
+    <p class="bench-note">No Miri cell crossed the charter's diagnosis thresholds in this run.</p>
+    {%- endif %}
+
+    <h2 class="bench-h2">This run</h2>
+    <dl class="bench-provenance">
+      <dt>Miri</dt><dd>{{ run.provenance.miri_version }} (<a href="{{ site.github_url }}/commit/{{ run.provenance.miri_sha }}"><code>{{ run.provenance.miri_sha | slice: 0, 10 }}</code></a>)</dd>
+      <dt>Machine</dt><dd>{{ run.provenance.cpu_model }}, {{ run.provenance.os }} (profile <code>{{ run.machine_profile }}</code>)</dd>
+      <dt>Toolchains</dt><dd>{% for t in run.provenance.toolchain_versions %}{{ t[0] }}: {{ t[1] }}{% unless forloop.last %}; {% endunless %}{% endfor %}</dd>
+      <dt>Charter</dt><dd>version {{ run.charter_version }}, <code>{{ run.charter_hash | slice: 0, 12 }}</code></dd>
+      <dt>Raw records</dt><dd><a href="{{ site.github_url }}/tree/main/{{ run.results_path }}">{{ run.results_path }}</a></dd>
+    </dl>
+
+    {%- assign earlier = "" | split: "" -%}
+    {%- for entry in site.data.bench %}{% if entry[0] != "latest" and entry[0] != version %}{% assign earlier = earlier | push: entry[0] %}{% endif %}{% endfor -%}
+    {%- if earlier.size > 0 %}
+    <h2 class="bench-h2">Earlier versions</h2>
+    <ul class="bench-versions">
+      {%- for v in earlier reversed %}
+      <li>Miri {{ v }}: <a href="{{ '/assets/bench/' | append: v | append: '/time-vs-c.svg' | relative_url }}">time</a>,
+        <a href="{{ '/assets/bench/' | append: v | append: '/memory-vs-c.svg' | relative_url }}">memory</a></li>
+      {%- endfor %}
+    </ul>
+    {%- endif %}
+    {%- endunless %}
+  </div>
+</section>

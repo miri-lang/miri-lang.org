@@ -1,0 +1,11 @@
+{%- comment -%}
+  Sections that exist before their content does. The blog is ready once a post
+  exists; the benchmarks page once bench/export_site.py has written
+  _data/bench/latest.json. A page carrying `gate: blog` or `gate: bench` stays
+  noindex'd, out of the sitemap and unlinked until its gate opens — the same
+  treatment the legal pages get while their address is blank.
+{%- endcomment -%}
+{%- assign blog_ready = false -%}
+{%- if site.posts.size > 0 -%}{%- assign blog_ready = true -%}{%- endif -%}
+{%- assign bench_ready = false -%}
+{%- if site.data.bench.latest -%}{%- assign bench_ready = true -%}{%- endif -%}

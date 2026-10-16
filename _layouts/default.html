@@ -15,8 +15,16 @@
   {%- endcomment -%}
   {%- assign legal_ready = false -%}
   {%- if site.legal.street != '' and site.legal.city != '' -%}{%- assign legal_ready = true -%}{%- endif -%}
-  {%- if page.noindex_when_incomplete and legal_ready == false %}
+  {%- include gates.html -%}
+  {%- assign gate_closed = false -%}
+  {%- if page.gate == 'blog' and blog_ready == false -%}{%- assign gate_closed = true -%}{%- endif -%}
+  {%- if page.gate == 'bench' and bench_ready == false -%}{%- assign gate_closed = true -%}{%- endif -%}
+  {%- if page.noindex_when_incomplete and legal_ready == false -%}{%- assign gate_closed = true -%}{%- endif -%}
+  {%- if gate_closed %}
   <meta name="robots" content="noindex, follow">
+  {%- endif %}
+  {%- if blog_ready %}
+  {% feed_meta %}
   {%- endif %}
 
   {%- comment -%}
@@ -29,7 +37,7 @@
   <!-- Open Graph -->
   <meta property="og:title" content="{{ page.title | default: site.title }}">
   <meta property="og:description" content="{{ page.description | default: site.description }}">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="{% if page.collection == 'posts' %}article{% else %}website{% endif %}">
   <meta property="og:url" content="{{ page.url | absolute_url }}">
   <meta property="og:image" content="{{ og_image | absolute_url }}">
   <meta property="og:image:width" content="1200">

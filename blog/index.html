@@ -1,0 +1,32 @@
+---
+layout: default
+permalink: /blog/
+nav_static: true
+og_image: /assets/og/blog.png
+og_image_alt: "The Miri blog"
+gate: blog
+title: "Blog — Miri Programming Language"
+description: "Articles about the Miri programming language: what was measured, what changed between versions, and why."
+---
+
+<section class="post-page">
+  <div class="wrap post-wrap">
+    <div class="kicker reveal">Blog</div>
+    <h1 class="post-title reveal">Writing about Miri</h1>
+    <p class="faq-sub reveal">Measurements, design notes and release write-ups. Also as an
+      <a href="{{ '/feed.xml' | relative_url }}">Atom feed</a>.</p>
+    {%- if site.posts.size > 0 %}
+    <ol class="post-list">
+      {%- for post in site.posts %}
+      <li class="post-list-item reveal">
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%-d %B %Y" }}</time>
+        <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+        {%- if post.description %}<p>{{ post.description }}</p>{% endif %}
+      </li>
+      {%- endfor %}
+    </ol>
+    {%- else %}
+    <p class="post-empty">No posts yet.</p>
+    {%- endif %}
+  </div>
+</section>

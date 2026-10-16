@@ -123,6 +123,25 @@ collections:
   gpu_demos:
     output: true
 
+# ---------------------------------------------------------------------------
+# Blog — posts under _posts/, the index at /blog/, Atom at /feed.xml
+# (jekyll-feed ships with GitHub Pages). The nav and footer link the blog only
+# once a post exists, so an empty index is never advertised.
+# ---------------------------------------------------------------------------
+plugins:
+  - jekyll-feed
+permalink: /blog/:year/:month/:slug/
+feed:
+  path: feed.xml
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      og_image: /assets/og/blog.png
+      og_image_alt: "The Miri blog"
+
 exclude:
   - Gemfile
   - Gemfile.lock

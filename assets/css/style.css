@@ -1694,3 +1694,64 @@ html.no-anim *, html.no-anim *::before, html.no-anim *::after {
 @media (max-width: 760px) {
   .docs-main table.agent-fields td:first-child { white-space: normal; }
 }
+
+/* ---------- Blog ---------- */
+/* Posts and the index read at a prose measure, like the FAQ. */
+.post-page { padding: 150px 0 110px; }
+.post-wrap { max-width: 760px; }
+.post-wrap .kicker a { color: inherit; }
+.post-title {
+  margin-top: 16px;
+  font-size: clamp(34px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+.post-meta { margin-top: 14px; color: var(--muted); font-size: 15px; }
+.post-body { margin-top: 36px; font-size: 17px; line-height: 1.7; color: var(--text); }
+.post-body p, .post-body ul, .post-body ol, .post-body pre, .post-body figure { margin-top: 1.1em; }
+.post-body h2 { margin-top: 2em; font-size: 26px; letter-spacing: -0.02em; }
+.post-body a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.post-body img { max-width: 100%; height: auto; }
+.post-list { list-style: none; margin-top: 40px; padding: 0; }
+.post-list-item { padding: 22px 0; border-bottom: 1px solid var(--line); }
+.post-list-item time { color: var(--muted); font-size: 14px; }
+.post-list-item h2 { margin-top: 6px; font-size: 24px; letter-spacing: -0.02em; }
+.post-list-item h2 a:hover { color: var(--yellow); }
+.post-list-item p { margin-top: 8px; color: var(--muted); }
+.post-empty { margin-top: 40px; color: var(--muted); }
+
+/* ---------- Benchmarks ---------- */
+/* The charts are drawn on a light surface of their own (bench/plot.py), so
+   they sit in a light frame; each links to its full-size SVG for phone
+   readers, and every number is also in a table. */
+.bench-page { padding: 150px 0 110px; }
+.bench-h2 { margin-top: 56px; font-size: 26px; letter-spacing: -0.02em; }
+.bench-rules { margin-top: 18px; padding-left: 1.2em; max-width: 72ch; color: var(--text); line-height: 1.65; }
+.bench-rules li { margin-top: 8px; }
+.bench-note { margin-top: 16px; max-width: 72ch; color: var(--muted); line-height: 1.65; }
+.bench-note a, .bench-provenance a, .bench-versions a, .bench-table a { color: var(--blue-bright); text-decoration: underline; text-underline-offset: 2px; }
+.bench-empty { margin-top: 40px; color: var(--muted); }
+.bench-figure { margin-top: 24px; }
+.bench-figure img { display: block; width: 100%; height: auto; background: #fcfcfb; border-radius: var(--radius); }
+.bench-figure-narrow { max-width: 640px; }
+.bench-figure figcaption { margin-top: 10px; color: var(--muted); font-size: 14px; }
+.bench-table-wrap { margin-top: 18px; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+.bench-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 14px; }
+.bench-table th, .bench-table td { padding: 9px 14px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.bench-table th[scope="row"], .bench-table thead th:first-child { text-align: left; }
+.bench-table thead th { color: var(--muted); font-weight: 500; }
+.bench-table tbody tr:last-child th, .bench-table tbody tr:last-child td { border-bottom: 0; }
+.bench-status span { color: var(--muted); font-size: 12px; }
+.bench-details { margin-top: 18px; }
+.bench-details summary { cursor: pointer; color: var(--text); font-weight: 500; }
+.bench-provenance { margin-top: 18px; display: grid; grid-template-columns: max-content 1fr; gap: 8px 22px; color: var(--text); }
+.bench-provenance dt { color: var(--muted); }
+.bench-versions { margin-top: 18px; padding-left: 1.2em; line-height: 1.8; }
+@media (max-width: 900px) {
+  .post-page, .bench-page { padding: 120px 0 80px; }
+}
+@media (max-width: 600px) {
+  .bench-provenance { grid-template-columns: 1fr; }
+  .bench-provenance dd { margin-bottom: 8px; }
+}

@@ -16,6 +16,13 @@
       <a href="{{ '/docs/getting-started/' | relative_url }}">Documentation</a>
       <a href="{{ '/gpu-demos/' | relative_url }}">GPU Demos</a>
       <a href="{{ '/faq/' | relative_url }}">FAQ</a>
+      {%- include gates.html %}
+      {%- if bench_ready %}
+      <a href="{{ '/benchmarks/' | relative_url }}">Benchmarks</a>
+      {%- endif %}
+      {%- if blog_ready %}
+      <a href="{{ '/blog/' | relative_url }}">Blog</a>
+      {%- endif %}
       <a href="{{ site.github_url }}/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0 License</a>
       {%- if legal_ready %}
       <a href="{{ '/impressum/' | relative_url }}">Impressum</a>

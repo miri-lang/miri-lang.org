@@ -1,0 +1,26 @@
+---
+layout: default
+nav_static: true
+---
+{%- comment -%}
+  A blog post. The title, date and byline come from the post's front matter
+  (`author:` overrides the site author); the reading time is counted from the
+  post itself. Numbers in a post come from _data, never from its prose: a
+  benchmark article renders its figures from site.data.bench, the way
+  /benchmarks/ does.
+{%- endcomment -%}
+{%- assign words = content | number_of_words -%}
+{%- assign minutes = words | divided_by: 220 | plus: 1 -%}
+<article class="post-page">
+  <div class="wrap post-wrap">
+    <div class="kicker reveal"><a href="{{ '/blog/' | relative_url }}">Blog</a></div>
+    <h1 class="post-title reveal">{{ page.title }}</h1>
+    <p class="post-meta reveal">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%-d %B %Y" }}</time>
+      · {{ page.author | default: site.author }} · {{ minutes }} min read
+    </p>
+    <div class="post-body">
+      {{ content }}
+    </div>
+  </div>
+</article>
