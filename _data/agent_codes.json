@@ -1596,6 +1596,15 @@
       "repairs": []
     },
     {
+      "code": "MER_RT_016",
+      "title": "List Changed While Sorted",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
       "code": "MER_TAR_001",
       "title": "Shuffle Offset Exceeds Subgroup Size",
       "severity": "error",
