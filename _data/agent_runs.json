@@ -61,7 +61,7 @@
         "json"
       ],
       "exit": 1,
-      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": false,\n  \"command\": \"check\",\n  \"diagnostics\": [\n    {\n      \"severity\": \"error\",\n      \"code\": \"MER_TYP_042\",\n      \"message\": \"Cannot assign to immutable variable 'total'\",\n      \"path\": \"tally.mi\",\n      \"line\": 10,\n      \"column\": 13,\n      \"length\": 17,\n      \"fixSafety\": \"local-edit\",\n      \"repair\": {\n        \"id\": \"let-to-var\",\n        \"summary\": \"Declare the variable with `var` so it can be reassigned.\",\n        \"edits\": [\n          {\n            \"path\": \"tally.mi\",\n            \"start\": 135,\n            \"end\": 138,\n            \"replacement\": \"var\"\n          }\n        ]\n      },\n      \"related\": []\n    }\n  ],\n  \"exitCode\": 1,\n  \"durationMs\": 83\n}\n",
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": false,\n  \"command\": \"check\",\n  \"diagnostics\": [\n    {\n      \"severity\": \"error\",\n      \"code\": \"MER_TYP_042\",\n      \"message\": \"Cannot assign to immutable variable 'total'\",\n      \"path\": \"tally.mi\",\n      \"line\": 10,\n      \"column\": 13,\n      \"length\": 17,\n      \"fixSafety\": \"local-edit\",\n      \"repair\": {\n        \"id\": \"let-to-var\",\n        \"summary\": \"Declare the variable with `var` so it can be reassigned.\",\n        \"edits\": [\n          {\n            \"path\": \"tally.mi\",\n            \"start\": 135,\n            \"end\": 138,\n            \"replacement\": \"var\"\n          }\n        ]\n      },\n      \"related\": []\n    }\n  ],\n  \"exitCode\": 1,\n  \"durationMs\": 15\n}\n",
       "stderr": ""
     },
     {
@@ -83,7 +83,7 @@
         "json"
       ],
       "exit": 0,
-      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": true,\n  \"command\": \"check\",\n  \"diagnostics\": [],\n  \"exitCode\": 0,\n  \"durationMs\": 33\n}\n",
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": true,\n  \"command\": \"check\",\n  \"diagnostics\": [],\n  \"exitCode\": 0,\n  \"durationMs\": 17\n}\n",
       "stderr": ""
     },
     {
@@ -138,7 +138,7 @@
         "--public"
       ],
       "exit": 0,
-      "stdout": "class String implements Equatable, Hashable, Comparable, Addable, Multiplicable, Iterable, Cloneable\n    fn clone() String\n    fn code_at(index int) int?\n    fn compare(other String) int\n    fn concat(other String) String\n    fn contains(needle String) bool\n    fn element_at(index int) String\n    fn ends_with(suffix String) bool\n    fn equals(other String) bool\n    static fn from_code_point(code int) String?\n    fn hash() int\n    fn init() String\n    fn is_empty() bool\n    fn join(parts [String]) String\n    fn length() int\n    fn repeat(count int) String\n    fn replace(old String, to String) String\n    fn size() int\n    fn split(separator String) [String]\n    fn starts_with(prefix String) bool\n    fn substring(start int, end int) String\n    fn to_float() float?\n    fn to_int() int?\n    fn to_lower() String\n    fn to_upper() String\n    fn trim() String\n    fn trim_end() String\n    fn trim_start() String\n",
+      "stdout": "class String implements Equatable, Hashable, Comparable, Addable, Multiplicable, Iterable, Cloneable\n    fn clone() String\n    fn code_at(index int) int?\n    fn compare(other String) int\n    fn concat(other String) String\n    fn contains(needle String) bool\n    fn element_at(index int) String\n    fn ends_with(suffix String) bool\n    fn equals(other String) bool\n    static fn from_code_point(code int) String?\n    fn hash() int\n    fn init() String\n    fn is_empty() bool\n    fn join(parts [String]) String\n    fn length() int\n    fn lines() StringPieces\n    fn pieces(separator String) StringPieces\n    fn repeat(count int) String\n    fn replace(old String, to String) String\n    fn size() int\n    fn split(separator String) [String]\n    fn starts_with(prefix String) bool\n    fn substring(start int, end int) String\n    fn to_float() float?\n    fn to_int() int?\n    fn to_lower() String\n    fn to_upper() String\n    fn trim() String\n    fn trim_end() String\n    fn trim_start() String\n",
       "stderr": ""
     },
     {
@@ -182,7 +182,7 @@
         "json"
       ],
       "exit": 1,
-      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": false,\n  \"command\": \"test\",\n  \"diagnostics\": [],\n  \"exitCode\": 1,\n  \"durationMs\": 347,\n  \"tests\": {\n    \"total\": 2,\n    \"passed\": 1,\n    \"failed\": 1,\n    \"ignored\": 0,\n    \"results\": [\n      {\n        \"path\": \"scores.mi\",\n        \"name\": \"counts_scores_from_five_up\",\n        \"outcome\": \"passed\"\n      },\n      {\n        \"path\": \"scores.mi\",\n        \"name\": \"empty_list_totals_zero\",\n        \"outcome\": \"failed\",\n        \"detail\": \"Runtime error: assertion failed at scores.mi:16:5: expected 1, got 0\\n\",\n        \"code\": \"MER_RT_005\",\n        \"line\": 16,\n        \"column\": 5,\n        \"expected\": \"1\",\n        \"actual\": \"0\"\n      }\n    ],\n    \"rejectedFiles\": [],\n    \"filesRead\": 1\n  }\n}\n",
+      "stdout": "{\n  \"schemaVersion\": 1,\n  \"ok\": false,\n  \"command\": \"test\",\n  \"diagnostics\": [],\n  \"exitCode\": 1,\n  \"durationMs\": 354,\n  \"tests\": {\n    \"total\": 2,\n    \"passed\": 1,\n    \"failed\": 1,\n    \"ignored\": 0,\n    \"results\": [\n      {\n        \"path\": \"scores.mi\",\n        \"name\": \"counts_scores_from_five_up\",\n        \"outcome\": \"passed\"\n      },\n      {\n        \"path\": \"scores.mi\",\n        \"name\": \"empty_list_totals_zero\",\n        \"outcome\": \"failed\",\n        \"detail\": \"Runtime error: assertion failed at scores.mi:16:5: expected 1, got 0\\n\",\n        \"code\": \"MER_RT_005\",\n        \"line\": 16,\n        \"column\": 5,\n        \"expected\": \"1\",\n        \"actual\": \"0\"\n      }\n    ],\n    \"rejectedFiles\": [],\n    \"filesRead\": 1\n  }\n}\n",
       "stderr": ""
     }
   ],
