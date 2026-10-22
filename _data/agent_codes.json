@@ -1927,6 +1927,33 @@
       "retired": false,
       "fixSafety": "requires-human-review",
       "repairs": []
+    },
+    {
+      "code": "MER_BLD_027",
+      "title": "Profiling Not Supported",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_028",
+      "title": "No Profile Recorded",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_BLD_029",
+      "title": "Profiled Program Failed",
+      "severity": "error",
+      "area": "BLD",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
     }
   ]
 }
