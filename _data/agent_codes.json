@@ -1605,6 +1605,15 @@
       "repairs": []
     },
     {
+      "code": "MER_RT_017",
+      "title": "Receiver Arrived Shared",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
       "code": "MER_TAR_001",
       "title": "Shuffle Offset Exceeds Subgroup Size",
       "severity": "error",
