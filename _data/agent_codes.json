@@ -342,6 +342,15 @@
       "repairs": []
     },
     {
+      "code": "MER_PAR_024",
+      "title": "Duplicate Parameter",
+      "severity": "error",
+      "area": "PAR",
+      "retired": false,
+      "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
       "code": "MER_NAM_001",
       "title": "Deprecated Kernel Context Identifier",
       "severity": "warning",
@@ -1200,6 +1209,15 @@
       "repairs": []
     },
     {
+      "code": "MER_TYP_085",
+      "title": "Type Declared Inside A Function",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_OWN_001",
       "title": "Resource Not Consumed at Scope Exit",
       "severity": "warning",
@@ -1629,6 +1647,15 @@
       "area": "RT",
       "retired": false,
       "fixSafety": "local-edit",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_018",
+      "title": "Use After Free",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "requires-human-review",
       "repairs": []
     },
     {
