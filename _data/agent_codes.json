@@ -1191,6 +1191,15 @@
       "repairs": []
     },
     {
+      "code": "MER_TYP_084",
+      "title": "Invalid Main Signature",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_OWN_001",
       "title": "Resource Not Consumed at Scope Exit",
       "severity": "warning",
