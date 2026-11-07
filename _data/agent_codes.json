@@ -1227,6 +1227,24 @@
       "repairs": []
     },
     {
+      "code": "MER_TYP_087",
+      "title": "Generic Method Called Through A Trait Value",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_TYP_088",
+      "title": "Generic Method Overridden",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_OWN_001",
       "title": "Resource Not Consumed at Scope Exit",
       "severity": "warning",
