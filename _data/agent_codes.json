@@ -1218,6 +1218,15 @@
       "repairs": []
     },
     {
+      "code": "MER_TYP_086",
+      "title": "Range Cannot Be Stepped",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_OWN_001",
       "title": "Resource Not Consumed at Scope Exit",
       "severity": "warning",
@@ -1656,6 +1665,15 @@
       "area": "RT",
       "retired": false,
       "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_RT_019",
+      "title": "Value Cannot Be Stepped",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "local-edit",
       "repairs": []
     },
     {
