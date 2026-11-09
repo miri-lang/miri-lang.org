@@ -1254,6 +1254,15 @@
       "repairs": []
     },
     {
+      "code": "MER_TYP_090",
+      "title": "Captured Value Written",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_OWN_001",
       "title": "Resource Not Consumed at Scope Exit",
       "severity": "warning",

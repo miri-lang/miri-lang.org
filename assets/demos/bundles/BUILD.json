@@ -3,7 +3,7 @@
   "compiledFrom": "assets/demos/<name>.mi",
   "compiler": {
     "commit": "6838054ee5967b820935e48e07406d6c19c5f80e",
-    "dirty": false
+    "dirty": true
   },
   "runtimeJsBytes": 51059,
   "demos": {
@@ -16,8 +16,8 @@
       "gzip": 5015
     },
     "particles": {
-      "raw": 136597,
-      "gzip": 8057
+      "raw": 136657,
+      "gzip": 8054
     },
     "fluid": {
       "raw": 286395,
