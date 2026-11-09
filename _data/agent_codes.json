@@ -1713,6 +1713,15 @@
       "repairs": []
     },
     {
+      "code": "MER_RT_020",
+      "title": "Stack Overflow",
+      "severity": "error",
+      "area": "RT",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_TAR_001",
       "title": "Shuffle Offset Exceeds Subgroup Size",
       "severity": "error",
