@@ -519,7 +519,7 @@ make build</code></pre>
 <p>The result is the best of both worlds: <strong>value semantics</strong> (mutating <code>b</code> never changes <code>a</code>), but with the <strong>performance of reference passing</strong> when no one mutates. CoW applies to <code>List</code>, <code>Map</code>, <code>Array</code>, <code>Set</code>, and <code>String</code>.</p>
 
 <h3>Zero-cost RC elision</h3>
-<p>The Perceus optimization pass analyses every function for linear flows. When the compiler proves that a value is created, used once, and discarded — never aliased, never escaping — it removes all of the IncRef/DecRef calls for that value entirely. You write idiomatic code. The compiler emits straight-line allocation and drop with no atomic counter traffic on the hot path.</p>
+<p>The compiler infers ownership over the whole program: a call lends its arguments unless the callee keeps them, a local read out of a value the function already holds borrows it, and a retain a release cancels straight away is deleted. A value that is only lent or borrowed pays no IncRef/DecRef at all. You write idiomatic code. The compiler emits straight-line allocation and drop with no atomic counter traffic on the hot path.</p>
 
 <h3>Automatic recursive cleanup</h3>
 <p>When a managed value's RC reaches zero, Miri runs a compiler-generated destructor that, in order: (1) calls the user's <code>fn drop(self)</code> if one is defined, (2) recursively decrements every managed field, (3) frees the allocation. You never write <code>.close()</code>, <code>.dispose()</code>, or <code>try/finally</code>.</p>
@@ -768,7 +768,7 @@ test result: ok. 3 passed; 0 failed; 1 ignored</code></pre>
   <tbody>
     <tr><td>Shadow heap</td><td><code>MIRI_HEAP_GUARD=1</code></td><td>An ASan-style shadow heap that traps use-after-free and double-free at the moment they happen, and attributes each leak to the allocation site. Silent on a correct program.</td></tr>
     <tr><td>Allocation count</td><td><code>MIRI_ALLOC_COUNT=1</code></td><td>Exact allocation totals for the run, split by category, so a change in allocation behaviour is measurable rather than guessed at.</td></tr>
-    <tr><td>RC verifier</td><td><code>--verify-mir</code></td><td>A path-sensitive check of the reference-counting invariants after the Perceus transform. Reports any imbalance as a hard error.</td></tr>
+    <tr><td>RC verifier</td><td><code>--verify-mir</code></td><td>A path-sensitive check of the reference-counting invariants after reference counts are inserted. Reports any imbalance as a hard error.</td></tr>
   </tbody>
 </table>
 

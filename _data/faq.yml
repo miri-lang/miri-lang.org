@@ -100,9 +100,9 @@
   a: >-
     <p>No, and you never write a memory annotation either. Primitives and small all-primitive structs are copied
     bitwise; strings and collections are reference counted, with the IncRef and DecRef calls emitted by the
-    compiler. A Perceus pass — precise reference counting, the technique Koka and Lean use — then proves which
-    values are created, used once and discarded, and deletes their counter traffic outright, so idiomatic code
-    compiles to straight-line allocation and drop. Assignment shares a buffer, the first mutation forks it, and
+    compiler. The compiler then infers which calls only lend a value and which locals borrow one the function
+    already holds, and deletes the counter traffic those never needed, so idiomatic code compiles to
+    straight-line allocation and drop. Assignment shares a buffer, the first mutation forks it, and
     use-after-move is a compile error.</p>
 
 - id: machine-learning

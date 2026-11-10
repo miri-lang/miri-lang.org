@@ -27,7 +27,7 @@ pager_next:
   <tbody>
     <tr><td>Shadow heap</td><td><code>MIRI_HEAP_GUARD=1</code></td><td>An ASan-style shadow heap that traps use-after-free and double-free at the moment they happen, and attributes each leak to the allocation site. Silent on a correct program.</td></tr>
     <tr><td>Allocation count</td><td><code>MIRI_ALLOC_COUNT=1</code></td><td>Exact allocation totals for the run, split by category, so a change in allocation behaviour is measurable rather than guessed at.</td></tr>
-    <tr><td>RC verifier</td><td><code>--verify-mir</code></td><td>A path-sensitive check of the reference-counting invariants after the Perceus transform. Reports any imbalance as a hard error.</td></tr>
+    <tr><td>RC verifier</td><td><code>--verify-mir</code></td><td>A path-sensitive check of the reference-counting invariants after reference counts are inserted. Reports any imbalance as a hard error.</td></tr>
   </tbody>
 </table>
 
