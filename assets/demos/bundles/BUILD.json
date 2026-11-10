@@ -2,7 +2,7 @@
   "generatedBy": "tools/gen_demo_bundles.py",
   "compiledFrom": "assets/demos/<name>.mi",
   "compiler": {
-    "commit": "6838054ee5967b820935e48e07406d6c19c5f80e",
+    "commit": "7640b7bec33918b2743dc701e7146ce582271f70",
     "dirty": true
   },
   "runtimeJsBytes": 51059,
@@ -20,8 +20,8 @@
       "gzip": 8054
     },
     "fluid": {
-      "raw": 286395,
-      "gzip": 10989
+      "raw": 527122,
+      "gzip": 13896
     },
     "raymarch": {
       "raw": 123397,
