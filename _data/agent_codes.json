@@ -1317,6 +1317,15 @@
       "repairs": []
     },
     {
+      "code": "MER_OWN_007",
+      "title": "Drop Hook Keeps Its Receiver",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_MIR_001",
       "title": "Unsupported Expression",
       "severity": "error",
