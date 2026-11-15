@@ -1308,6 +1308,15 @@
       "repairs": []
     },
     {
+      "code": "MER_OWN_006",
+      "title": "Element Method Keeps a Value",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_MIR_001",
       "title": "Unsupported Expression",
       "severity": "error",
