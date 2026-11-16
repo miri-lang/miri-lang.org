@@ -1272,6 +1272,15 @@
       "repairs": []
     },
     {
+      "code": "MER_TYP_092",
+      "title": "Optional Declaration",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_OWN_001",
       "title": "Resource Not Consumed at Scope Exit",
       "severity": "warning",
