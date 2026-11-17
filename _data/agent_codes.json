@@ -1344,6 +1344,15 @@
       "repairs": []
     },
     {
+      "code": "MER_OWN_008",
+      "title": "Resource Handed Out of a Place",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_MIR_001",
       "title": "Unsupported Expression",
       "severity": "error",
