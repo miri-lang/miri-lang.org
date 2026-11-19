@@ -1281,6 +1281,15 @@
       "repairs": []
     },
     {
+      "code": "MER_TYP_093",
+      "title": "Copy Trait Declaration",
+      "severity": "error",
+      "area": "TYP",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
       "code": "MER_OWN_001",
       "title": "Resource Not Consumed at Scope Exit",
       "severity": "warning",
@@ -1346,6 +1355,24 @@
     {
       "code": "MER_OWN_008",
       "title": "Resource Handed Out of a Place",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_OWN_009",
+      "title": "Lent Argument Kept",
+      "severity": "error",
+      "area": "OWN",
+      "retired": false,
+      "fixSafety": "requires-human-review",
+      "repairs": []
+    },
+    {
+      "code": "MER_OWN_010",
+      "title": "Resource Element Copied",
       "severity": "error",
       "area": "OWN",
       "retired": false,
